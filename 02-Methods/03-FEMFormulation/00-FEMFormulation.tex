@@ -1,0 +1,12 @@
+\section{有限要素法による離散化}
+\label{Sec:FEMFormulation}
+\numberwithin{equation}{subsection}
+
+自然界の物理現象の多くは偏微分方程式によって記述されるが，複雑な境界条件や非線形性を有する場合，厳密な解析解を得ることは極めて困難である．有限要素法（Finite Element Method: FEM）は，このような連続体の境界値問題を，計算機を用いて数値的に解くための最も汎用的な離散化手法の一つである．本手法の核心は，本来無限の自由度を持つ連続体上の未知関数を，有限個のパラメータ（節点値）と既知の関数（形状関数）の線形結合によって近似的に表現することにある．具体的には，解析領域を「要素」と呼ばれる単純な形状の小領域に分割し，各要素内での物理量の変化を低次の多項式などで補間する．数理的には，支配方程式（強形式）に対して重み付き残差法（Method of Weighted Residuals）を適用し，積分形式である弱形式 (Weak Form) へと変換するプロセスを経る．これにより，微分可能性の要求を緩和しつつ，代数的な連立一次方程式へと帰着させることが可能となる．本節では，\cref{Sec:GoverningEquationDerivation}で導出した支配方程式を有限要素法により離散化する手法を示す．
+
+\input{02-Methods/03-FEMFormulation/01-TimeIntegration}
+\input{02-Methods/03-FEMFormulation/02-ThermalFEM}
+\input{02-Methods/03-FEMFormulation/03-HydraulicFEM}
+\input{02-Methods/03-FEMFormulation/04-LinearizedSystem}
+
+\numberwithin{equation}{section}

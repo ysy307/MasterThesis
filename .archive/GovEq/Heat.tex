@@ -1,0 +1,80 @@
+\section{熱移動支配方程式の要素方程式への定式化}\label{Sec:Heat}
+地盤内の熱移動の支配方程式は次のようになる．ただし，凍結による潜熱の放出に関しては温度回復法よって取り扱うので\ref{Sec:Heat}節では考慮しない．
+\begin{equation}
+  \eqlabel{GovHeat}
+  \lo{C}{p}\pdv{T}{t}=\opdv{\xii}\bab{\lambda\pdv{T}{\xii}}-\lo{C}{w}\vel\pdv{T}{\xii}
+\end{equation}
+ただし，$\vel$は液状水のフラックス$\bab{\si{m~s^{-1}}}$，$\lo{C}{p}$は土壌全体の体積熱容量$\bab{\si{J~m^{-3}~K^{-1}}}$である．ただし$\lo{C}{p}$は\eqref{Eq:DefCap}式で定義され，$n$は間隙率，$\lo{C}{s}$，$\lo{C}{w}$，$\lo{C}{ice}$はそれぞれ土，水，氷の体積熱容量$\bab{\si{J~m^{-3}~K^{-1}}}$である．
+\begin{equation}
+  \eqlabel{DefCap}
+  \lo{C}{p}\coloneqq(1-\phivv)\lo{C}{s}+(1-Fr)\phivv\lo{C}{w}+Fr\cdot \phivv\lo{C}{ice}
+\end{equation}
+分散を含む一般的な熱伝導率$\lambda_{ij}~\bab{\si{W~m^{-1}~K^{-1}}}$は次のように定義される．ただし，$\lo{\alpha}{L}$，$\lo{\alpha}{T}$はそれぞれ縦，横分散長，$\delta_{ij}$はクロネッカーのデルタ (Kroenecker delta)である．
+\begin{equation}
+  \eqlabel{DefTherCondA}
+  \lambda_{ij}\coloneqq\lo{\alpha}{L}\lo{C}{w}{\left|q\right|}\lo{\delta}{ij}+\pab{\lo{\alpha}{L}-\lo{\alpha}{T}}\lo{C}{w}\dfrac{\lo{q}{j}\lo{q}{i}}{\left|q\right|}+\lambda\lo{\delta}{ij}
+\end{equation}
+また{\eqref{Eq:DefTherCondA}}式中の凍結率を考慮した分散を含まない熱伝導率$\lambda~\bab{\si{W~m^{-1}~K^{-1}}}$は熱拡散の非線形性を担保するように\eqref{Eq:DefTherCond}式で定義される．ただし，$\lambda_{s}$，$\lambda_{w}$，$\lambda_{ice}$はそれぞれ土壌，水，氷の熱伝導率$\bab{\si{W~m^{-1}~K^{-1}}}$である．
+\begin{equation}
+  \eqlabel{DefTherCond}
+  \lambda\coloneqq\lo{\lambda}{s}^{1-\phivv}\cdot\lo{\lambda}{w}^{\phivv\pab{1-Fr}}\cdot\lo{\lambda}{ice}^{\phivv Fr}
+\end{equation}
+{\ref{Sec:CalcCond}}節で示す条件の場合，分散成分を考慮せずに計算を行っているため縦，横分散長を0として計算を行っている．ここで{\eqref{Eq:Defhh}}と同様に基底関数を用いて試行関数$\Th$，$\velh$を表すと，
+\begin{equation}
+  \eqlabel{DefTh}
+  \Th=\NJ\TJ\qquad J=1,2,\ldots,n
+\end{equation}
+\begin{equation}
+  \eqlabel{DefVel}
+  \velh=\NK\velk\qquad K=1,2,\ldots,n
+\end{equation}
+~\eqref{Eq:GovHeat}にMVRを適用すると
+\begin{equation}
+  \eqlabel{WeakHeat}
+  \iintO{\NI\pab{\lo{C}{p}\pdv{\Th}{t}-\opdv{\xii}\bab{\lambda\pdv{\Th}{\xii}}+\lo{C}{w}\velh\pdv{\Th}{\xii}}}=0
+\end{equation}
+さらに，$\mathbf{g}$をそれぞれ次のようにおく．
+\begin{equation}
+  \eqlabel{DefVecg}
+  \mathbf{g}=
+  \begin{bmatrix}
+    \NI\lambda\dfrac{\partial\Th}{\partial x_1} & \NI\lambda\dfrac{\partial\Th}{\partial x_2}
+  \end{bmatrix}
+\end{equation}
+ガウスの発散定理を用いれば次のようにあらわせる．
+\begin{gather}
+  \iintO{\Div{g}}=\ointC{\mathbf{g}\cdot\mathbf{n}}\notag\\
+  \iintO{\left(\lambda\ppdv{\NI}{T}{\xii}+\NI\ppdv{\lambda}{T}{\xii}+\NI\lambda\pdv[order=2]{T}{\xii}\right)}=\ointC{\NI\lambda\pdv{T}{\mathbf{n}}}\notag\\
+  \eqlabel{GauDg}
+  \iintO{\NI\lambda\pdv[order=2]{T}{\xii}}=\ointC{\NI\lambda\pdv{T}{\xii}\cdot\nii}-\iintO{\lambda\ppdv{\NI}{T}{\xii}}-\iintO{\NI\ppdv{\lambda}{T}{\xii}}
+\end{gather}
+~\eqref{Eq:WeakHeat}式，~\eqref{Eq:GauDg}式より，
+\begin{equation}
+  \eqlabel{WeakHeatFBC}
+  \begin{split}
+    \iintO{\lo{C}{p}\NI\NJ}\cdot\pdv{\TJ}{t}&+\iintO{\lambda\ppdv{\NI}{\NJ}{\xii}}\cdot\TJ+\lo{C}{w}\iintO{\NI\NK\velk\pdv{\NJ}{\xii}}\cdot\TJ\\
+    &+\ointCbc{\lambda\NI\Theta}{N}+\ointCbc{\NI q}{F}=0
+  \end{split}
+\end{equation}
+境界条件がDirichlet境界条件または勾配かフラックスが0で与えられる場合に限り，次のようになる．
+\begin{equation}
+  \eqlabel{WeakHeatFBC2}
+  \iintO{\lo{C}{p}\NI\NJ}\cdot\pdv{\TJ}{t}+\iintO{\lambda\ppdv{\NI}{\NJ}{\xii}}\cdot\TJ+\lo{C}{w}\iintO{\NI\NK\velk\pdv{\NJ}{\xii}}\cdot\TJ=0
+\end{equation}
+つまり次の要素方程式をすべての要素で足し合わせることで全体方程式を得ることができる．
+\begin{equation}
+  \eqlabel{DiscWeakHeat}
+  \bon{Q}{\textit{w}}{e}=\iintOj{\lo{C}{p,\textit{J}}\NI\NJ}\cdot\pdv{\TJ}{t}+\iintOj{\lambda_J\ppdv{\NI}{\NJ}{\xii}}\cdot\TJ+\lo{C}{w}\iintOj{\NI\NK\velk\pdv{\NJ}{\xii}}\cdot\TJ
+\end{equation}
+% ~\eqref{Eq:WeakHeatFBC}式は各要素について合計したものとして表せるので，
+% \begin{equation}
+%   \sum_{e=1}^{N_e}\Bab{\iintOj{\lo{C}{p}\NJ\NI\pdv{\Tj}{t}}+\iintOj{\lambda\ppdv{\NJ}{\NI}{\xii}\Tj}+\lo{C}{w}\iintOj{\NJ\vel\pdv{\NI}{\xii}\Tj}}=0
+% \end{equation}
+% ここで$N_e$は総要素数である．
+% 最終的に次のようになる．
+% \begin{itembox}[l]{熱移動の要素方程式}
+%   \begin{equation}
+%     \eqlabel{DiscWeakHeat}
+%     \bon{Q}{\textit{w}}{e}=\iintOj{\lo{C}{p,\textit{j}}\NJ\NI\pdv{\Tj}{t}}+\iintOj{\lambda_j\ppdv{\NJ}{\NI}{\xii}\Tj}+\lo{C}{w}\iintOj{\NJ\velj\pdv{\NI}{\xii}\Tj}
+%   \end{equation}
+% \end{itembox}

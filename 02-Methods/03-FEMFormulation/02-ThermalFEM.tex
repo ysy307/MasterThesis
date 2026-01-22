@@ -1,0 +1,189 @@
+\subsection{熱移動支配方程式の離散化}
+\label{Sec:ThermalFEM}
+
+熱移動に対する境界条件は以下のとおりである．
+境界 $\partial V$ 上における外向き単位法線ベクトルを $\vect{n}$ としたとき，境界上の熱収支は全熱エネルギーフラックスの法線成分 $\vect{j}_\mathrm{E} \cdot \vect{n}$ を用いて記述される．
+
+\begin{ConditionBox}{温度境界条件}{Thermal_BC}
+  領域 $V$ における温度場 $T(\vect{x},t)$ は，境界 $\partial V$ 上において，
+  以下に示す代表的な温度境界条件を満たすものとする．
+  ここで，
+  $h$ は熱伝達係数，
+  $\varepsilon$ は放射率，
+  $\sigma$ はステファン＝ボルツマン定数，
+  $F$ は形態係数を表す．
+  さらに，
+  $\alpha_\mathrm{HR}$ は熱放射項を線形化した等価熱伝達係数である．
+
+  \begin{subequations}
+    \label{Eq:Thermal-BC}
+    \begin{description}
+      \item[(a) 温度既定境界 (Dirichlet 境界条件)]
+            境界 $\partial V_\mathrm{HD}$ 上において温度が既定される場合，
+            \begin{equation}
+              T\pab{\vect{x}, t} = T_\mathrm{D}\pab{\vect{x}}
+              \qquad \text{for } \vect{x}\in\partial V_\mathrm{HD}
+            \end{equation}
+
+      \item[(b) 熱流束既定境界 (Neumann 境界条件)]
+            境界 $\partial V_\mathrm{HN}$ 上において，全熱エネルギーフラックスの法線成分が既定される場合，
+            \begin{equation}
+              \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n}
+              = q_\mathrm{TN}\pab{\vect{x}, t}
+              \qquad \text{for } \vect{x}\in\partial V_\mathrm{HN}
+            \end{equation}
+            ここで $q_\mathrm{TN}$ は境界を通して流入・流出する正味の熱流束（既知量）である．
+
+      \item[(c) Robin 境界条件]
+            境界 $\partial V_\mathrm{HC}$ において，熱流束が温度の線形関数として与えられる場合，
+            当該境界において水分（液状水・水蒸気）の出入りはないものと仮定すると，境界上のエネルギー収支は以下のように記述される．
+            \begin{equation}
+              \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n}
+              = \beta\pab{\vect{x}}\,T\pab{\vect{x}, t} + \gamma\pab{\vect{x}}
+              \qquad \text{for } \vect{x}\in\partial V_\mathrm{HC}
+            \end{equation}
+            一方，当該領域において，水分の出入りがある場合には，境界上のエネルギー収支は以下のように記述される．
+            \begin{align}
+              \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n} \notag                                                        \\
+               & = \beta\pab{\vect{x}}\,T\pab{\vect{x}, t} + \gamma\pab{\vect{x}}
+              + c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL}\pab{\vect{x}, t} \cdot \vect{n}\, T\pab{\vect{x}, t} \notag   \\
+               & \quad + c_\mathrm{v} \rho_\mathrm{w} \vect{j}_\mathrm{WV}\pab{\vect{x}, t} \cdot \vect{n}\, T\pab{\vect{x}, t}
+              + \rho_\mathrm{w} L_\mathrm{v} \vect{j}_\mathrm{WV}\pab{\vect{x}, t} \cdot \vect{n}
+              \qquad \text{for } \vect{x}\in\partial V_\mathrm{HC}
+            \end{align}
+
+      \item[(d) 熱伝達境界]
+            境界 $\partial V_\mathrm{HH}$ において周囲環境との熱伝達（対流熱伝達）を考慮する場合，
+            当該境界において水分の出入りはない（不透水境界）と仮定する．このとき，全熱エネルギーフラックスは熱伝達量と釣り合うため，以下のように記述される．
+            \begin{equation}
+              \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n}
+              = h(\vect{x})
+              \bab{T\pab{\vect{x}, t}-T_\mathrm{env}\pab{\vect{x}, t}}
+              \qquad \text{for } \vect{x}\in\partial V_\mathrm{HH}
+            \end{equation}
+
+      \item[(e) 熱放射境界]
+            境界 $\partial V_\mathrm{HR}$ において熱放射によるエネルギー交換を考慮する場合，
+            同様に水分の出入りはないものと仮定すると，以下の条件が成立する．
+            \begin{align}
+              \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n}
+               & = \varepsilon\sigma F
+              \bab{T\pab{\vect{x}, t}^4 - T_\mathrm{r}\pab{\vect{x}, t}^4} \notag \\
+               & \simeq \alpha_\mathrm{HR}(\vect{x})
+              \bab{T\pab{\vect{x}, t}-T_\mathrm{r}\pab{\vect{x}, t}}
+              \qquad \text{for } \vect{x}\in\partial V_\mathrm{HR}
+            \end{align}
+    \end{description}
+  \end{subequations}
+\end{ConditionBox}
+
+支配方程式\ref{Eq:Energy_Continuity_Differential}を有限要素法で離散化することを考える．$V$を$\mathbb{R}^3$で有界な領域，重み関数を$\chi$とすれば弱形式は
+\begin{equation}
+  \label{Eq:Thermal-weak-form}
+  \iiint_{V} \bab{\pdv{\mathcal{U}}{t} + \nabla\cdot \vect{j}_\mathrm{E} + S_\mathrm{T}}\chi \odif{V} = 0
+\end{equation}
+ただし$\chi$は任意な関数であるが，以下の条件を満たしている必要がある．
+\begin{ConditionBox}{重み関数$\chi$の条件}{Weight_Function_Condition}
+  \begin{itemize}
+    \item 重み関数$\chi$は，有限要素の節点で連続である．
+    \item 重み関数$\chi$は，Dirichlet境界条件において，値がゼロである．
+    \item 重み関数$\chi$は，Neumann境界条件において，値が1で微分値がゼロである．
+    \item 重み関数$\chi$は無次元である．
+    \item 重み関数$\chi$は，互いに独立関数でなくてはならない．
+  \end{itemize}
+\end{ConditionBox}
+まず，ベクトル解析の恒等式 (\cref{Form:Identity-Div-Product})を用いると，支配方程式の体積積分項はガウスの発散定理 (\ref{Form:Gauss-Divergence-Theorem-3D})より次のように変形できる．
+\begin{align}
+  \iiint_{V} \chi \nabla \cdot \vect{j}_\mathrm{E} \odif{V}
+   & = \iiint_{V} \bab{\nabla \cdot \pab{\chi\vect{j}_\mathrm{E}} - \nabla\chi \cdot \vect{j}_\mathrm{E}} \odif{V} \notag              \\
+  \label{Eq:Thermal-Weak-Form-Divergence}
+   & = \oiint_{\partial V} \chi \vect{j}_\mathrm{E} \cdot \vect{n} \odif{S} - \iiint_{V} \nabla\chi \cdot \vect{j}_\mathrm{E} \odif{V}
+\end{align}
+ここで，右辺第一項の面積分への変換にガウスの発散定理を用いた．$\vect{n}$は境界$\partial V$上の外向き単位法線ベクトルである．
+これより，\eqref{Eq:Thermal-weak-form}は次のように書き換えられる．
+\begin{equation}
+  \iiint_{V} \bab{\chi\pdv{\mathcal{U}}{t} - \nabla\chi \cdot \vect{j}_\mathrm{E} + \chi S_\mathrm{T}} \odif{V} + \oiint_{\partial V} \chi \vect{j}_\mathrm{E} \cdot \vect{n} \odif{S} = 0
+\end{equation}
+次に，境界積分項を評価する．全境界$\partial V$は，適用される境界条件の種類に応じて以下のように分割される．
+\begin{equation}
+  \partial V = \partial V_\mathrm{HD} \cup \partial V_\mathrm{HN} \cup \partial V_\mathrm{HC} \cup \partial V_\mathrm{HH} \cup \partial V_\mathrm{HR}
+\end{equation}
+ここで，\cref{Condition:Weight_Function_Condition}の重み関数の条件より，Dirichlet境界（$\partial V_\mathrm{HD}$）上では$\chi=0$となるため，当該境界上での積分は消失する．
+その他の境界については，式\eqref{Eq:Thermal-BC}で与えられる各条件を代入する．
+各境界において，全熱エネルギーフラックスの法線成分 $\vect{j}_\mathrm{E} \cdot \vect{n}$ は，既定の熱流束 $q_\mathrm{N}$ あるいは温度に依存する関数（$Q_\mathrm{HC}, Q_\mathrm{HH}, Q_\mathrm{HR}$）と釣り合うため，最終的な弱形式は以下のようになる．
+\begin{align}
+  \label{Eq:Thermal-weak-form-final}
+   & \iiint_{V} \bab{\chi\pdv{\mathcal{U}}{t} - \nabla\chi \cdot \vect{j}_\mathrm{E} + \chi S_\mathrm{T}} \odif{V} \notag \\
+   & \quad + \iint_{\partial V_\mathrm{HN}} \chi q_\mathrm{N} \odif{S}
+  + \iint_{\partial V_\mathrm{HC}} \chi Q_\mathrm{HC} \odif{S} \notag                                                     \\
+   & \quad + \iint_{\partial V_\mathrm{HH}} \chi Q_\mathrm{HH} \odif{S}
+  + \iint_{\partial V_\mathrm{HR}} \chi Q_\mathrm{HR} \odif{S} = 0
+\end{align}
+ここで，$Q_\mathrm{HC}, Q_\mathrm{HH}, Q_\mathrm{HR}$ はそれぞれ式\eqref{Eq:Thermal-BC}におけるRobin 境界，熱伝達境界，熱放射境界の右辺項を表す．
+
+% \subsubsection{完全連成解析における時間離散化と修正Picard反復法}
+% \label{Sec:TimeDiscretization_Picard}
+
+% 熱移動支配方程式 \eqref{Eq:ThermalGoverning_Final} に対して，BDFを用いた時間離散化を行う．
+% 変数 $X$ の時刻 $t_{n+1}$ における時間微分項は，BDF係数 $\alpha_k$ を用いて以下のように近似される．
+% \begin{equation}
+%   \pdv{X}{t} \bigg|_{n+1} \approx \alpha_0 X_{n+1} + X_\mathrm{hist}, \quad X_\mathrm{hist} = \sum_{k=1}^{k} \alpha_k X_{n+1-k}
+% \end{equation}
+% ここで，$X_\mathrm{hist}$ は過去の時刻の既知量から定まる履歴項である．
+
+% 本解析では，温度 $\vect{T}$ と間隙水圧 $\vect{P}_\mathrm{w}$ を同時に解く完全連成解析（Monolithic Approach）を採用し，非線形解法には修正Picard反復法を用いる．
+% 第 $m$ 回目の反復における更新解 $\vect{T}^{(m+1)}, \vect{P}_\mathrm{w}^{(m+1)}$ を求めるための線形方程式系は，以下のブロック行列形式で記述される．
+
+% \begin{equation}
+%   \label{Eq:Monolithic-Picard-System}
+%   \begin{bmatrix}
+%     \mat{K}_\mathrm{TT}^{(m)} & \mat{K}_\mathrm{TH}^{(m)} \\
+%     \mat{K}_\mathrm{HT}^{(m)} & \mat{K}_\mathrm{HH}^{(m)}
+%   \end{bmatrix}
+%   \begin{pmatrix}
+%     \vect{T}^{(m+1)} \\
+%     \vect{P}_\mathrm{w}^{(m+1)}
+%   \end{pmatrix}
+%   =
+%   \begin{pmatrix}
+%     \vect{F}_\mathrm{T, RHS}^{(m)} \\
+%     \vect{F}_\mathrm{H, RHS}^{(m)}
+%   \end{pmatrix}
+% \end{equation}
+
+% ここで，熱移動支配方程式に対応する上段のブロック（$\mat{K}_\mathrm{TT}, \mat{K}_\mathrm{TH}$）および右辺ベクトル $\vect{F}_\mathrm{T, RHS}$ は，前節で定義した一般化熱容量 $C_\mathrm{TT}, C_\mathrm{TH}$ を用いて以下のように構築される．
+
+% \begin{enumerate}
+%   \item \textbf{熱－熱ブロック $\mat{K}_\mathrm{TT}$（対角ブロック）} \\
+%         温度変化に対する慣性項（見かけの熱容量）と熱伝導項から構成される．
+%         \begin{align}
+%           \mat{K}_\mathrm{TT}^{(m)}
+%            & = \iiint_{V} \alpha_0 C_\mathrm{TT}^{(m)} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{V}
+%           + \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \tensor{R}^{(m)} \nabla\vect{\psi}_\mathrm{T} \odif{V} \notag \\
+%            & \quad + \iint_{\partial V_\mathrm{HC}} \beta \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+%           + \iint_{\partial V_\mathrm{HH}} h \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+%           + \iint_{\partial V_\mathrm{HR}} \alpha_\mathrm{HR}^{(m)} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+%         \end{align}
+
+%   \item \textbf{熱－水ブロック $\mat{K}_\mathrm{TH}$（非対角ブロック）} \\
+%         水圧変化が熱収支に与える影響を表す連成項であり，左辺行列に組み込むことで強連成を実現する．
+%         \begin{equation}
+%           \mat{K}_\mathrm{TH}^{(m)} = \iiint_{V} \alpha_0 C_\mathrm{TH}^{(m)} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{P}^\mathsf{T} \odif{V}
+%         \end{equation}
+
+%   \item \textbf{熱等価外力ベクトル $\vect{F}_\mathrm{T, RHS}$} \\
+%         境界条件からの既知の流入出，非線形性の強い移流項，および時間微分の履歴項から構成される．
+%         \begin{align}
+%           \vect{F}_\mathrm{T, RHS}^{(m)}
+%            & = - \iint_{\partial V_\mathrm{HN}} q_\mathrm{N} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+%           - \iint_{\partial V_\mathrm{HC}} \gamma \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S} \notag                                                                    \\
+%            & \quad + \iint_{\partial V_\mathrm{HH}} h T_\mathrm{env} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+%           + \iint_{\partial V_\mathrm{HR}} \alpha_\mathrm{HR}^{(m)} T_\mathrm{r} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S} \notag                                     \\
+%            & \quad + \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \cdot \vect{j}_\mathrm{adv}^{(m)} \odif{V} \notag                                              \\
+%            & \quad - \iiint_{V} \vect{\psi}_\mathrm{T}^\mathsf{T} \left( C_\mathrm{TT}^{(m)} T_\mathrm{hist} + C_\mathrm{TH}^{(m)} P_\mathrm{w, hist} \right) \odif{V}
+%         \end{align}
+%         ここで，$\vect{j}_\mathrm{adv}^{(m)}$ は前回の反復値で評価された，流体移動に伴う顕熱および潜熱フラックスの総和である．
+%         \begin{equation}
+%           \vect{j}_\mathrm{adv}^{(m)} = \left( c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL} T + c_\mathrm{v} \rho_\mathrm{w} \vect{j}_\mathrm{WV} T + \rho_\mathrm{w} L_\mathrm{v} \vect{j}_\mathrm{WV} \right)^{(m)}
+%         \end{equation}
+% \end{enumerate}

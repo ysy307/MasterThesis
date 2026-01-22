@@ -1,0 +1,49 @@
+\subsection{数値積分と物性値の評価方法}
+
+本解析では，土壌の熱・水分物性値（容量係数，拡散テンソル，輸送ベクトル等）が温度 $T$ および間隙水圧 $\Pw$ に強く依存する非線形性を有する．
+そのため，係数自体を節点値から形状関数で補間する手法は用いず，各ガウス積分点において補間された状態量に基づき，構成則を用いて直接評価する手法を採用する．
+
+まず，要素内のガウス積分点 $p$（局所座標 $\xi_p, \eta_p$）における未知変数の値（$T_p, P_{\mathrm{w},p}$）およびその勾配は，節点値 $\vect{T}^e, \vect{P}_\mathrm{w}^e$ と形状関数 $\vect{\psi}$，勾配行列 $\mat{B}$ を用いて以下のように計算される．
+\begin{equation}
+  \label{Eq:GaussPoint_Interp}
+  \begin{aligned}
+    T_p              & = \vect{\psi}(\xi_p, \eta_p) \vect{T}^e,            & \nabla T_p              & = \mat{B}(\xi_p, \eta_p)^\top \vect{T}^e            \\
+    P_{\mathrm{w},p} & = \vect{\psi}(\xi_p, \eta_p) \vect{P}_\mathrm{w}^e, & \nabla P_{\mathrm{w},p} & = \mat{B}(\xi_p, \eta_p)^\top \vect{P}_\mathrm{w}^e
+  \end{aligned}
+\end{equation}
+ここで，$\mat{B} = \nabla \vect{\psi}$ は形状関数の空間微分行列である．
+
+これらを用いて，積分点 $p$ における物理係数（スカラー $A$，テンソル $\mat{M}$，ベクトル $\vect{V}$）は，構成則関数 $\mathcal{F}$ を用いて以下のように決定される．
+\begin{equation}
+  A_p = \mathcal{F}_A(T_p, P_{\mathrm{w},p}), \quad
+  \mat{M}_p = \mathcal{F}_M(T_p, P_{\mathrm{w},p}), \quad
+  \vect{V}_p = \mathcal{F}_V(T_p, P_{\mathrm{w},p}, \nabla T_p, \dots)
+\end{equation}
+
+これを踏まえ，各要素行列の数値積分計算式を以下のように記述する．
+
+\subsubsection{容量型行列（分布スカラー係数 $A$）}
+質量行列や熱容量行列などがこれに該当する．積分点ごとの係数値 $A_p$ を用いて計算される．
+\begin{align}
+  \mat{K}_1^e
+   & = \iint_{\Omega^e} \vect{\psi}^\top A(T, \Pw) \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                                        \\
+   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\vect{\psi}(\xi_p)^\top}_{(N_n \times 1)} \underbrace{A_p}_{\text{Scalar}} \underbrace{\vect{\psi}(\xi_p)}_{(1 \times N_n)} \det\mat{J}(\xi_p)
+\end{align}
+
+\subsubsection{拡散型行列（分布テンソル係数 $\mat{M}$）}
+熱伝導行列や透水行列などがこれに該当する．積分点ごとのテンソル値 $\mat{M}_p$ を用いて計算される．
+\begin{align}
+  \mat{K}_2^e
+   & = \iint_{\Omega^e} \mat{B}^\top \mat{M}(T, \Pw) \mat{B} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                                                          \\
+   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\mat{B}(\xi_p)^\top}_{(N_n \times \text{dim})} \underbrace{\mat{M}_p}_{\text{Tensor}} \underbrace{\mat{B}(\xi_p)}_{(\text{dim} \times N_n)} \det\mat{J}(\xi_p)
+\end{align}
+ここで $\text{dim}$ は空間次元数（2または3）である．
+
+\subsubsection{混合型行列（分布ベクトル係数 $\vect{V}$）}
+移流項などがこれに該当する．積分点ごとのベクトル値 $\vect{V}_p$ を用いて計算される．
+（ここでは $\nabla \psi \cdot \vect{V} \psi$ の型を例示する）
+\begin{align}
+  \mat{K}_3^e
+   & = \iint_{\Omega^e} \pab{\mat{B}^\top \vect{V}(T, \Pw)} \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                           \\
+   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\pab{\mat{B}(\xi_p)^\top \vect{V}_p}}_{(N_n \times 1)} \underbrace{\vect{\psi}(\xi_p)}_{(1 \times N_n)} \det\mat{J}(\xi_p)
+\end{align}

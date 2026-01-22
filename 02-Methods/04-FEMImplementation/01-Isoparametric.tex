@@ -1,0 +1,30 @@
+\subsection{2次元アイソパラメトリック要素の統一的記述}
+\label{Sec:2D_Isoparametric_Elements}
+
+本解析では，2次元領域の空間離散化において，アイソパラメトリック要素（Isoparametric Element）を採用する．
+これは，解析対象になる物理量の補間と，座標などの要素形状の定義に同一の基底関数を用いる手法である．
+本節では，解析に用いる以下の4種類の要素を統一的に記述する．
+\begin{itemize}
+  \item 三角形一次要素 (Tri3) および 二次要素 (Tri6)
+  \item 四角形一次要素 (Quad4) および 二次要素 (Quad8)
+\end{itemize}
+まず，要素内の任意の点における物理量 $T$ および 物理座標 $\vect{x} = (x, y)^\top$ は，要素内の節点値を用いて次式で近似される．
+\begin{subequations}
+  \label{Eq:Iso-Interp}
+  \begin{align}
+    T\pab{\xi, \eta}            & = \sum_{i=1}^{N_n} \psi_i\pab{\xi, \eta} T_i              \\
+    \Pw\pab{\xi, \eta} & = \sum_{i=1}^{N_n} \psi_i\pab{\xi, \eta} P_{\mathrm{w},i} \\
+    \vect{x}\pab{\xi, \eta}     & = \sum_{i=1}^{N_n} \psi_i\pab{\xi, \eta} \vect{x}_i
+  \end{align}
+\end{subequations}
+ここで，$N_n$ は要素あたりの節点数，$\psi_i$ は正規化座標系 $\pab{\xi, \eta}$ で定義された形状関数である．
+この定式化により，要素の幾何形状が歪んでいる場合でも，正規化座標系上での積分計算に帰着させることが可能となる．
+座標変換に伴うJacobian行列 $\mat{J}$ は，要素タイプに関わらず次式で統一的に定義される．
+\begin{equation}
+  \label{Eq:General_Jacobian}
+  \mat{J} =
+  \begin{bmatrix}
+    \displaystyle \sum \pdv{\psi_i}{\xi} x_i & \displaystyle \sum \pdv{\psi_i}{\eta} x_i \\[3mm]
+    \displaystyle \sum \pdv{\psi_i}{\xi} y_i & \displaystyle \sum \pdv{\psi_i}{\eta} y_i
+  \end{bmatrix}
+\end{equation}

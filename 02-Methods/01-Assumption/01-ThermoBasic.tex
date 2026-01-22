@@ -1,0 +1,243 @@
+\subsection{熱力学的前提と記号定義}
+\label{Sec:ThermoBasic}
+
+\subsubsection{系の構成と相の定義}
+\label{Sec:PhaseDefinition}
+
+本研究で対象とする凍土は，熱・水分移動を同時に取り扱う必要があるため，多相混合体として定式化する．ここでは，土粒子（solid），液相水（liquid），氷（ice），および気相（air）の四相からなる系を考える．
+\begin{figure}[tbp]
+  \centering
+  \begin{tikzpicture}[scale=0.95]
+    % \draw[help lines] (0,0) grid (15,12);
+
+    \coordinate (p11) at (5,0);
+    \coordinate (p12) at (5,3);
+    \coordinate (p13) at (5,5.25);
+    \coordinate (p14) at (5,7.5);
+    \coordinate (p15) at (5,9);
+    \coordinate (p21) at (9,0);
+    \coordinate (p22) at (9,3);
+    \coordinate (p23) at (9,5.25);
+    \coordinate (p24) at (9,7.5);
+    \coordinate (p25) at (9,9);
+
+    \fill[soil]  (p11) rectangle (p22);
+    \node[white] at ($(p11)!0.5!(p22)$) {\Large Soil};
+    \fill[water] (p12) rectangle (p23);
+    \node[white] at ($(p12)!0.5!(p23)$) {\Large Water};
+    \fill[ice]   (p13) rectangle (p24);
+    \node at ($(p13)!0.5!(p24)$) {\Large Ice};
+    % \fill[air]   (p14) rectangle (p25);
+    \node at ($(p14)!0.5!(p25)$) {\Large Air};
+
+    \draw[line width = 0.5mm] (p11) rectangle (p25);
+    \draw[line width = 0.5mm] (p12) -- (p22);
+    \draw[line width = 0.5mm] (p13) -- (p23);
+    \draw[line width = 0.5mm] (p14) -- (p24);
+
+    % Volume
+    \coordinate (v11) at (0,0);
+    \coordinate (v12) at (0,9);
+    \coordinate (v21) at (4,0);
+    \coordinate (v22) at (4,9);
+    \coordinate (v31) at (1.5,3);
+    \coordinate (v32) at (4,3);
+    \coordinate (v41) at (3.5,0);
+    \coordinate (v42) at (3.5,3);
+    \coordinate (v43) at (3.5,5.25);
+    \coordinate (v44) at (3.5,7.5);
+    \coordinate (v45) at (3.5,9);
+    \coordinate (v51) at (3,5.25);
+    \coordinate (v52) at (3,7.5);
+
+    \node at ($(v12)!0.5!(v22)+(0,0.5)$) {\LARGE Volume};
+    \draw[line width = 0.5mm] (v11) -- (v21);
+    \draw[line width = 0.5mm] (v12) -- (v22);
+    \draw[line width = 0.5mm] (v31) -- (v32);
+    \draw[line width = 0.5mm] (v51) -- ++(1,0);
+    \draw[line width = 0.5mm] (v52) -- ++(1,0);
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(v11)+(0.5,0)$) -- ($(v12)+(0.5,0)$) node[midway, left] {\Large $V$};
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(v12)+(2,0)$) -- ++(0,-6) node[midway, left] {\Large $\Vvoid$};
+
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (v41) -- (v42)  node[midway, left] {\Large $\Vs$};
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (v42) -- (v43)  node[midway, left] {\Large $\Vw$};
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (v43) -- (v44)  node[midway, left] {\Large $\Vice$};
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (v44) -- (v45)  node[midway, left] {\Large $\Va$};
+
+    % mass
+    \coordinate (m11) at (10,0);
+    \coordinate (m12) at (10,3);
+    \coordinate (m13) at (10,5.25);
+    \coordinate (m14) at (10,7.5);
+    \coordinate (m15) at (10,9);
+    \coordinate (m21) at (14,9);
+    \coordinate (m31) at (13,0);
+
+    \node at ($(m15)!0.5!(m21)+(0,0.5)$) {\LARGE Mass};
+    \draw[line width = 0.5mm] (m11) -- ++(4,0);
+    \draw[line width = 0.5mm] (m12) -- ++(1,0);
+    \draw[line width = 0.5mm] (m13) -- ++(1,0);
+    \draw[line width = 0.5mm] (m14) -- ++(1,0);
+    \draw[line width = 0.5mm] (m15) -- ++(4,0);
+
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(m11)+(0.5,0)$) -- ++(0,3)  node[midway, right] {\Large $m_\mathrm{s}$};
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(m12)+(0.5,0)$) -- ++(0,2.25)  node[midway, right] {\Large $m_\mathrm{w}$};
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(m13)+(0.5,0)$) -- ++(0,2.25)  node[midway, right] {\Large $m_\mathrm{ice}$};
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(m14)+(0.5,0)$) -- ++(0,1.5)  node[midway, right] {\Large $m_\mathrm{a}=0$};
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (m31) -- ++(0,9)  node[midway, right] {\Large $m$};
+
+  \end{tikzpicture}
+  \caption{凍土中における四相地盤構造}\label{fig:4Phase_Soil}
+\end{figure}
+
+間隙比$e$ \unit{[-]} および間隙率$\phiv$ \unit{[-]} は次式で定義される．
+\begin{subequations}
+  \label{Eq:Void_Definition}
+  \begin{align}
+    \label{Eq:Void_Definition_e}
+    e     & = \frac{\Vvoid}{\Vs} \\
+    \label{Eq:Void_Definition_phi}
+    \phiv & = \frac{\Vvoid}{V}
+  \end{align}
+\end{subequations}
+両者の関係は次式で表される．
+\begin{subequations}
+  \label{Eq:Void_Porosity}
+  \begin{align}
+    \label{Eq:Void_Porosity_e}
+    \phiv   & = \frac{e}{1+e} \\
+    \label{Eq:Void_Porosity_phi}
+    1-\phiv & = \frac{1}{1+e}
+  \end{align}
+\end{subequations}
+間隙体積に対する各相の体積比（飽和度）\unit{[-]} を次式で定義する．
+\begin{subequations}
+  \label{Eq:Saturation_Def}
+  \begin{align}
+    \label{Eq:Saturation_Water_Def}
+    \Sw   & = \frac{\Vw}{\Vvoid}   \\
+    \label{Eq:Saturation_Ice_Def}
+    \Sice & = \frac{\Vice}{\Vvoid} \\
+    \label{Eq:Saturation_Air_Def}
+    \Sa   & = \frac{\Va}{\Vvoid}   \\
+    \label{Eq:Saturation_Vapor_Def}
+    \Sv   & = \frac{\Vv}{\Vvoid}
+  \end{align}
+\end{subequations}
+このとき，次の関係が成り立つ．
+\begin{equation}
+  \label{Eq:Saturation_Sum}
+  \Sw + \Sice + \Sa = 1
+\end{equation}
+全体体積に対する体積分率$\theta_\alpha$ \unit{[\meter^3.\meter^{-3}]} は次式で定義される．
+ただし，$\alpha = n\!:\text{soil},\ w\!:\text{water},\ i\!:\text{ice},\ a\!:\text{air},\ v\!:\text{vapor}$である．
+\begin{subequations}
+  \label{Eq:Theta_Def}
+  \begin{align}
+    \label{Eq:Theta_Solid_Def}
+    \Qn   & = \frac{\Vs}{V}   \\
+    \label{Eq:Theta_Water_Def}
+    \Qw   & = \frac{\Vw}{V}   \\
+    \label{Eq:Theta_Ice_Def}
+    \Qice & = \frac{\Vice}{V} \\
+    \label{Eq:Theta_Air_Def}
+    \Qa   & = \frac{\Va}{V}   \\
+    \label{Eq:Theta_Vapor_Def}
+    \Qv   & = \frac{\Vv}{V}
+  \end{align}
+\end{subequations}
+体積保存条件は次式となる．
+\begin{equation}
+  \label{Eq:VolumeSum}
+  \Qn + \Qw + \Qice + \Qa = 1
+\end{equation}
+さらに，間隙における有効密度$\rho_\mathrm{e}$ \unit{[\kilogram.\meter^{-3}]}を次式で定義する．
+\begin{align}
+  \label{Eq:Density_effective}
+  \rho_\mathrm{e}
+   & = \phiv (\rho_\mathrm{w} \Sw + \rho_\mathrm{ice} \Sice + \rho_\mathrm{a} \Sa) \notag    \\
+   & = \frac{e (\rho_\mathrm{w} \Sw + \rho_\mathrm{ice} \Sice + \rho_\mathrm{a} \Sa)}{1 + e}
+\end{align}
+以上により，四相地盤の体積構成および基本変数の定義が確定する．この定義に基づき，次節では各相の状態変数と熱力学関係式を整理する．
+
+\subsubsection{状態変数と熱力学関係式}
+\label{Sec:ThermoRelation}
+
+各相（固相，液相，気相）における熱力学状態は，温度$T$，圧力$p$，および比体積$\nu$を基本変数として定義する．本章の表記は\textcite{Tasaki-Thermodynamics}に従う．
+内部エネルギー$U$，エントロピー$S$，エンタルピー$H$，Helmholtzの自由エネルギー$F$，Gibbsの自由エネルギー$G$は熱力学ポテンシャルと呼ばれる．ここで，$T$は熱力学的温度，$V$は体積，$p$は圧力，$N$は物質量（モル数または質量）である．
+熱力学の基本関係式より，内部エネルギー$U$の全微分は次式で与えられる．
+\begin{equation}
+  \label{Eq:dU}
+  \odif{U} = T \odif{S} - p \odif{V} + \mu \odif{N}
+\end{equation}
+ここで，$\mu$は化学ポテンシャルである．他の熱力学ポテンシャルは，$U$からルジャンドル変換により，独立変数を$S \to T$または$V \to p$（あるいはその両方）へ変更することで定義される．
+まず，Helmholtzの自由エネルギー$F$は次式で定義される．
+\begin{equation}
+  \label{Eq:Helmholtz}
+  F = U - TS
+\end{equation}
+ただし，Helmholtzの自由エネルギー$F$が$T$について微分可能とする．その全微分は，\eqref{Eq:dU}式および\eqref{Eq:Helmholtz}式を用いて次式で導かれる．
+\begin{align}
+  \odif{F}
+   & = \odif{U} - \odif{(TS)} \notag                                                       \\
+   & = \pab{T \odif{S} - p \odif{V} + \mu \odif{N}} - \pab{S \odif{T} + T \odif{S}} \notag \\
+  \label{Eq:dF}
+   & = -S \odif{T} - p \odif{V} + \mu \odif{N}
+\end{align}
+また，状態量としての圧力はHelmholtzの自由エネルギー$F$の体積微分として表せるので，
+\begin{equation}
+  \label{Eq:Pressure_differential}
+  \pdv{F}{V} = -p
+\end{equation}
+同様に物質量$N$についても同様の量である化学ポテンシャル$\mu$を考える．
+\begin{equation}
+  \label{Eq:Chemical_potential_differential}
+  \pdv{F}{N} = \mu
+\end{equation}
+次に，エンタルピー$H$は次式で定義される．
+\begin{equation}
+  \label{Eq:Enthalpy_def}
+  H = U + pV
+\end{equation}
+その全微分は次式で与えられる．
+\begin{align}
+  \odif{H}
+   & = \odif{U} + \odif{\pab{pV}} \notag                                                   \\
+   & = \pab{T \odif{S} - p \odif{V} + \mu \odif{N}} + \pab{V \odif{p} + p \odif{V}} \notag \\
+  \label{Eq:dH}
+   & = T \odif{S} + V \odif{p} + \mu \odif{N}
+\end{align}
+さらに，Gibbsの自由エネルギー $G$ は次式で定義される．
+\begin{equation}
+  \label{Eq:Gibbs_def}
+  G = U - TS + pV
+\end{equation}
+$G$ は $F$ または $H$ を用いて次のようにも表される．
+\begin{equation}
+  \label{Eq:ThermoRelation}
+  G = F + pV = H - TS
+\end{equation}
+$G$ の全微分は次式で与えられる．
+\begin{align}
+  \odif{G}
+   & = \odif{F} + \odif{(pV)} \notag                                                        \\
+   & = \pab{-S \odif{T} - p \odif{V} + \mu \odif{N}} + \pab{V \odif{p} + p \odif{V}} \notag \\
+  \label{Eq:dG}
+   & = -S \odif{T} + V \odif{p} + \mu \odif{N}
+\end{align}
+物質量 $N$ が一定（$\odif{N}=0$）の場合，\eqref{Eq:dG} 式は次式のように書ける．
+\begin{equation}
+  \label{Eq:dG_constN}
+  \eval{\odif{G}}{{N=\text{const}}} = -S \odif{T} + V \odif{p}
+\end{equation}
+
+各相の物性は温度と圧力の関数として次式で表される．
+\begin{subequations}
+  \begin{align}
+    \label{Eq:Density_TP}
+    \rho_\alpha           & = \rho_\alpha\pab{T, p}           \\
+    \label{Eq:Specific_Heat_TP}
+    c_{\mathrm{p},\alpha} & = c_{\mathrm{p},\alpha}\pab{T, p}
+  \end{align}
+\end{subequations}
+特に後章で導入する体積熱容量$C$や熱伝導率$\lambda$の導出において，これらの関数形が用いられる．

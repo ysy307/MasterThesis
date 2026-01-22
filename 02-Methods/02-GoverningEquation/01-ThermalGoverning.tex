@@ -1,0 +1,101 @@
+\subsection{熱移動における支配方程式}
+\label{Sec:ThermalGoverning}
+
+\cref{Sec:EnergyConservationBasic}で導出したエネルギー保存則の基礎式 (\eqref{Eq:EnergyConservation_Final})に，各相の内部エネルギーを\eqref{Eq:InnerEnergy_Component_Def}として代入し，さらに熱フラックス$\vect{j}_\mathrm{T}$をFourier則に基づいて表しせば，次の支配方程式が得られる．ただし，圧力は全水頭として考えるものとする．
+\begin{equation}
+  \label{Eq:ThermalGoverningEquation}
+  \begin{split}
+     & \pdv{}{t} \pab[bigg]{c_\mathrm{s}\rho_\mathrm{s}\Qn T +  c_\mathrm{w} \rho_\mathrm{w} \Qw T + c_\mathrm{ice}\rho_\mathrm{ice} \Qice T + c_\mathrm{v} \rho_\mathrm{w} \Qv^\star T - \rho_\mathrm{ice} L_\mathrm{f} \Qice + \rho_\mathrm{w} L_\mathrm{v} \Qv^\star} \\
+     & + \div\bab[big]{-\lambda \grad T + c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL} T + c_\mathrm{v}\rho_\mathrm{w} \vect{j}_\mathrm{WV} T + \rho_\mathrm{w} L_\mathrm{v} \vect{j}_\mathrm{WV}} + S_\mathrm{T} = 0
+  \end{split}
+\end{equation}
+ここで，$\Qv^\star$は気相水蒸気の液相換算含有率であり，\eqref{Eq:Qvstar}で定義される．
+\begin{equation}
+  \label{Eq:Qvstar}
+  \Qv^\star =\frac{e \Sv}{1 + e}\frac{\rho_\mathrm{v}}{\rho_\mathrm{w}}
+\end{equation}
+まず，\eqref{Eq:ThermalGoverningEquation}の時間微分項について整理する．
+\begin{itemize}
+  \item 土粒子項
+        \begin{align}
+          \label{Eq:ThermalGoverning_Time_Soil}
+          \pdv{}{t} \pab{c_\mathrm{s}\rho_\mathrm{s}\Qn T} = c_\mathrm{s}\rho_\mathrm{s}\Qn \pdv{T}{t}
+        \end{align}
+  \item 液相水項
+        \begin{align}
+          \pdv{}{t} \pab{c_\mathrm{w} \rho_\mathrm{w} \Qw T}
+           & = c_\mathrm{w} \Qw T \pdv{\rho_\mathrm{w}}{t} + c_\mathrm{w} \rho_\mathrm{w} T \pdv{\Qw}{t} + c_\mathrm{w} \rho_\mathrm{w} \Qw \pdv{T}{t}                        \notag \\
+           & = c_\mathrm{w} \Qw T \pab{\pdv{\rho_\mathrm{w}}{T}\pdv{T}{t} + \pdv{\rho_\mathrm{w}}{\Pw}\pdv{\Pw}{t}}                                         \notag \\
+           & \quad + c_\mathrm{w} \rho_\mathrm{w} T \pab{\pdv{\Qw}{T}\pdv{T}{t} + \pdv{\Qw}{\Pw}\pdv{\Pw}{t}} + c_\mathrm{w} \rho_\mathrm{w} \Qw \pdv{T}{t} \notag \\
+           & = \pab{c_\mathrm{w} \Qw T \pdv{\rho_\mathrm{w}}{T} + c_\mathrm{w} \rho_\mathrm{w} T \pdv{\Qw}{T} + c_\mathrm{w} \rho_\mathrm{w} \Qw} \pdv{T}{t}                  \notag \\
+          \label{Eq:ThermalGoverning_Time_Water}
+           & \quad + \pab{c_\mathrm{w} \Qw T \pdv{\rho_\mathrm{w}}{\Pw} + c_\mathrm{w} \rho_\mathrm{w} T \pdv{\Qw}{\Pw}} \pdv{\Pw}{t}
+        \end{align}
+  \item 氷項
+        \begin{align}
+          \pdv{}{t} \pab{c_\mathrm{ice} \rho_\mathrm{ice} \Qice T}
+           & = c_\mathrm{ice} \Qice T \pdv{\rho_\mathrm{ice}}{t} + c_\mathrm{ice} \rho_\mathrm{ice} T \pdv{\Qice}{t} + c_\mathrm{ice} \rho_\mathrm{ice} \Qice \pdv{T}{t}                    \notag \\
+           & = c_\mathrm{ice} \Qice T \pab{\pdv{\rho_\mathrm{ice}}{T}\pdv{T}{t} + \pdv{\rho_\mathrm{ice}}{\Pw}\pdv{\Pw}{t}}                                               \notag \\
+           & \quad + c_\mathrm{ice} \rho_\mathrm{ice} T \pab{\pdv{\Qice}{T}\pdv{T}{t} + \pdv{\Qice}{\Pw}\pdv{\Pw}{t}} + c_\mathrm{ice} \rho_\mathrm{ice} \Qice \pdv{T}{t} \notag \\
+           & = \pab{c_\mathrm{ice} \Qice T \pdv{\rho_\mathrm{ice}}{T} + c_\mathrm{ice} \rho_\mathrm{ice} T \pdv{\Qice}{T} + c_\mathrm{ice} \rho_\mathrm{ice} \Qice} \pdv{T}{t}              \notag \\
+          \label{Eq:ThermalGoverning_Time_Ice}
+           & \quad + \pab{c_\mathrm{ice} \Qice T \pdv{\rho_\mathrm{ice}}{\Pw} + c_\mathrm{ice} \rho_\mathrm{ice} T \pdv{\Qice}{\Pw}} \pdv{\Pw}{t}
+        \end{align}
+  \item 気相水蒸気項
+        \begin{align}
+          \pdv{}{t}  \pab{c_\mathrm{v} \rho_\mathrm{w} \Qv^\star T}
+           & = c_\mathrm{v} \pab{\Qv^\star T \pdv{\rho_\mathrm{w}}{t} + \rho_\mathrm{w} T \pdv{\Qv^\star}{t} + \rho_\mathrm{w} \Qv^\star \pdv{T}{t}}                                                    \notag \\
+           & = c_\mathrm{v} \left[\Qv^\star T \pab{\pdv{\rho_\mathrm{w}}{T}\pdv{T}{t} + \pdv{\rho_\mathrm{w}}{\Pw}\pdv{\Pw}{t}} \right.                                               \notag \\
+           & + \left. \rho_\mathrm{w} T \pab{\pdv{\Qv^\star}{T}\pdv{T}{t} + \pdv{\Qv^\star}{\Pw}\pdv{\Pw}{t}} + \rho_\mathrm{w} \Qv^\star \pdv{T}{t} \right]                          \notag \\
+           & = \pab{c_\mathrm{v} \Qv^\star T \pdv{\rho_\mathrm{w}}{T} + c_\mathrm{v} \rho_\mathrm{w} T \pdv{\Qv^\star}{T} + c_\mathrm{v} \rho_\mathrm{w} \Qv^\star} \pdv{T}{t}                          \notag \\
+           & + \pab{c_\mathrm{v} \Qv^\star T \pdv{\rho_\mathrm{w}}{\Pw} + c_\mathrm{v} \rho_\mathrm{w} T \pdv{\Qv^\star}{\Pw}} \pdv{\Pw}{t}  \label{Eq:ThermalGoverning_Time_Vapor}
+        \end{align}
+  \item 潜熱項
+        \begin{align}
+          \pdv{}{t} & \pab{- \rho_\mathrm{ice} L_\mathrm{f} \Qice + \rho_\mathrm{w} L_\mathrm{v} \Qv^\star} \notag                                                                                                                                                                                        \\
+                    & = - L_\mathrm{f} \Qice \pdv{\rho_\mathrm{ice}}{t} - \rho_\mathrm{ice} L_\mathrm{f} \pdv{\Qice}{t} + L_\mathrm{v} \Qv^\star \pdv{\rho_\mathrm{w}}{t} + \rho_\mathrm{w} L_\mathrm{v} \pdv{\Qv^\star}{t} \notag                                                                        \\
+                    & = - L_\mathrm{f} \Qice \pab{\pdv{\rho_\mathrm{ice}}{T}\pdv{T}{t} + \pdv{\rho_\mathrm{ice}}{\Pw}\pdv{\Pw}{t}} \notag                                                                                                                                               \\
+                    & \quad - \rho_\mathrm{ice} L_\mathrm{f} \pab{\pdv{\Qice}{T}\pdv{T}{t} + \pdv{\Qice}{\Pw}\pdv{\Pw}{t}} \notag                                                                                                                                                       \\
+                    & \quad + L_\mathrm{v} \Qv^\star \pab{\pdv{\rho_\mathrm{w}}{T}\pdv{T}{t} + \pdv{\rho_\mathrm{w}}{\Pw}\pdv{\Pw}{t}} \notag                                                                                                                                           \\
+                    & \quad + \rho_\mathrm{w} L_\mathrm{v} \pab{\pdv{\Qv^\star}{T}\pdv{T}{t} + \pdv{\Qv^\star}{\Pw}\pdv{\Pw}{t}} \notag                                                                                                                                                 \\
+                    & = \pab{- L_\mathrm{f} \Qice \pdv{\rho_\mathrm{ice}}{T} - \rho_\mathrm{ice} L_\mathrm{f} \pdv{\Qice}{T} + L_\mathrm{v} \Qv^\star \pdv{\rho_\mathrm{w}}{T} + \rho_\mathrm{w} L_\mathrm{v} \pdv{\Qv^\star}{T}} \pdv{T}{t} \notag                                                       \\
+          \label{Eq:ThermalGoverning_Time_Latent}
+                    & \quad + \pab{- L_\mathrm{f} \Qice \pdv{\rho_\mathrm{ice}}{\Pw} - \rho_\mathrm{ice} L_\mathrm{f} \pdv{\Qice}{\Pw} + L_\mathrm{v} \Qv^\star \pdv{\rho_\mathrm{w}}{\Pw} + \rho_\mathrm{w} L_\mathrm{v} \pdv{\Qv^\star}{\Pw}} \pdv{\Pw}{t}
+        \end{align}
+\end{itemize}
+したがって，時間微分項は次式で表される．
+\begin{equation}
+  \label{Eq:ThermalGoverning_Time_Total}
+  \begin{split}
+     & \text{Time Term} =                                                                                                                                                                                                                                                    \\
+     & \biggl[ c_\mathrm{s}\rho_\mathrm{s}\Qn + c_\mathrm{w} \Qw T \pdv{\rho_\mathrm{w}}{T} + c_\mathrm{w} \rho_\mathrm{w} T \pdv{\Qw}{T} + c_\mathrm{w} \rho_\mathrm{w} \Qw                                                                                                 \\
+     & \quad + c_\mathrm{ice} \Qice T \pdv{\rho_\mathrm{ice}}{T} + c_\mathrm{ice} \rho_\mathrm{ice} T \pdv{\Qice}{T} + c_\mathrm{ice} \rho_\mathrm{ice} \Qice + c_\mathrm{v} \Qv^\star T \pdv{\rho_\mathrm{w}}{T} + c_\mathrm{v} \rho_\mathrm{w} T \pdv{\Qv^\star}{T}        \\
+     & \quad + c_\mathrm{v} \rho_\mathrm{w} \Qv^\star - L_\mathrm{f} \Qice \pdv{\rho_\mathrm{ice}}{T} - \rho_\mathrm{ice} L_\mathrm{f} \pdv{\Qice}{T} + L_\mathrm{v} \Qv^\star \pdv{\rho_\mathrm{w}}{T} + \rho_\mathrm{w} L_\mathrm{v} \pdv{\Qv^\star}{T} \biggr] \pdv{T}{t} \\
+     & + \biggl( c_\mathrm{w} \Qw T \pdv{\rho_\mathrm{w}}{\Pw} + c_\mathrm{w} \rho_\mathrm{w} T \pdv{\Qw}{\Pw} + c_\mathrm{ice} \Qice T \pdv{\rho_\mathrm{ice}}{\Pw} + c_\mathrm{ice} \rho_\mathrm{ice} T \pdv{\Qice}{\Pw}               \\
+     & \quad + c_\mathrm{v} \Qv^\star T \pdv{\rho_\mathrm{w}}{\Pw} + c_\mathrm{v} \rho_\mathrm{w} T \pdv{\Qv^\star}{\Pw} - L_\mathrm{f} \Qice \pdv{\rho_\mathrm{ice}}{\Pw} - \rho_\mathrm{ice} L_\mathrm{f} \pdv{\Qice}{\Pw}             \\
+     & \quad + L_\mathrm{v} \Qv^\star \pdv{\rho_\mathrm{w}}{\Pw} + \rho_\mathrm{w} L_\mathrm{v} \pdv{\Qv^\star}{\Pw} \biggr) \pdv{\Pw}{t}
+  \end{split}
+\end{equation}
+以上より，エネルギー式における時間微分項は，温度 $T$ および水圧 $\Pw$ の時間変化に対して次式のように整理される．
+\begin{equation}
+  \label{Eq:ThermalGoverning_Time_Simplified}
+  \text{Time Term} = C_\mathrm{TT} \pdv{T}{t} + C_\mathrm{TH} \pdv{\Pw}{t}
+\end{equation}
+ここで，$C_\mathrm{TT}$ および $C_\mathrm{TH}$ はそれぞれ温度および圧力に対する一般化された熱容量項であり，次式で定義される．
+\begin{subequations}
+  \begin{align}
+    \label{Eq:Def_CTT}
+    C_\mathrm{TT} & = c_\mathrm{s}\rho_\mathrm{s}\Qn + c_\mathrm{w} \Qw T \pdv{\rho_\mathrm{w}}{T} + c_\mathrm{w} \rho_\mathrm{w} T \pdv{\Qw}{T} + c_\mathrm{w} \rho_\mathrm{w} \Qw \notag                                                                                                   \\
+                  & \quad + c_\mathrm{ice} \Qice T \pdv{\rho_\mathrm{ice}}{T} + c_\mathrm{ice} \rho_\mathrm{ice} T \pdv{\Qice}{T} + c_\mathrm{ice} \rho_\mathrm{ice} \Qice + c_\mathrm{v} \Qv^\star T \pdv{\rho_\mathrm{v}}{T} + c_\mathrm{v} \rho_\mathrm{w} T \pdv{\Qv^\star}{T} \notag    \\
+                  & \quad + c_\mathrm{v} \rho_\mathrm{w} \Qv^\star - L_\mathrm{f} \Qice \pdv{\rho_\mathrm{ice}}{T} - \rho_\mathrm{ice} L_\mathrm{f} \pdv{\Qice}{T} + L_\mathrm{v} \Qv^\star \pdv{\rho_\mathrm{w}}{T} + \rho_\mathrm{w} L_\mathrm{v} \pdv{\Qv^\star}{T}                       \\[10pt]
+    \label{Eq:Def_CTP}
+    C_\mathrm{TH} & = c_\mathrm{w} \Qw T \pdv{\rho_\mathrm{w}}{\Pw} + c_\mathrm{w} \rho_\mathrm{w} T \pdv{\Qw}{\Pw} \notag                                                                                                                                                 \\
+                  & \quad + c_\mathrm{ice} \Qice T \pdv{\rho_\mathrm{ice}}{\Pw} + c_\mathrm{ice} \rho_\mathrm{ice} T \pdv{\Qice}{\Pw} + c_\mathrm{v} \Qv^\star T \pdv{\rho_\mathrm{w}}{\Pw} + c_\mathrm{v} \rho_\mathrm{w} T \pdv{\Qv^\star}{\Pw} \notag \\
+                  & \quad - L_\mathrm{f} \Qice \pdv{\rho_\mathrm{ice}}{\Pw} - \rho_\mathrm{ice} L_\mathrm{f} \pdv{\Qice}{\Pw} + L_\mathrm{v} \Qv^\star \pdv{\rho_\mathrm{w}}{\Pw} + \rho_\mathrm{w} L_\mathrm{v} \pdv{\Qv^\star}{\Pw}
+  \end{align}
+\end{subequations}
+したがって，熱移動支配方程式は次式で表される．
+\begin{equation}
+  \label{Eq:ThermalGoverning_Final}
+  C_\mathrm{TT} \pdv{T}{t} + C_\mathrm{TH} \pdv{\Pw}{t} + \nabla\cdot\bab[bigg]{-\lambda \nabla T + c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL} T + c_\mathrm{v}\rho_\mathrm{w} \vect{j}_\mathrm{WV} T + \rho_\mathrm{w} L_\mathrm{v} \vect{j}_\mathrm{WV}} + S_\mathrm{T} = 0
+\end{equation}

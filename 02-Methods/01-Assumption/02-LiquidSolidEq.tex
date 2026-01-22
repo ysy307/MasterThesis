@@ -1,0 +1,193 @@
+\subsection{液相・固相間の相平衡}
+\label{sec:LiquidSolidEq}
+
+単一系における液状水と氷の平衡条件は，各相のGibbs自由エネルギーが等しいことによって定義される．
+ここで，Fig.~\ref{Fig:GCC_diagram}に示すように，氷相に水蒸気のみに一様に働く圧力を$P_\mathrm{ice}$，
+液相に水蒸気のみに一様に働く圧力を$\Pw$とすれば，
+両者は共通の大気圧$P_\mathrm{a}$を介して次式のように関係づけられる．
+\begin{subequations}
+  \begin{align}
+    \label{Eq:Pressure_1}
+    P_2 & = P_\mathrm{a} + \Pw   \\
+    \label{Eq:Pressure_2}
+    P_1 & = P_\mathrm{a} + P_\mathrm{ice}
+  \end{align}
+\end{subequations}
+ここで，$P_1$，$P_2$はそれぞれ氷相および液相に作用する全圧である．
+$T_\mathrm{f}$を三相が平衡状態にあるときの温度（凝固点）とする．
+
+\begin{figure}[tbp]
+  \centering
+  \begin{tikzpicture}[scale=1.5] % スケール調整はお好みで
+    \usetikzlibrary{calc, arrows.meta} % arrows.meta を追加 (calc は既存)
+
+    % 共通の圧力矢印スタイルを定義
+    \tikzset{pressurearrow/.style={
+    -{LaTeX[length=4.0mm, width=3.6mm]}, % 矢印の先端形状とサイズ
+    line width=1.2mm                    % 線の太さ
+    }
+    }
+
+    % 座標やサイズを調整しやすくするための変数定義（任意）
+    \def\waterHeight{2}
+    \def\iceHeight{3}
+    \def\blockY{0.2} % ブロックの下端のY座標
+    \def\containerTop{5}
+    \def\containerBottom{0}
+    \def\containerLeft{0}
+    \def\containerRight{7}
+    \def\pressureArrowStartY{6} % 圧力矢印の開始Y座標
+    \def\pressureLabelY{5.5}    % 圧力ラベルの共通Y座標 (お好みで調整)
+
+    % 外側の容器の線
+    \draw (\containerLeft,\containerBottom) rectangle (\containerRight,\containerTop);
+
+    % 水の部分 (左下)
+    \coordinate (waterSW) at (0.2,\blockY); % 左下隅の座標
+    \coordinate (waterNE) at (3.5,\waterHeight); % 右上隅の座標
+    \fill[pattern=north west lines, pattern color=blue!50] (waterSW) rectangle (waterNE);
+    \draw (waterSW) rectangle (waterNE);
+    \node[fill=white, text=black, font=\bfseries, inner sep=2pt, rounded corners=1pt] at ($(waterSW)!0.5!(waterNE)$) {Water};
+
+    % 氷の部分 (右下)
+    \coordinate (iceSW) at (3.5,\blockY); % 左下隅の座標
+    \coordinate (iceNE) at (6.8,\iceHeight); % 右上隅の座標
+    \fill[pattern=north east lines, pattern color=cyan!30] (iceSW) rectangle (iceNE);
+    \draw (iceSW) rectangle (iceNE);
+    \node[fill=white, text=black, font=\bfseries, inner sep=2pt, rounded corners=1pt] at ($(iceSW)!0.5!(iceNE)$) {Ice};
+
+    % 蒸気の部分 (上部全体)
+    \node at (3.5,3.5) {Air};
+    % 蒸気と水の境界線
+    \draw (0.2,\waterHeight) -- (3.5,\waterHeight);
+    % 蒸気と氷の境界線
+    \draw (3.5,\iceHeight) -- (6.8,\iceHeight);
+    % 水と氷の間の境界線
+    \draw (3.5,\blockY) -- (3.5, \waterHeight); % 水ブロックの高さまで
+
+    % 容器の上部の線 (Vaporと接する部分)
+    \draw (0.2,\waterHeight) -- (0.2,\containerTop-0.2);
+    \draw (6.8,\iceHeight) -- (6.8,\containerTop-0.2);
+    \draw (0.2,\containerTop-0.2) -- (6.8,\containerTop-0.2);
+
+    % --- 圧力矢印とラベル ---
+    % 圧力 P (全体にかかる)
+    \draw[pressurearrow] (3.5,\pressureArrowStartY) -- (3.5,\containerTop-1.2);
+    \node[right, xshift=3mm] at (3.5, \pressureLabelY) {$P_\mathrm{a}$};
+
+    % 水面にかかる圧力 P_w
+    \draw[pressurearrow] (1.75,\pressureArrowStartY) -- (1.75,\waterHeight+0.2);
+    \node[left, xshift=-3mm] at (1.75, \pressureLabelY) {$\Pw$};
+    \node[below] at (1.75,\containerBottom-0.3) {$P_2 = P_\mathrm{a} + \Pw$};
+
+    % 氷面にかかる圧力 P_f
+    \draw[pressurearrow] (5.25,\pressureArrowStartY) -- (5.25,\iceHeight+0.2);
+    \node[right, xshift=3mm] at (5.25, \pressureLabelY) {$P_\mathrm{ice}$};
+    \node[below] at (5.25,\containerBottom-0.3) {$P_1 = P_\mathrm{a} + P_\mathrm{ice}$};
+  \end{tikzpicture}
+  \caption{固相，液相，気相の三相それぞれに異なる圧力が加わっている状況における，各相間の平衡状態を表す概念図}
+  \label{Fig:GCC_diagram}
+\end{figure}
+\noindent
+液相と氷相が平衡状態にある場合，それぞれの比Gibbs自由エネルギーは等しくなる．
+\begin{equation}
+  \label{Eq:Gibbs_equal}
+  G_1 = G_2
+\end{equation}
+ここで，$G_1$，$G_2$はそれぞれ氷相および液相のGibbs自由エネルギーである．
+系に変化が生じた際には，これらの自由エネルギーの微分が等しくなければならない．
+\begin{equation}
+  \label{Eq:Gibbs_Equilibrium}
+  \odif{G_1} = \odif{G_2}
+\end{equation}
+\eqref{Eq:Gibbs_Equilibrium}に対し，Gibbs自由エネルギーの全微分\eqref{Eq:dG_constN}を用いると，
+\begin{equation}
+  \label{Eq:Gibbs_Equilibrium_2}
+  -S_1\odif{T} + \nu_1\odif{P_1} = -S_2\odif{T} + \nu_2\odif{P_2}
+\end{equation}
+が得られる．ここで，$\nu_1$，$\nu_2$はそれぞれ氷相，液相の比体積 \unit{[\meter^3.\kilogram^{-1}]}であり，
+$\odif{P_1}$と$\odif{P_2}$はそれぞれ氷および水に加わる全圧力の変化である．
+一般に$\odif{P_1}\neq\odif{P_2}$である．
+\eqref{Eq:Gibbs_Equilibrium_2}に\eqref{Eq:Pressure_1}，\eqref{Eq:Pressure_2}を代入して整理すると，
+\begin{equation}
+  \nu_1\pab{\odv{P_\mathrm{a}}{T} + \odv{P_\mathrm{ice}}{T}} - S_1
+  = \nu_2\pab{\odv{P_\mathrm{a}}{T} + \odv{\Pw}{T}} - S_2
+\end{equation}
+となり，さらに次式を得る．
+\begin{equation}
+  \label{Eq:Gibbs_Equilibrium_3}
+  \nu_2\odv{\Pw}{T} - \nu_1\odv{P_\mathrm{ice}}{T}
+  + \odv{P_\mathrm{a}}{T}\pab{\nu_2 - \nu_1} = S_2 - S_1
+\end{equation}
+一般に液相から固相への相変化に伴うエンタルピー変化は，
+\begin{equation}
+  \label{Eq:Enthalpy_Change}
+  H_\mathrm{fus}\pab{T; N} = T \Bab{S \pab{T; V_\mathrm{liquid}\pab{T; N}, N} - S\pab{T;V_\mathrm{solid}\pab{T; N}, N}}
+\end{equation}
+で与えられる．ここで，$H_\mathrm{fus}$は液相から固相への凝固潜熱である．
+液状水から氷への相変化を考えれば，
+\begin{equation}
+  \label{Eq:Enthalpy_Change_2}
+  S_2 - S_1 = \frac{L_\mathrm{f}}{T}
+\end{equation}
+となる．ただし，$L_\mathrm{f}$は水の凍結潜熱 \unit{[J.kg^{-1}]}である．
+\eqref{Eq:Gibbs_Equilibrium_3}に\eqref{Eq:Enthalpy_Change_2}を代入し，比体積を密度に置き換えると次式を得る．
+
+\begin{NoteBox}{Generalized Clausius-Clapeyron式}{GCCE}
+  \eqref{Eq:GCC_main}は，凍土における相平衡の基礎となる一般化Clausius-Clapeyron式（Generalized Clausius-Clapeyron equation, GCC）である．
+  \begin{equation}
+    \label{Eq:GCC_main}
+    \frac{1}{\rho_\mathrm{w}}\odv{\Pw}{T} - \frac{1}{\rho_\mathrm{ice}}\odv{P_\mathrm{ice}}{T} + \odv{P_\mathrm{a}}{T}\pab{\frac{1}{\rho_\mathrm{w}} - \frac{1}{\rho_\mathrm{ice}}} = \frac{L_\mathrm{f}}{T}
+  \end{equation}
+  ここで，$\rho_\mathrm{w}$，$\rho_\mathrm{ice}$はそれぞれ水と氷の密度 \unit{[\kilogram.\meter^{-3}]}である．
+\end{NoteBox}
+\noindent
+特に本研究内では，以下の2つの場合に着目する．ただし，圧力の単位は \unit{\pascal}である．
+\begin{enumerate}[label=Case \arabic*：, leftmargin=*, labelwidth=3.1em, labelsep=0.5em]
+  \item 氷の圧力を一定とし，水の圧力のみが変化する場合．\\[4mm]
+        氷の圧力微分$\displaystyle\odv{P_\mathrm{ice}}{T}=0$とすれば，\eqref{Eq:GCC_main}は
+        \begin{equation}
+          \label{Eq:GCC_ice_constant}
+          \odv{\Pw}{T}
+          = \frac{\rho_\mathrm{w} L_\mathrm{f}}{ T}
+          + \odv{P_\mathrm{a}}{T}\pab{\frac{\rho_\mathrm{w}}{\rho_\mathrm{ice}} - 1}
+        \end{equation}
+        右辺第2項は通常非常に小さいため無視できるため，次式が得られる．
+        \begin{equation}
+          \label{Eq:GCC_ice_constant_approx}
+          \odv{\Pw}{T} \approx \frac{L_\mathrm{f}\rho_\mathrm{w}}{T}
+        \end{equation}
+        大気圧が標準状態$P_\mathrm{a}=\qty{1013.25}{\hecto\pascal}$のとき，凝固点$T_\mathrm{f}^\ast=\qty{273.15}{\kelvin}$で凍結するとすれば，
+        \eqref{Eq:GCC_ice_constant_approx}の積分形は次式で与えられる．
+        \begin{align}
+          \int_{0}^{\Pw}\odif{\Pw}
+           & = \int_{T_\mathrm{f}^\ast}^{T^\ast}\frac{L_\mathrm{f}\rho_\mathrm{w}}{T}\odif{T} \notag \\
+          \label{Eq:GCC_ice_constant_approx_integrated}
+          \Pw
+           & = L_\mathrm{f}\rho_\mathrm{w}\ln{\frac{T^\ast}{T_\mathrm{f}^\ast}}
+        \end{align}
+
+  \item 大気圧$P_\mathrm{a}$が温度に依存しない場合．\\
+        このとき，\eqref{Eq:GCC_main}左辺第3項は消去されるため，
+        \begin{equation}
+          \label{Eq:GCC_vapor_constant}
+          \frac{1}{\rho_\mathrm{w}}\odv{\Pw}{T} - \frac{1}{\rho_\mathrm{ice}}\odv{P_\mathrm{ice}}{T} = \frac{L_\mathrm{f}}{T}
+        \end{equation}
+        よって，氷の圧力変化は次式で表される．
+        \begin{equation}
+          \label{Eq:GCC_vapor_constant_2}
+          \odv{P_\mathrm{ice}}{T}
+          = \frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\odv{\Pw}{T}
+          - \frac{L_\mathrm{f}\rho_\mathrm{ice}}{T}
+        \end{equation}
+        Case 1 と同様に積分すれば，
+        \begin{align}
+          \int_{0}^{P_\mathrm{ice}}\odif{P_\mathrm{ice}}
+           & = \int_{0}^{\Pw}\odif{\Pw}
+          - \int_{T_\mathrm{f}^\ast}^{T^\ast}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T}\odif{T} \notag \\
+          \label{Eq:GCC_vapor_constant_2_integrated}
+          P_\mathrm{ice}
+           & = \frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\Pw
+          - L_\mathrm{f}\rho_\mathrm{ice}\ln{\frac{T^\ast}{T_\mathrm{f}^\ast}}
+        \end{align}
+\end{enumerate}

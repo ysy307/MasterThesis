@@ -1,0 +1,30 @@
+\section{定式化における前提条件について}
+本研究では，以下の前提条件のもとで，水分移動・熱移動方程式を解く．
+\begin{description}
+  \item[1] 土壌は等方性で均一な多孔質体であり，常に飽和している．
+  \item[2] 地盤凍結によって土壌の体積は変化しない．
+  \item[3] 土壌及び水は不圧縮である．
+  \item[4] 土壌間隙は一定である．
+  \item[5] 土壌及び氷体は不動である．
+  % \item[6] 地盤は水平2次元である．
+\end{description}
+解析対象とする物理量 (例えば温度や圧力水頭)を$Z$とおくと，PDEsを数値的に解くためには領域内の初期条件または境界上の境界条件が必要である．本研究で用いる対象領域の境界条件は以下の３種類を用いた．ここで$\tilde{Z}$は設定する境界条件の値を表す．
+\begin{description}
+  \item[1] Dirichlet境界条件 \\
+  \begin{equation}
+    Z = \lo{\tilde{Z}}{D}\qquad\text{on}\quad\lo{\Gamma}{D}
+  \end{equation}
+  \item[2] Neumann境界条件 \\
+  \begin{equation}
+    \pdv{Z}{\xii} = \lo{\tilde{Z}}{N}\qquad\text{on}\quad\lo{\Gamma}{N}
+  \end{equation}
+  \item[3] フラックス境界条件 \\
+  \begin{equation}
+    A\pdv{Z}{\xii}\nii = \lo{\tilde{Z}}{F}\qquad\text{on}\quad\lo{\Gamma}{F}
+  \end{equation}
+\end{description}
+また，境界については以下の関係が成り立つ．
+\begin{align*}
+  &\lo{\Gamma}{D}\cup\lo{\Gamma}{N}\cup\lo{\Gamma}{F} = \Gamma\\
+  &\lo{\Gamma}{D}\cap\lo{\Gamma}{N}=\lo{\Gamma}{N}\cap\lo{\Gamma}{F}=\lo{\Gamma}{F}\cap\lo{\Gamma}{D} = \varnothing
+\end{align*}

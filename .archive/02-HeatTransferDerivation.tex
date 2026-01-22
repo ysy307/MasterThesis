@@ -1,0 +1,136 @@
+\section{熱移動支配方程式の導出}
+熱力学第一法則より，エネルギー保存則は次のように表される．
+\begin{equation}
+  \label{Eq:First_Law_Thermo}
+  \odif{U} = \delta Q - \delta W
+\end{equation}
+ここで，内部エネルギー$U$，熱量$\delta Q$，仕事$\delta W$である．発散は放出向きに正をとるので，\eqref{Eq:First_Law_Thermo}を単位時間あたりに直せば，
+\begin{equation}
+  \label{Eq:First_Law_Thermo_Closed_Time}
+  \pdv{U}{t} + \div\pab{\vect{j}_\mathrm{T}} - S_\mathrm{T} = 0
+\end{equation}
+ここで，$\vect{j}_\mathrm{T}$は熱フラックス，$S_\mathrm{T}$は単位時間に単位体積に外部から土に供給される熱量である．気相やキャビテーションを考慮しないとすると，\eqref{Eq:Sw_Sice_Relation}が成り立つ．
+\begin{equation}
+  \label{Eq:Sw_Sice_Relation}
+  \Sw+\Sice = 1
+\end{equation}
+よって，$\vect{j}_\mathrm{T}$は拡散と移流の和で表される．拡散による熱フラックスいてはFourier則により表現する．
+\begin{equation}
+  \label{Eq:Fourier_Law}
+  \vect{j}_\mathrm{T} = \vect{j}_\mathrm{TC}+\vect{j}_\mathrm{TA} = -\lambda\nabla T + \rho_\mathrm{w}c_\mathrm{w}\vect{q} T
+\end{equation}
+または，$U$は土壌の構成要素である水，氷，土壌の内部エネルギーの和であるとすると，
+\begin{equation}
+  \label{Eq:Internal_Energy}
+  U = U_\mathrm{s} + U_\mathrm{w} + U_\mathrm{ice}
+\end{equation}
+ここで，$U_\mathrm{s}$，$U_\mathrm{w}$，$U_\mathrm{ice}$はそれぞれ土壌，水，氷の内部エネルギーである．それぞれの内部エネルギーは次のように表される．
+\begin{subequations}
+  \label{Eq:Internal_Energy_Component}
+  \begin{align}
+    U_\mathrm{s}   & = c_\mathrm{s}T\rho_\mathrm{s}\pab{1-\phiv}                        \\
+    U_\mathrm{w}   & = c_\mathrm{w}T\rho_\mathrm{w}\Sw\phiv                             \\
+    U_\mathrm{ice} & = \pab{-L_\mathrm{f}+c_\mathrm{ice}T}\rho_\mathrm{ice}\Sice\phiv 
+  \end{align}
+\end{subequations}
+\eqref{Eq:First_Law_Thermo_Closed_Time}に\eqref{Eq:Fourier_Law}，\eqref{Eq:Internal_Energy_Component}を代入すると，
+\begin{align}
+   & \pdv{\pab{U_\mathrm{s}+U_\mathrm{w}+U_\mathrm{ice}}}{t}+\div\pab{\lambda\nabla T-\rho_\mathrm{w}c_\mathrm{w}\vect{q} T} - S_\mathrm{T} = 0\notag \\
+  \label{Eq:First_Law_Thermo_Closed_Time_2}
+  \begin{split}
+     & \pdv{\bab{c_\mathrm{s}T\rho_\mathrm{s}\pab{1-\phiv}+c_\mathrm{w}T\rho_\mathrm{w}\Sw\phiv+\pab{-L_\mathrm{f}+c_\mathrm{ice}T}\rho_\mathrm{ice}\Sice\phiv}}{t} \\
+     & =\nabla\cdot\pab{\lambda\nabla T}-\rho_\mathrm{w}c_\mathrm{w}\vect{q}\nabla T + S_\mathrm{T}
+  \end{split}
+\end{align}
+\eqref{Eq:First_Law_Thermo_Closed_Time_2}の右をLeibniz ruleで展開する．このとき，時間依存性を持つ変数は$T$，$\rho_\mathrm{w}$，$\Sw$，$\rho_\mathrm{ice}$，$\Sice$，$\phiv$とすれば，
+\begin{align}
+   & \pdv{\bab{c_\mathrm{s}T\rho_\mathrm{s}\pab{1-\phiv}+c_\mathrm{w}T\rho_\mathrm{w}\Sw\phiv+\pab{-L_\mathrm{f}+c_\mathrm{ice}T}\rho_\mathrm{ice}\Sice\phiv}}{t} \notag                                                                              \\
+   & =c_\mathrm{s}\rho_\mathrm{s}\pdv{\bab{T\pab{1-\phiv}}}{t}
+  +c_\mathrm{w}\pdv{\pab{T\rho_\mathrm{w}\Sw\phiv}}{t}
+  -L_\mathrm{f}\pdv{\pab{\rho_\mathrm{ice}\Sice\phiv}}{t}
+  +c_\mathrm{ice}\pdv{\pab{T\rho_\mathrm{ice}\Sice\phiv}}{t}\notag                                                                                                                                                                                    \\
+  \begin{split}
+     & =c_\mathrm{s}\rho_\mathrm{s}\bab{\pab{1-\phiv}\pdv{T}{t}+T\pdv{\pab{1-\phiv}}{t}}                                                                                            \\
+     & +c_\mathrm{w}\pab{\rho_\mathrm{w}\Sw\phiv\pdv{T}{t}+T\Sw\phiv\pdv{\rho_\mathrm{w}}{t}+T\rho_\mathrm{w}\phiv\pdv{\Sw}{t}+T\rho_\mathrm{w}\Sw\pdv{\phiv}{t}}                   \\
+     & -L_\mathrm{f}\pab{\Sice\phiv\pdv{\rho_\mathrm{ice}}{t}+\rho_\mathrm{ice}\phiv\pdv{\Sice}{t}+\rho_\mathrm{ice}\Sice\pdv{\phiv}{t}}                                            \\
+     & +c_\mathrm{ice}\pab{\rho_\mathrm{ice}\Sice\phiv\pdv{T}{t}+T\Sice\phiv\pdv{\rho_\mathrm{ice}}{t}+T\rho_\mathrm{ice}\phiv\pdv{\Sice}{t}+T\rho_\mathrm{ice}\Sice\pdv{\phiv}{t}}
+  \end{split}\notag \\
+  \begin{split}
+     & =\bab{c_\mathrm{s}\rho_\mathrm{s}\pab{1-\phiv}+c_\mathrm{w}\rho_\mathrm{w}\Sw\phiv+c_\mathrm{ice}\rho_\mathrm{ice}\Sice\phiv}\pdv{T}{t}                     \\
+     & +\bab{c_\mathrm{w}T\Sw\phiv\pdv{\rho_\mathrm{w}}{t}+\pab{-L_\mathrm{f}\Sice\phiv+c_\mathrm{ice}T\Sice\phiv}\pdv{\rho_\mathrm{ice}}{t}}                      \\
+     & +\bab{c_\mathrm{w}T\rho_\mathrm{w}\phiv\pdv{\Sw}{t}+\pab{-L_\mathrm{f}\rho_\mathrm{ice}\phiv+c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pdv{\Sice}{t}}          \\
+     & +\pab{-c_\mathrm{s}T\rho_\mathrm{s}+c_\mathrm{w}T\rho_\mathrm{w}\Sw-L_\mathrm{f}\rho_\mathrm{ice}\Sice+c_\mathrm{ice}T\rho_\mathrm{ice}\Sice}\pdv{\phiv}{t}
+  \end{split}
+  \label{Eq:First_Law_Thermo_Closed_Time_3}
+\end{align}
+\eqref{Eq:First_Law_Thermo_Closed_Time_3}第2項について考える．\eqref{Eq:GCC_differential_form}，\eqref{Eq:Compressibility}，\eqref{Eq:Sw_Sice_Relation}を\eqref{Eq:First_Law_Thermo_Closed_Time_3}第2項に代入すると，
+\begin{align}
+   & c_\mathrm{w}T\Sw\phiv\pdv{\rho_\mathrm{w}}{t}+\pab{-L_\mathrm{f}\Sice\phiv+c_\mathrm{ice}T\Sice\phiv}\pdv{\rho_\mathrm{ice}}{t}\notag                                                                                                                                                                                          \\
+   & =c_\mathrm{w}T\Sw\phiv\pdv{\rho_\mathrm{w}}{t}+\bab{-L_\mathrm{f}\pab{1-\Sw}\phiv+c_\mathrm{ice}T\pab{1-\Sw}\phiv}\pdv{\rho_\mathrm{ice}}{t}\notag                                                                                                                                                                             \\
+   & =c_\mathrm{w}T\Sw\phiv\frac{\rho_\mathrm{w}}{K_\mathrm{w}}\pdv{P}{t}+\bab{-L_\mathrm{f}\pab{1-\Sw}\phiv+c_\mathrm{ice}T\pab{1-\Sw}\phiv}\frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\pdv{P_\mathrm{ice}}{t}\notag                                                                                                       \\
+   & =c_\mathrm{w}T\Sw\phiv\frac{\rho_\mathrm{w}}{K_\mathrm{w}}\pdv{P}{t}+\bab{-L_\mathrm{f}\pab{1-\Sw}\phiv+c_\mathrm{ice}T\pab{1-\Sw}\phiv}\frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pdv{P}{t} - \frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}\pdv{T}{t}}\notag \\
+  \label{Eq:First_Law_Thermo_Closed_Time_4}
+  \begin{split}
+     & =\Bab[bigg]{c_\mathrm{w}T\Sw\phiv\frac{\rho_\mathrm{w}}{K_\mathrm{w}}+\bab{c_\mathrm{ice}T\pab{1-\Sw}\phiv-L_\mathrm{f}\pab{1-\Sw}\phiv}\frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\pdv{P}{t} \\
+     & -\bab{c_\mathrm{ice}T\pab{1-\Sw}\phiv-L_\mathrm{f}\pab{1-\Sw}\phiv}\frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}\pdv{T}{t}
+  \end{split}
+\end{align}
+\eqref{Eq:First_Law_Thermo_Closed_Time_3}第3項について考える．\eqref{Eq:Sw_Sice_Relation}を$t$で微分すると，\eqref{Eq:Sw_Sice_Relation_Diff}が得られる．
+\begin{equation}
+  \label{Eq:Sw_Sice_Relation_Diff}
+  \pdv{\Sw}{t}=-\pdv{\Sice}{t}
+\end{equation}
+\eqref{Eq:GCC_differential_form}，\eqref{Eq:Compressibility}，\eqref{Eq:Sw_Sice_Relation_Diff}を\eqref{Eq:First_Law_Thermo_Closed_Time_3}第3項に代入すると，
+\begin{align}
+   & c_\mathrm{w}T\rho_\mathrm{w}\phiv\pdv{\Sw}{t}+\pab{-L_\mathrm{f}\rho_\mathrm{ice}\phiv+c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pdv{\Sice}{t} \notag                                               \\
+   & =c_\mathrm{w}T\rho_\mathrm{w}\phiv\pdv{\Sw}{t}-\pab{-L_\mathrm{f}\rho_\mathrm{ice}\phiv+c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pdv{\Sw}{t}\notag                                                 \\
+   & =\pab{c_\mathrm{w}T\rho_\mathrm{w}\phiv+L_\mathrm{f}\rho_\mathrm{ice}\phiv-c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pdv{\Sw}{t}\notag                                                              \\
+   & =\pab{c_\mathrm{w}T\rho_\mathrm{w}\phiv+L_\mathrm{f}\rho_\mathrm{ice}\phiv-c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pab{\pdv{\Sw}{P}\pdv{P}{t}+\pdv{\Sw}{T}\pdv{T}{t}}\notag \\
+  \label{Eq:First_Law_Thermo_Closed_Time_5}
+  \begin{split}
+     & =\bab{\pab{c_\mathrm{w}T\rho_\mathrm{w}\phiv+L_\mathrm{f}\rho_\mathrm{ice}\phiv-c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pdv{\Sw}{P}}\pdv{P}{t} \\
+     & +\bab{\pab{c_\mathrm{w}T\rho_\mathrm{w}\phiv+L_\mathrm{f}\rho_\mathrm{ice}\phiv-c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pdv{\Sw}{T}}\pdv{T}{t}
+  \end{split}
+\end{align}
+\eqref{Eq:First_Law_Thermo_Closed_Time_3}第4項について考える．$\varepsilon_\mathrm{v}$は圧縮方向を正としているので，
+\begin{align}
+   & \bab{-c_\mathrm{s}T\rho_\mathrm{s}+c_\mathrm{w}T\rho_\mathrm{w}\Sw-L_\mathrm{f}\rho_\mathrm{ice}\Sice+c_\mathrm{ice}T\rho_\mathrm{ice}\Sice}\pdv{\phiv}{t}\notag                        \\
+  \label{Eq:First_Law_Thermo_Closed_Time_6}
+   & =\bab{c_\mathrm{s}T\rho_\mathrm{s}-c_\mathrm{w}T\rho_\mathrm{w}\Sw+L_\mathrm{f}\rho_\mathrm{ice}\pab{1-\Sw}-c_\mathrm{ice}T\rho_\mathrm{ice}\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}{t}
+\end{align}
+\eqref{Eq:First_Law_Thermo_Closed_Time_3}に，\eqref{Eq:First_Law_Thermo_Closed_Time_4}，\eqref{Eq:First_Law_Thermo_Closed_Time_5}，\eqref{Eq:First_Law_Thermo_Closed_Time_6}を代入すると，
+\begin{equation}
+  \label{Eq:First_Law_Thermo_Closed_Time_7}
+  \begin{split}
+    \pdv{U}{t}= & \bab{c_\mathrm{s}\rho_\mathrm{s}\pab{1-\phiv}+c_\mathrm{w}\rho_\mathrm{w}\Sw\phiv+c_\mathrm{ice}\rho_\mathrm{ice}\Sice\phiv}\pdv{T}{t}                                                                                                    \\
+                & +\Bab{c_\mathrm{w}T\Sw\phiv\frac{\rho_\mathrm{w}}{K_\mathrm{w}}+\bab{c_\mathrm{ice}T\pab{1-\Sw}\phiv-L_\mathrm{f}\pab{1-\Sw}\phiv}\frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\pdv{P}{t} \\
+                & -\bab{c_\mathrm{ice}T\pab{1-\Sw}\phiv-L_\mathrm{f}\pab{1-\Sw}\phiv}\frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}\pdv{T}{t}                                                                         \\
+                & +\bab{\pab{c_\mathrm{w}T\rho_\mathrm{w}\phiv+L_\mathrm{f}\rho_\mathrm{ice}\phiv-c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pdv{\Sw}{P}}\pdv{P}{t}                                                                       \\
+                & +\bab{\pab{c_\mathrm{w}T\rho_\mathrm{w}\phiv+L_\mathrm{f}\rho_\mathrm{ice}\phiv-c_\mathrm{ice}T\rho_\mathrm{ice}\phiv}\pdv{\Sw}{T}}\pdv{T}{t}                                                                                             \\
+                & +\bab{c_\mathrm{s}T\rho_\mathrm{s}-c_\mathrm{w}T\rho_\mathrm{w}\Sw+L_\mathrm{f}\rho_\mathrm{ice}\pab{1-\Sw}-c_\mathrm{ice}T\rho_\mathrm{ice}\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}{t}
+  \end{split}
+\end{equation}
+\eqref{Eq:Volumetric_Heat_Capacity}，\eqref{Eq:Volumetric_Heat_Capacity_Total}を\eqref{Eq:First_Law_Thermo_Closed_Time_7}に代入すると，
+\begin{equation}
+  \begin{split}
+    \pdv{U}{t} & = \bab{C_\mathrm{p}-\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}\pab{C_\mathrm{ice}T-L_\mathrm{f}\rho_\mathrm{ice}}+\phiv\pab{C_\mathrm{w}T-C_\mathrm{ice}T+L_\mathrm{f}\rho_\mathrm{ice}}\pdv{\Sw}{T}}\pdv{T}{t}                                                 \\
+               & +\bab{\frac{\Sw\phiv}{K_\mathrm{w}}C_\mathrm{w}T+\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pab{C_\mathrm{ice}T-L_\mathrm{f}\rho_\mathrm{ice}}+\pab{C_\mathrm{w}T-C_\mathrm{ice}T+L_\mathrm{f}\rho_\mathrm{ice}}\pdv{\Sw}{P}\phiv}\pdv{P}{t} \\
+               & +\bab{C_\mathrm{s}T-C_\mathrm{w}T\Sw+L_\mathrm{f}\rho_\mathrm{ice}\pab{1-\Sw}-C_\mathrm{ice}T\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}{t}
+  \end{split}
+\end{equation}
+よって最終的に，\eqref{Eq:First_Law_Thermo_Closed_Time_2}は次のように表される．
+\begin{equation}
+  \label{Eq:First_Law_Thermo_Closed_Time_Final}
+  \begin{split}
+     & \bab{C_\mathrm{p}-\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}\pab{C_\mathrm{ice}T-L_\mathrm{f}\rho_\mathrm{ice}}+\phiv\pab{C_\mathrm{w}T-C_\mathrm{ice}T+L_\mathrm{f}\rho_\mathrm{ice}}\pdv{\Sw}{T}}\pdv{T}{t}                                                   \\
+     & +\bab{\frac{\Sw\phiv}{K_\mathrm{w}}C_\mathrm{w}T+\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pab{C_\mathrm{ice}T-L_\mathrm{f}\rho_\mathrm{ice}}+\pab{C_\mathrm{w}T-C_\mathrm{ice}T+L_\mathrm{f}\rho_\mathrm{ice}}\pdv{\Sw}{P}\phiv}\pdv{P}{t} \\
+     & +\bab{C_\mathrm{s}T-C_\mathrm{w}T\Sw+L_\mathrm{f}\rho_\mathrm{ice}\pab{1-\Sw}-C_\mathrm{ice}T\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}{t}                                                                                                                                                                 \\
+     & =\nabla\cdot\pab{\lambda\nabla T}-\rho_\mathrm{w}c_\mathrm{w}\vect{q}\nabla T + S_\mathrm{T}
+  \end{split}
+\end{equation}
+ここで，熱移動支配方程式の独立変数を$T$のみとすれば，\eqref{Eq:Volumetric_Heat_Capacity}，\eqref{Eq:Volumetric_Heat_Capacity_Total}をを用いて\eqref{Eq:First_Law_Thermo_Closed_Time_2}は次のように表される．
+\begin{align}
+   & \pdv{\pab{U_\mathrm{s}+U_\mathrm{w}+U_\mathrm{ice}}}{t}+\div\pab{\lambda\nabla T-\rho_\mathrm{w}c_\mathrm{w}\vect{q} T} - S_\mathrm{T} = 0\notag           \\
+  \label{Eq:First_Law_Thermo_Closed_Time_8}
+   & C_\mathrm{p}\pdv{T}{t}-L_\mathrm{f}\rho_\mathrm{ice}\pdv{\pab{\Sice\phiv}}{t}=\nabla\cdot\pab{\lambda\nabla T}-C_\mathrm{w}\vect{q}\nabla T + S_\mathrm{T}
+\end{align}

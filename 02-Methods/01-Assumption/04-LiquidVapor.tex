@@ -1,0 +1,83 @@
+\subsection{液相・気相間の相平衡}
+\label{Sec:LiquidVaporEquilibrium}
+
+\indent
+本節では熱力学的な平衡論に基づいて土壌中の液・気相間の相平衡をマトリックポテンシャルを用いて定式化することを目的とする．
+土壌表面などある基準水面を考えれば，その上部に存在する水は毛管力によって引き上げられ，基準水面よりも高い位置にある水は負圧状態になる．
+ここで，水のポテンシャルを基準水面からの水柱の高さで表したものがマトリックポテンシャル $h$ \unit{[\meter]} である．
+このとき，マトリックポテンシャル $h$ の場所にある液相の水の比自由エネルギー $\Delta f_\mathrm{w}$ \unit{[\joule.\kilogram^{-1}]} は，次のようになる．
+\begin{equation}
+  \label{Eq:LiquidFreeEnergy}
+  \Delta f_\mathrm{w} = h g
+\end{equation}
+ここで，$g$は重力加速度 \unit{[\meter.\second^{-2}]} である．
+一方，同じ高さにおける水蒸気の比自由エネルギー $\Delta f_\mathrm{v}$ \unit{[\joule.\kilogram^{-1}]} は，その場所の蒸気圧$P_\mathrm{v}$と基準水面$h=0$での飽和蒸気圧$P_\mathrm{v}^\mathrm{sat}$との比で決定される．
+\begin{equation}
+  \label{Eq:VaporFreeEnergy}
+  \Delta f_\mathrm{v} = R_\mathrm{v} T^\ast \ln{\frac{P_\mathrm{v}}{P_\mathrm{v}^\mathrm{sat}}}
+\end{equation}
+ここで，$R_\mathrm{v}$は水蒸気の気体定数 [\qty{461.5}{\joule.\kilogram^{-1}.\kelvin^{-1}}] である．水蒸気の気体定数は，一般気体定数$R=\qty{8.314}{\joule.\mole^{-1}.\kelvin^{-1}}$を水のモル質量$M_\mathrm{w}=\qty{18.015}{\gram.\mole^{-1}}$で割ったものである．すなわち，$R_\mathrm{v} = R / M_\mathrm{w}$である．
+考えている土壌の系が熱力学的平衡状態にあるとき，液相と気相の単位質量あたりのHelmholtz自由エネルギーは等しい．すなわち，$\Delta f_\mathrm{w} = \Delta f_\mathrm{v}$が成り立つ．これを用いれば，\eqref{Eq:LiquidFreeEnergy}と\eqref{Eq:VaporFreeEnergy}より次式（Kelvin方程式）が得られる．
+\begin{equation}
+  \label{Eq:LiquidVaporEquilibrium}
+  h g =\frac{R T^\ast}{M_\mathrm{w}} \ln{\frac{P_\mathrm{v}}{P_\mathrm{v}^\mathrm{sat}}}
+\end{equation}
+ここで，相対湿度$H_\mathrm{r}$は，空気中の水蒸気分圧と飽和水蒸気圧の比で表されるので，
+\begin{equation}
+  \label{Eq:RelativeHumidity}
+  H_\mathrm{r} = \frac{P_\mathrm{v}}{P_\mathrm{v}^\mathrm{sat}}
+\end{equation}
+よって，相対湿度は\eqref{Eq:LiquidVaporEquilibrium}より次のように表される．
+\begin{align}
+  \label{Eq:RelativeHumidityFinal}
+  H_\mathrm{r} & = \exp{\pab{\frac{h M_\mathrm{w} g}{R T^\ast}}}
+\end{align}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{2-1/Hr_soil.pdf}
+  \caption{相対湿度$H_\mathrm{r}$とマトリックポテンシャルの関係}\label{fig:Hr_soil}
+\end{figure}
+ここで，水蒸気密度$\rho_\mathrm{v}$は，飽和水蒸気密度$\rho_\mathrm{v}^\mathrm{sat}$と相対湿度$H_\mathrm{r}$の積で表される．
+\begin{align}
+  \label{Eq:VaporDensity}
+  \rho_\mathrm{v} & = \rho_\mathrm{v}^\mathrm{sat} H_\mathrm{r} = \rho_\mathrm{v}^\mathrm{sat} \exp{\pab{\frac{h M_\mathrm{w} g}{R T^\ast}}}
+\end{align}
+また，水蒸気を液水換算したときの体積水蒸気量 $\Qv$ \unit{[-]} は，水蒸気密度 $\rho_\mathrm{v}$ と気相率 $\Qa$ を用いて次のように定義される．
+\begin{equation}
+  \label{Eq:VolumetricVaporContent}
+  \Qv = \frac{\rho_\mathrm{v} \Qa}{\rho_\mathrm{w}} = \rho_\mathrm{v}^\mathrm{sat} H_\mathrm{r} \frac{\Qa}{\rho_\mathrm{w}}
+\end{equation}
+
+$\rho_\mathrm{v}^\mathrm{sat}$は$T$の関数，$H_\mathrm{r}$は$h$と$T$の関数であり，水分保持関数によって$h$は$\Qw$について一価関数になることを考慮すれば，$\rho_\mathrm{v}$の空間方向の微分は，積の微分法則より次のようになる．
+\begin{align}
+  \label{Eq:VaporDensityGradient}
+  \nabla \rho_\mathrm{v} & = H_\mathrm{r} \nabla \rho_\mathrm{v}^\mathrm{sat} + \rho_\mathrm{v}^\mathrm{sat} \nabla H_\mathrm{r} \notag                                                           \\
+                         & = H_\mathrm{r} \odv{\rho_\mathrm{v}^\mathrm{sat}}{T} \nabla T + \rho_\mathrm{v}^\mathrm{sat} \pab{\pdv{H_\mathrm{r}}{T} \nabla T + \pdv{H_\mathrm{r}}{\Qw} \nabla \Qw}
+\end{align}
+\eqref{Eq:VaporDensityGradient}は $\nabla \rho_\mathrm{v}$ を $\nabla T$ と $\nabla \Qw$ で厳密に表現している．
+ここで，この式をより実用的な形に単純化するため，相対湿度 $H_\mathrm{r}$ が $h$ と $T$ に対してどのように応答するか，その特性を次に考察する．
+\eqref{Eq:RelativeHumidityFinal}より明らかなように，$H_\mathrm{r}$は $h$ の指数関数となっている．
+$h$ は不飽和帯において負の値をとるため，土壌が乾燥するにしたがって $h$ は負の方向により大きな値をとる．
+ここで例えば温度を$\qty{298.15}{\kelvin}=\qty{25.0}{\degreeCelsius}$と固定すれば，\eqref{Eq:RelativeHumidityFinal}の指数部の$h$以外$\pab{M_\mathrm{w} g / \pab{R T^\ast}}$を定数として計算でき，その定数部はおよそ $\qty{7.13e-5}{\meter^{-1}}$ となる．
+$h>\qty{-1e3}{\meter}$であれば，指数部の絶対値が比較的小さいため，$H_\mathrm{r}$は$1$に非常に近い値をとる．
+しかし，$h$ が $\qty{-1e3}{\meter}$ より小さくなる（負の方向に大きくなる）と，指数部の$h$の影響が大きくなり，$H_\mathrm{r}$は減少し始める．$h<-\qty{e6}{\meter}$ になると$h$が支配的になり，$H_\mathrm{r}$は$0$に漸近する．この傾向は Fig.~\ref{fig:Hr_soil} と一致する．
+一方，絶対温度 $T^\ast$は\eqref{Eq:RelativeHumidityFinal}の指数の分母にある．$h$ は負であるため，温度 $T^\ast$ が上昇すると，$H_\mathrm{r}$は大きくなる．
+しかし，$T^\ast$の変動幅が $h$ の変動幅に比べて小さいため，Fig.~\ref{fig:Hr_soil_contour}に示す通り，$H_\mathrm{r}$の$T^\ast$に対する感度は $h$ に対する感度と比べて小さい．
+よって，$H_\mathrm{r}$ の値は，主にマトリックポテンシャル $h$および，それと水分保持関数を介して関連する液状水量 $\Qw$によって支配的に決定されると言える．
+$H_\mathrm{r}$ の特性についての考察から，$H_\mathrm{r}$ の温度 $T^\ast$ に対する依存性は，マトリックポテンシャル $h$ に対する依存性と比較して小さいことが示された．
+この知見に基づき，\eqref{Eq:VaporDensityGradient}を単純化するため，$H_\mathrm{r}$ の温度依存性は無視できると仮定する．
+土壌が極めて乾燥している状態（例えば $h < \qty{-2e3}{\meter}$）や塩分濃度が高い状態を除けば，$H_\mathrm{r} \approx 1$ の近似を用いることができる．
+前者の条件下では温度依存性を無視しうるため，Fig.~\ref{fig:Hr_soil_validation} に示すように，温度 $\qty{15}{\degreeCelsius}$ における $H_\mathrm{r}$ と $h$ の関係を代表例として用いることができる．
+このとき，基準マトリックポテンシャルを $\psi_\mathrm{m,ref} = \qty{-2e3}{\meter}$ のように適切に設定すれば，$h > \psi_\mathrm{m,ref}$ の範囲において $H_\mathrm{r} \approx 1$ と近似できることが確認される．
+この近似の成立には数パーセント程度の誤差を許容する必要があるが，例えば $H_\mathrm{r} = 0.99$ に相当する $h$ はおおよそ $\qty{-1383}{\meter}$ であり，実用上は十分な精度を保つ．
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{2-1/Hr_contour_plot.pdf}
+  \caption{温度およびマトリックポテンシャルに対する相対湿度の応答曲面}\label{fig:Hr_soil_contour}
+\end{figure}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{2-1/Hr_soil_validation.pdf}
+  \caption{温度$\qty{15}{\degreeCelsius}$における相対湿度とマトリックポテンシャルの関係および近似のための基準マトリックポテンシャル}\label{fig:Hr_soil_validation}
+\end{figure}

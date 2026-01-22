@@ -1,0 +1,276 @@
+\subsection{輸送過程と保存則}
+\label{Sec:TransportAndGoverning}
+
+\subsubsection{液相の輸送}
+% Darcy則に基づく液相フラックス
+本節では，土壌中の液相水移動である液相水フラックスを，マトリックポテンシャル勾配を駆動力とするDarcyの法則に基づいてモデル化する．
+多孔質媒体中の液相水フラックスは，Darcyの法則に従い，全水圧の勾配 $\nabla \Pw$ に比例すると仮定される．
+\begin{equation}
+  \label{Eq:LiquidFlux}
+  \vect{j}_\mathrm{WL} = - K_\mathrm{w} \nabla \Pw
+\end{equation}
+ここで，$\vect{j}_\mathrm{WL}$ は液相水フラックス \unit{[\meter.\second^{-1}]}である．
+不飽和土中の液相水の全水圧 $\Pw$ は，溶質を無視すればマトリックポテンシャル $h$ と重力ポテンシャル $z$ の和として表される．
+\begin{equation}
+  \label{Eq:LiquidPressure}
+  \Pw = h + z
+\end{equation}
+ここで，重力ポテンシャル $z$ は，基準高さを $z_0$ \unit{[\meter]} とした場合，次式で与えられる．
+\begin{equation}
+  \label{Eq:GravitationalPotential}
+  z = \pab{z_\text{soil} - z_0}
+\end{equation}
+ここで$z_\text{soil}$ は土中水の高さの鉛直座標 \unit{[\meter]} である．
+液相水フラックス \eqref{Eq:LiquidFlux} に，液相水圧 \eqref{Eq:LiquidPressure}を代入し，さらに \eqref{Eq:GravitationalPotential}を用いて $\nabla \Pw$ を展開すると，次のように表される．
+\begin{equation}
+  \label{Eq:LiquidFlux_final}
+  \vect{j}_\mathrm{WL} = - K_\mathrm{w} \nabla \pab{h + z}
+\end{equation}
+ここで，マトリックポテンシャル $h$ は，毛管力によって引き上げられた水の位置エネルギーを表すので，大気圧面を基準とした場合，$h$ は負の値をとる．
+\begin{equation}
+  \label{Eq:MatricPotential}
+  h = - \frac{2 \sigma \cos\alpha}{\rho_\mathrm{w} g r_\mathrm{cap}}
+\end{equation}
+ここで，$\sigma$ は土壌間隙水の表面張力 \unit{[\newton.\meter^{-1}]}，$\alpha$ は接触角 \unit{[\radian]}，$r_\mathrm{cap}$ は毛管半径 \unit{[\meter]} である．
+$\sigma$は温度の関数として次式で表される．
+\begin{equation}
+  \label{Eq:SurfaceTension}
+  \sigma\pab{T} = 75.6 - 0.1425 T - 2.38 \times 10^{-4} T^2
+\end{equation}
+マトリックポテンシャル $h$ の温度依存性を調べるため，$\sigma$と$\rho_\mathrm{w}$が温度に依存するとし，\eqref{Eq:MatricPotential}を$T$ で偏微分すると，次式が得られる．
+\begin{align}
+  \label{Eq:MatricPotentialGradient}
+  \pdv{h}{T} & = - \frac{2 \cos\alpha}{g r_\mathrm{cap}} \frac{\displaystyle \rho_\mathrm{w}\pdv{\sigma}{T} - \sigma\pdv{\rho_\mathrm{w}}{T}}{\rho_\mathrm{w}^2} \notag \\
+             & = \frac{\rho_\mathrm{w} h}{\sigma} \frac{\displaystyle \rho_\mathrm{w}\pdv{\sigma}{T} - \sigma\pdv{\rho_\mathrm{w}}{T}}{\rho_\mathrm{w}^2} \notag        \\
+             & = h \pab{\frac{1}{\sigma}\pdv{\sigma}{T} - \frac{1}{\rho_\mathrm{w}}\pdv{\rho_\mathrm{w}}{T}} \notag                                                     \\
+             & \approx h \frac{1}{\sigma}\pdv{\sigma}{T}
+\end{align}
+よって $\vect{j}_\mathrm{WL}$は，温度勾配 $\nabla T$ とマトリックポテンシャル勾配 $\nabla h$ の関数として次式で表される．
+\begin{equation}
+  \label{Eq:LiquidFlux_final2}
+  \vect{j}_\mathrm{WL} = - K_\mathrm{w} \pab{\frac{h}{\sigma}\pdv{\sigma}{T} \nabla T + \nabla h + \nabla z}
+\end{equation}
+ここで，温度勾配に起因する液相水フラックスの透水係数 $K_\mathrm{wT}$ \unit{[\meter^{2}.\second^{-1}.\kelvin^{-1}]} と，マトリックポテンシャル勾配に起因する液相水フラックスの透水係数  $K_\mathrm{wP}$ \unit{[\meter.\second^{-1}]} を，それぞれ次式で定義する．
+\begin{align}
+  \label{Eq:Kwh_def}
+  K_\mathrm{wP} & = K_\mathrm{w}                                                 \\
+  \label{Eq:KwT_def}
+  K_\mathrm{wT} & = K_\mathrm{w} h G_\mathrm{wT} \frac{1}{\sigma}\pdv{\sigma}{T}
+\end{align}
+ここで，$G_\mathrm{wT}$は液相水の温度勾配に起因するフラックスの増進係数 \unit{[-]} であり，砂で$7$となる．
+\eqref{Eq:Kwh_def} と \eqref{Eq:KwT_def} を用いると，液相水フラックス \eqref{Eq:LiquidFlux_final2} は次のように簡略化できる．
+\begin{equation}
+  \label{Eq:LiquidFlux_final3}
+  \vect{j}_\mathrm{WL} = -K_\mathrm{wP} \pab{\nabla h + \nabla z} - K_\mathrm{wT} \nabla T
+\end{equation}
+
+\subsubsection{気相の輸送}
+\label{Sec:VaporTransport}
+% Fick則に基づく水蒸気輸送
+
+本節では，土壌中の水蒸気移動である水蒸気密度フラックスを，水蒸気密度の勾配を駆動力とするFickの法則に基づいてモデル化する．
+水蒸気密度フラックスは，Fickの法則に従い，水蒸気密度 $\rho_\mathrm{v}$ の勾配 $\nabla \rho_\mathrm{v}$ に比例すると仮定される．
+したがって，当面の目標は，この水蒸気密度 $\rho_\mathrm{v}$ を熱力学変数で表し，その勾配 $\nabla \rho_\mathrm{v}$ を導出することである．
+最終的なゴールは，水蒸気密度フラックス を観測可能な変数である温度勾配 $\nabla T$ とマトリックポテンシャル勾配 $\nabla h$ の関数として表現することである．
+
+\cref{Sec:LiquidVaporEquilibrium}での仮定を用い，\eqref{Eq:VaporDensityGradient}を，$\nabla h$ を用いて書き直すと，次のように近似できる．
+\begin{align}
+  \label{Eq:VaporDensityGradient_approx}
+  \nabla \rho_\mathrm{v} & = H_\mathrm{r} \odv{\rho_\mathrm{v}^\mathrm{sat}}{T} \nabla T + \rho_\mathrm{v}^\mathrm{sat} \pab{\pdv{H_\mathrm{r}}{T} \nabla T + \pdv{H_\mathrm{r}}{h} \nabla h} \notag  \\
+                         & \approx H_\mathrm{r} \odv{\rho_\mathrm{v}^\mathrm{sat}}{T} \nabla T + \rho_\mathrm{v}^\mathrm{sat} \pdv{H_\mathrm{r}}{h} \nabla h \notag                                   \\
+                         & = H_\mathrm{r} \odv{\rho_\mathrm{v}^\mathrm{sat}}{T} \nabla T + \rho_\mathrm{v}^\mathrm{sat} \pdv{}{h}\bab{\exp{\pab{\frac{h M_\mathrm{w} g}{R T^\ast}}} } \nabla h \notag \\
+                         & = H_\mathrm{r} \odv{\rho_\mathrm{v}^\mathrm{sat}}{T} \nabla T + \rho_\mathrm{v}^\mathrm{sat} \pab{ H_\mathrm{r} \frac{M_\mathrm{w} g}{R T^\ast} } \nabla h
+\end{align}
+この\eqref{Eq:VaporDensityGradient_approx}が， 水蒸気密度フラックスを計算するための $\nabla \rho_\mathrm{v}$ の近似形となる．
+
+% \subsubsection{土壌中の水蒸気拡散係数}
+ここで，飽和水蒸気密度$\rho_\mathrm{v}^\mathrm{sat}$ \unit{[\kilogram.\meter^{-3}]} は温度$T$の関数であるので，次のように表される．
+\begin{equation}
+  \label{Eq:VaporSaturationDensity}
+  \rho_\mathrm{v}^\mathrm{sat} = 10^{-3} \dfrac{\exp\pab{31.3716-\dfrac{6014.79}{T} - 0.00792495 T}}{T}
+\end{equation}
+水蒸気密度フラックスも他のガスと同様に，Fickの法則にしたがうと仮定すれば，次のように表される．
+\begin{equation}
+  \label{Eq:VaporFlux}
+  \vect{j}_\mathrm{WV} = - \frac{\Qa \tau v D_\mathrm{atm}}{\rho_\mathrm{w}} \nabla \rho_\mathrm{v}
+\end{equation}
+ここで，$\vect{j}_\mathrm{WV}$は水蒸気密度フラックス\unit{[\meter.\second^{-1}]}，$D_\mathrm{atm}$は大気中での水蒸気相互拡散係数\unit{[\meter^2.\second^{-1}]}，$\tau$は屈曲度\unit{[-]}，$v$は水蒸気の一方拡散による促進を示すマスフローファクター\unit{[-]}である．
+一般に$D_\mathrm{atm}$は温度と土中空気全圧の関数となり，次のように表される\parencite{Campbell-1985}．
+\begin{equation}
+  \label{Eq:VaporDiffusionCoefficient}
+  D_\mathrm{atm} \pab{T,P} = D_\mathrm{atm,0} \pab{\frac{T}{T_0}}^n \pab{\frac{P_0}{P}}
+\end{equation}
+ここで，$D_\mathrm{atm,0} = \qty{2.12e-5}{\meter^2.\second^{-1}}$は基準温度$T_0 = \qty{273.16}{\kelvin}$，基準圧力$P_0 = \qty{101.3}{\kilo\pascal}$における水蒸気の拡散係数であり，指数$n$は一般に水蒸気の場合$2$とされる．
+土壌中の液状水表面からのみ水蒸気が発生するとし，氷などの固体によって気泡として閉じ込められた空気中の水蒸気は考慮しないとすれば，液状水表面は何らかの通路をたどって大気に接することができるので，$P_0/P\approx 1$の近似ができる．
+よって，\eqref{Eq:VaporDiffusionCoefficient}は次のように近似できる．
+\begin{equation}
+  \label{Eq:VaporDiffusionCoefficient_approx}
+  D_\mathrm{atm} \pab{T} \approx \num{2.12e-5} \pab{\frac{T}{273.15}}^2
+\end{equation}
+また，屈曲度$\tau$は，気相率$\Qa$の関数として次のように表される\parencite{Millington-1961}．
+\begin{equation}
+  \label{Eq:Tortuosity}
+  \tau = \frac{\Qa^{7/3}}{\Qs^2}
+\end{equation}
+\textcite{Millington-1961} では，土壌中の水蒸気拡散係数 $D_\mathrm{v}$を $D_\mathrm{v} = D_\mathrm{atm} (\Qa^{10/3} / \Qs^2)$ のように $\Qa$ の $10/3$ 乗で表している．
+しかし，本文では \eqref{Eq:VaporFlux} および \eqref{Eq:SoilVaporDiffusionCoefficient} で $D_\mathrm{v} = \Qa \tau D_\mathrm{atm}$ と定義しているため，これと整合させるために $\tau$ の定義 \eqref{Eq:Tortuosity} では $\Qa$ の指数が $7/3$ となっている点に注意されたい．
+また，マスフローファクター$v$は，常温ではほぼ$1$とされる．
+
+\eqref{Eq:VaporFlux}から\eqref{Eq:Tortuosity}までの議論は，土壌間隙中の気相をガスが単純に拡散する（Fickの法則）というモデルに基づいている．
+しかし，単純な気相拡散モデルでは土壌中の熱的蒸気フラックス（温度勾配によるフラックス）を過小評価することが \textcite{Philip-1957} によって指摘されている．
+これは，間隙中の液体の島 (liquid-island) を介した水蒸気と液状水の相互作用（相変化を伴う高速移動）や，熱伝導率の違いによる局所的な温度勾配の増加に起因する．
+この効果を考慮するため，熱的蒸気フラックスを補正する促進係数 (enhancement factor) $\eta_e$ \unit{[-]} を導入する\parencite{Cass-1984, Campbell-1985}．
+\begin{equation}
+  \label{Eq:EnhancementFactor}
+  \eta_e = 9.5 + 3 \frac{\Qw}{\Qs} - 8.5 \exp\Bab{-\bab{\pab{1+\frac{2.6}{\sqrt{f_c}}}\frac{\Qw}{\Qs}}^4}
+\end{equation}
+ここで，$f_c$は土壌中の質量粘土分率 \unit{[-]} である．
+
+Fickの法則 \eqref{Eq:VaporFlux} に，近似した水蒸気密度勾配 \eqref{Eq:VaporDensityGradient_approx} を代入し，さらに \eqref{Eq:VaporDensityGradient} の第一項（温度勾配項）に対して熱的蒸気フラックスの促進係数 $\eta_e$ \eqref{Eq:EnhancementFactor} を適用することで，最終的な液相換算水蒸気フラックス密度は次のように表される．
+\begin{align}
+  \label{Eq:VaporFlux_final}
+  \vect{j}_\mathrm{WV} & = - \frac{\Qa \tau v D_\mathrm{atm}}{\rho_\mathrm{w}} \pab{\eta_e H_\mathrm{r} \odv{\rho_\mathrm{v}^\mathrm{sat}}{T} \nabla T + \rho_\mathrm{v}^\mathrm{sat} \frac{M_\mathrm{w} g}{R T^\ast} H_\mathrm{r} \nabla h} \notag \\
+                       & = - K_\mathrm{vT} \nabla T - K_\mathrm{vP} \nabla h
+\end{align}
+ここで，$K_\mathrm{vT}$は温度勾配に起因する水蒸気密度フラックスの有効拡散係数 \unit{[\meter^{2}.\second^{-1}.\kelvin^{-1}]}，$K_\mathrm{vP}$はマトリックポテンシャル勾配に起因する水蒸気密度フラックスの有効拡散係数 \unit{[\meter.\second^{-1}]} であり，それぞれ
+\begin{align}
+  \label{Eq:Kvh_def}
+  K_\mathrm{vP} & = \frac{D_\mathrm{v}}{\rho_\mathrm{w}} \rho_\mathrm{v}^\mathrm{sat} \frac{M_\mathrm{w} g}{R T^\ast} H_\mathrm{r} \\
+  \label{Eq:KvT_def}
+  K_\mathrm{vT} & = \frac{D_\mathrm{v}}{\rho_\mathrm{w}} \eta_e H_\mathrm{r} \odv{\rho_\mathrm{v}^\mathrm{sat}}{T}
+\end{align}
+と定義される．ここで，$D_\mathrm{v}$は土壌中の水蒸気拡散係数 \unit{[\meter^2.\second^{-1}]} であり，次のように表される．
+\begin{equation}
+  \label{Eq:SoilVaporDiffusionCoefficient}
+  D_\mathrm{v} = \Qa \tau D_\mathrm{atm}
+\end{equation}
+
+\subsubsection{エネルギー保存則の基礎式}
+\label{Sec:EnergyConservationBasic}
+% 熱伝導と潜熱項
+
+まず，領域$V$に含まれる土壌全体の全内部エネルギー$\mathcal{E}\pab{t}$は，ある点$\vect{r}\pab{x_1,x_2,x_3}$の単位体積あたり内部エネルギー$\mathcal{U}\pab{\vect{r},t}$の体積積分で表される．
+\begin{equation}
+  \label{Eq:Total_Energy}
+  \mathcal{E}\pab{t} = \iiint_V \mathcal{U}\pab{\vect{r},t} \odif{V}
+\end{equation}
+ここで，$\mathcal{U}$は単位体積あたりの土壌全体の内部エネルギー \unit{[\joule.\meter^{-3}]} であり，各相の内部エネルギー$\mathcal{U}_i$の体積分率平均に加え，相変化に伴う内部エネルギー差を含む．
+\begin{equation}
+  \label{Eq:Total_InnerEnergy_Def}
+  \mathcal{U} =
+  \frac{1}{1 + e} \mathcal{U}_\mathrm{s}
+  + \frac{e \Sw}{1 + e} \mathcal{U}_\mathrm{w}
+  + \frac{e \Sice}{1 + e} \mathcal{U}_\mathrm{ice}
+  + \pab{\frac{e \Sv}{1 + e} \frac{\rho_\mathrm{v}}{\rho_\mathrm{w}}} \mathcal{U}_\mathrm{v}^\star
+  - \frac{e \Sice}{1 + e} \rho_\mathrm{ice} L_\mathrm{f}
+  + \pab{\frac{e \Sv}{1 + e} \frac{\rho_\mathrm{v}}{\rho_\mathrm{w}}} \rho_\mathrm{w} L_\mathrm{v}
+\end{equation}
+また，各相の内部エネルギー$\mathcal{U}_i$ \unit{[\joule.\meter^{-3}]} は以下で与えられる．
+\begin{subequations}
+  \label{Eq:InnerEnergy_Component_Def}
+  \begin{align}
+    \label{Eq:InnerEnergy_Soil}
+    \mathcal{U}_\mathrm{s}       & = c_\mathrm{s}T \rho_\mathrm{s}     \\
+    \label{Eq:InnerEnergy_Liquid}
+    \mathcal{U}_\mathrm{w}       & = c_\mathrm{w}T \rho_\mathrm{w}     \\
+    \label{Eq:InnerEnergy_Ice}
+    \mathcal{U}_\mathrm{ice}     & = c_\mathrm{ice}T \rho_\mathrm{ice} \\
+    \label{Eq:InnerEnergy_Vapor_Eq}
+    \mathcal{U}_\mathrm{v}^\star & = c_\mathrm{v}T \rho_\mathrm{w}
+  \end{align}
+\end{subequations}
+ここで，$\mathcal{U}^\ast_\mathrm{v}$は液相換算水蒸気の内部エネルギーであるので注意されたい．
+次に，領域の表面$S$を通過する単位時間あたりのエネルギー流束（エネルギーフラックス密度）$\vect{j}_E$ \unit{[\joule.\second^{-1}.\meter^{-2}]} を定義する．
+エネルギーの輸送は，(1) 熱伝導による拡散と，(2) 液状水・水蒸気の移動に伴う移流の2形態で生じる．
+\begin{equation}
+  \label{Eq:Energy_Flux_Def}
+  \vect{j}_E = \vect{j}_\mathrm{H} + \mathcal{U}_\mathrm{w} \vect{j}_\mathrm{WL} + \pab{\mathcal{U}_\mathrm{v}^\star + \rho_\mathrm{w} L_\mathrm{v}} \vect{j}_\mathrm{WV}
+\end{equation}
+ここで，$\vect{j}_\mathrm{H}$は熱伝導による熱フラックス密度，$\vect{j}_\mathrm{WL}$と$\vect{j}_\mathrm{WV}$はそれぞれ液状水と水蒸気のフラックス密度である．
+エネルギー保存則より，領域$V$内のエネルギー変化量$\odif{E}$は，表面$S$を通じて流出するエネルギーと，領域内のエネルギー流出量$S_\mathrm{T}$ \unit{[\joule.\second^{-1}.\meter^{-3}]} の和と等しくなる．
+ある微小時間$\odif{t}$の間に$S$全体から外向きに流出するエネルギーの総量は，フラックス$\vect{j}_E$の面積分で表される．
+\begin{equation}
+  \odif{\mathcal{E}\pab{t}} + \pab{\iint_S \vect{j}_E \cdot \odif{\vect{S}} + \iiint_V S_\mathrm{T} \odif{V}} \odif{t} = 0
+\end{equation}
+質量保存則の導出 \eqref{Eq:vel_Volume} と同様に，ガウスの発散定理を用いると，表面$S$からの流出項は体積積分に変換できる．
+\begin{equation}
+  \iint_S \vect{j}_E \cdot \odif{\vect{S}} = \iiint_V \div\pab{\vect{j}_E} \odif{V}
+\end{equation}
+これを上式に代入し，両辺を$\odif{t}\pab{>0}$で割ると，
+\begin{equation}
+  \label{Eq:Energy_Continuity_Integral}
+  \odv{\mathcal{E}\pab{t}}{t} + \iiint_V \bab{\div\pab{\vect{j}_E} + S_\mathrm{T}} \odif{V} = 0
+\end{equation}
+\eqref{Eq:Total_Energy}を \eqref{Eq:Energy_Continuity_Integral}に代入し，時間微分を積分の内側に入れると，
+\begin{align}
+  \label{Eq:Energy_Continuity_Integral_Full}
+   & \odv{}{t} \pab{\iiint_V \mathcal{U} \odif{V}} + \iiint_V \bab{\div\pab{\vect{j}_E} + S_\mathrm{T}} \odif{V} \notag \\
+   & = \iiint_V \bab{\pdv{\mathcal{U}}{t} + \div\pab{\vect{j}_E} + S_\mathrm{T}} \odif{V} = 0
+\end{align}
+この\eqref{Eq:Energy_Continuity_Integral_Full}は任意の領域$V$について成り立つので，被積分関数は0でなければならない．
+\begin{equation}
+  \label{Eq:Energy_Continuity_Differential}
+  \pdv{\mathcal{U}}{t} + \div\pab{\vect{j}_E} + S_\mathrm{T} = 0
+\end{equation}
+\eqref{Eq:Energy_Continuity_Differential}に，\eqref{Eq:Total_InnerEnergy_Def}と\eqref{Eq:Energy_Flux_Def}を代入することで，土壌中のエネルギー保存則の最終的な支配方程式が得られる．
+\begin{equation}
+  \label{Eq:EnergyConservation_Final}
+  \begin{split}
+     & \pdv{}{t} \Bab{\frac{1}{1 + e} \bab{\mathcal{U}_\mathrm{s} + e \Sw \mathcal{U}_\mathrm{w}+ e \Sice \mathcal{U}_\mathrm{ice} + \pab{e \Sv \frac{\rho_\mathrm{v}}{\rho_\mathrm{w}}} \mathcal{U}_\mathrm{v}^\star - e \Sice \rho_\mathrm{ice} L_\mathrm{f} + \pab{e \Sv \frac{\rho_\mathrm{v}}{\rho_\mathrm{w}}} \rho_\mathrm{w} L_\mathrm{v}}} \\
+     & + \div\bab{\vect{j}_\mathrm{T} + \mathcal{U}_\mathrm{w} \vect{j}_\mathrm{WL} + \pab{\mathcal{U}_\mathrm{v}^\star + \rho_\mathrm{w} L_\mathrm{v}} \vect{j}_\mathrm{WV}} + S_\mathrm{T} = 0
+  \end{split}
+\end{equation}
+
+\subsubsection{質量保存則の基礎式}
+\label{Sec:MassConservationBasic}
+% 質量保存
+
+ある領域$V$に含まれる流体の質量$M\pab{t}$はある点$\vect{r}\pab{x_1,x_2,x_3}$の流体の密度$\rho\pab{\vect{r},t}$とその点の体積$\odif{V}$の積分で表される．
+\begin{equation}
+  \label{Eq:Density}
+  M\pab{t} = \iiint_V \rho\pab{\vect{r},t}\odif{V}
+\end{equation}
+領域$V$の表面$S$について，面積要素$\odif{S}$，$S$に対して垂直で外向きの単位法線ベクトル$\vect{n}$を導入し，面積要素ベクトル$\odif{\vect{S}}$を定める．
+\begin{equation}
+  \odif{\vect{S}} = \vect{n}\odif{S}
+\end{equation}
+微小面積$\odif{S}$を通って流出する流体の体積はそのときの流体の速度$\vect{v}\pab{\vect{r},t}$を用いて表される．
+\begin{equation}
+  \label{Eq:vel_Volume}
+  \abs{\vect{v}\pab{\vect{r},t}}\odif{S}\cos\theta = \vect{v}\pab{\vect{r},t}\cdot\odif{\vect{S}}
+\end{equation}
+ここで$\theta$は$\vect{v}$と$\vect{n}$のなす角である．この体積に密度をかけたものがある単位時間あたりに流出する流体の質量となる．$S$全体である微小時間$\odif{t}$の間に外向きに流出する流体の質量は\eqref{Eq:vel_Volume}を領域$S$全体で積分することで求められる．これをガウスの発散定理で表すと，
+\begin{equation}
+  \iint_S \rho\pab{\vect{r},t} \vect{v}\pab{\vect{r},t}\cdot\odif{\vect{S}}\odif{t} = \iiint_V\nabla\cdot\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}}\odif{V}\odif{t} = \iiint_V\div\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}}\odif{V}
+\end{equation}
+質量保存則が成り立つようにすれば，領域$V$内の流体の質量変化量$\odif{M}$は，表面$S$を通じて流出する流体の質量と流体の湧き出し量$S_\mathrm{H}$と等しくなる．
+\begin{equation}
+  \odif{M\pab{t}}+\iiint_V\bab{\div\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}} + S_\mathrm{H}}\odif{V}\odif{t} = 0
+\end{equation}
+両辺を$\odif{t}\pab{>0}$で割って，\eqref{Eq:Density}を用いて整理すると
+\begin{align}
+  \label{Eq:Continuity_Integral}
+   & \odv{M\pab{t}}{t}+\iiint_V\bab{\div\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}}+ S_\mathrm{H}}\odif{V}\notag            \\
+   & =\iiint_V\bab{\pdv{\rho\pab{\vect{r},t}}{t}+\div\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}} + S_\mathrm{H}} \odif{V}=0
+\end{align}
+\eqref{Eq:Continuity_Integral}は任意の$\vect{r}$についていたるところで成り立つので，積分の中身は0となる．よって，連続の式は
+\begin{equation}
+  \label{Eq:Continuity}
+  \pdv{\rho}{t} + \div\pab{\rho\vect{v}} + S_\mathrm{H} = 0
+\end{equation}
+\eqref{Eq:Continuity}は連続の式と呼ばれ，流体の質量保存則を表す．ここで連続の式を土壌間隙に適用する．
+このとき，間隙に対する水の密度$\rho_\mathrm{void}$ \unit{[\kilogram.\meter^{-3}]} は次のように定義される．
+\begin{equation}
+  \label{Eq:rho_void}
+  \rho_\mathrm{void} \coloneq \frac{e}{1+e} \pab{\rho_\mathrm{w} \Sw + \rho_\mathrm{ice} \Sice + \rho_\mathrm{v} \Sv}
+\end{equation}
+この時，領域$V$の表面$S$からの流出は液状水および水蒸気であり氷は不動であるとすれば，\eqref{Eq:Continuity}は\eqref{Eq:rho_void}と液状水フラックス密度$\vect{j}_\mathrm{WL}$と水蒸気フラックス密度$\vect{j}_\mathrm{WV}$を用いて次のように表される．
+\begin{equation}
+  \label{Eq:Continuity_void}
+  \pdv{\rho_\mathrm{void}}{t} + \div\bab{\rho_\mathrm{w} \pab{\vect{j}_\mathrm{WL} + \vect{j}_\mathrm{WV}}} + S_\mathrm{H} = 0
+\end{equation}
+\eqref{Eq:rho_void} と \eqref{Eq:Continuity_void} により，間隙中の水の質量保存則が表される．
+\begin{equation}
+  \label{Eq:MassConservation_Water}
+  \pdv{}{t} \bab{\frac{e}{1+e} \pab{\rho_\mathrm{w} \Sw + \rho_\mathrm{ice} \Sice + \rho_\mathrm{v} \Sv}} + \div\bab{\rho_\mathrm{w} \pab{\vect{j}_\mathrm{WL} + \vect{j}_\mathrm{WV}}} + S_\mathrm{H} = 0
+\end{equation}

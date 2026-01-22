@@ -1,0 +1,203 @@
+\section{線形方程式のためのKrylov部分空間法}
+\label{Sec:KSP}
+
+\subsection{BiCGSTAB}
+
+BiCGSTAB (Biconjugate Gradient Stabilized) 法は，非対称な係数行列を持つ線形方程式系を解くための反復法である\parencite{Vorst-1992}．
+\footnote{JICFuS WIKI，BiCGSTAB法：\url{https://www.jicfus.jp:443/wiki/index.php?Bi-CGSTAB\%20\%E6\%B3\%95}}
+
+\begin{algorithm}[H]
+  \caption{Preconditioned Bi-CGSTAB method (Theoretical)}
+  \label{PreBiCGSTAB}
+  \begin{algorithmic}[1]
+    \State Set an initial value $\vect{x}_0$
+    \State Compute the initial residual $\vect{r}_0=\vect{b}-\mat{A}\vect{x}_0$
+    \State Choose an arbitrary vector $\hat{\vect{r}}_0$ such that $\inp{\hat{\vect{r}}_0}{\vect{r}_0}\neq 0$, e.g., $\hat{\vect{r}}_0=\vect{r}_0$
+    \State Set $\vect{p}_0=\vect{r}_0$
+    \For{$k=0,1,2,\cdots$}
+    \State $\vect{v}_k = \mat{A} \mat{M}^{-1} \vect{p}_k$
+    \State $\alpha_k = \dfrac{\inp{\hat{\vect{r}}_0}{\vect{r}_k}}{\inp{\hat{\vect{r}}_0}{\vect{v}_k}}$
+    \State $\vect{s}_k = \vect{r}_k - \alpha_k \vect{v}_k$
+    \If{$\norm{\vect{s}_k}_2 < tol$}
+    \State $\vect{x}_{k+1} = \vect{x}_k + \alpha_k \mat{M}^{-1} \vect{p}_k$
+    \State \textbf{break} (Converged)
+    \EndIf
+    \State $\vect{t}_k = \mat{A} \mat{M}^{-1} \vect{s}_k$
+    \State $\omega_k = \dfrac{\inp{\vect{t}_k}{\vect{s}_k}}{\inp{\vect{t}_k}{\vect{t}_k}}$
+    \State $\vect{x}_{k+1} = \vect{x}_k + \alpha_k \mat{M}^{-1} \vect{p}_k + \omega_k \mat{M}^{-1} \vect{s}_k$
+    \State $\vect{r}_{k+1} = \vect{s}_k - \omega_k \vect{t}_k$
+    \If{$\norm{\vect{r}_{k+1}}_2 < tol$}
+    \State \textbf{break} (Converged)
+    \EndIf
+    \State $\beta_k = \dfrac{\alpha_k}{\omega_k} \times \dfrac{\inp{\hat{\vect{r}}_0}{\vect{r}_{k+1}}}{\inp{\hat{\vect{r}}_0}{\vect{r}_k}}$
+    \State $\vect{p}_{k+1} = \vect{r}_{k+1} + \beta_k (\vect{p}_k - \omega_k \vect{v}_k)$
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
+
+実際の実装では，行列ベクトル積の回数とベクトル格納に必要なメモリを削減するため，以下のように中間変数を再利用する．
+\begin{algorithm}[H]
+  \caption{Implementation of preconditioned Bi-CGSTAB method}
+  \label{Alg:IMP_PreBiCGSTAB}
+  \begin{algorithmic}[1]
+    \State Set an initial value $\vect{x}_0=0.0$
+    \State Compute the initial residual $\vect{r}_0=\vect{b}-\mat{A}\vect{x}_0$
+    \State Create preconditioned matrix $\mat{M}^{-1}$
+    \State Set initial shadow residual $\hat{\vect{r}}_0=\vect{r}_0$
+    \State $\rho = \inp{\hat{\vect{r}}_0}{\vect{r}_0}$, $\rho_\mathrm{old} = 1.0$, $\alpha_k = 1.0$, $\omega_k = 1.0$
+    \State $\vect{p} \leftarrow 0$, $\vect{v} \leftarrow 0$
+    \For{$k=0,1,2,\cdots$}
+    \If{$k = 0$}
+    \State $\vect{p} = \vect{r}_0$
+    \Else
+    \State $\beta_k=\dfrac{\alpha_k}{\omega_k}\times\dfrac{\rho}{\rho_\mathrm{old}}$
+    \State $\vect{p} = \vect{r}_k+\beta_k(\vect{p}-\omega_k\vect{v})$
+    \EndIf
+
+    \State Apply preconditioner: $\hat{\vect{p}}=\mat{M}^{-1}\vect{p}$
+    \State $\vect{v}=\mat{A}\hat{\vect{p}}$
+
+    \State $\alpha_k=\dfrac{\rho}{\inp{\hat{\vect{r}}_0}{\vect{v}}}$
+    \State $\vect{s}_k=\vect{r}_k-\alpha_k\vect{v}$
+
+    \State $resid_{s} = \norm{\vect{s}_k}_2$
+    \If{$resid_{s} < tol$}
+    \State $\vect{x}_{k+1}=\vect{x}_k+\alpha_k\hat{\vect{p}}$
+    \State \textbf{break} (Converged)
+    \EndIf
+
+    \State Apply preconditioner: $\hat{\vect{s}}=\mat{M}^{-1}\vect{s}_k$
+    \State $\vect{t}=\mat{A}\hat{\vect{s}}$
+
+    \State $\omega_k=\dfrac{\inp{\vect{t}}{\vect{s}_k}}{\inp{\vect{t}}{\vect{t}}}$
+    \If{$\omega_k = 0.0$}
+    \State \textbf{fail} (div zero breakdown); \textbf{break}
+    \EndIf
+
+    \State $\vect{x}_{k+1}=\vect{x}_k+\alpha_k\hat{\vect{p}}+\omega_k\hat{\vect{s}}$
+    \State $\vect{r}_{k+1}=\vect{s}_k-\omega_k\vect{t}$
+
+    \State $resid = \norm{\vect{r}_{k+1}}_2$
+    \If{$resid < tol$}
+    \State \textbf{break} (Converged)
+    \EndIf
+
+    \State $\rho_\mathrm{old}=\rho$
+    \State $\rho=\inp{\hat{\vect{r}}_0}{\vect{r}_{k+1}}$
+    \If{$\rho = 0.0$}
+    \State \textbf{fail} (breakdown); \textbf{break}
+    \EndIf
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{GMRES}
+
+GMRES (Generalized Minimal Residual) 法は，非対称な係数行列を持つ線形方程式系を解くための反復法である\parencite{Saad-1986}
+\footnote{JICFuS WIKI，GMRES法：\url{https://www.jicfus.jp:443/wiki/index.php?GMRES\%28m\%29\%20\%E6\%B3\%95}}
+．
+右前処理 (Right Preconditioning) を用いたリスタート付き GMRES(m) 法を示す．
+
+\begin{algorithm}[H]
+  \caption{Preconditioned GMRES(m) method (Right Preconditioning)}
+  \label{Alg:PreFullGMRES_Corrected}
+  \setlength{\baselineskip}{17pt}
+  \begin{algorithmic}[1]
+    \State Set an initial value $\vect{x}_0$
+    \State Compute $\vect{r} = \vect{b} - \mat{A} \vect{x}_0$
+    \While{$\norm{\vect{r}}_2 / \norm{\vect{b}}_2 > \varepsilon$}
+    \State $\beta = \norm{\vect{r}}_2$
+    \State $\vect{v}_1 = \vect{r} / \beta$
+    \State Set $\vect{g} = \beta \vect{e}_1 \in \mathbb{R}^{m+1}$
+
+    \For{$j=1, 2, \dots, m$}
+    \State $\vect{w} = \mat{A} \mat{M}^{-1} \vect{v}_j$
+    \For{$i=1, 2, \dots, j$}
+    \State $h_{i,j} = \inp{\vect{w}}{\vect{v}_i}$
+    \State $\vect{w} = \vect{w} - h_{i,j} \vect{v}_i$
+    \EndFor
+    \State $h_{j+1,j} = \norm{\vect{w}}_2$
+    \State $\vect{v}_{j+1} = \vect{w} / h_{j+1,j}$
+
+    \For{$i=1, 2, \dots, j-1$}
+    \State $\begin{bmatrix} h_{i,j} \\ h_{i+1,j} \end{bmatrix} \leftarrow \begin{bmatrix} c_i  & s_i \\ -s_i & c_i \end{bmatrix} \begin{bmatrix} h_{i,j} \\ h_{i+1,j} \end{bmatrix} $
+    \EndFor
+
+    \State $c_j = \dfrac{h_{j,j}}{\sqrt{h_{j,j}^2 + h_{j+1,j}^2}}$
+    \State $s_j = \dfrac{h_{j+1,j}}{\sqrt{h_{j,j}^2 + h_{j+1,j}^2}}$
+
+    \State $h_{j,j} = c_j h_{j,j} + s_j h_{j+1,j}$
+    \State $h_{j+1,j} = 0.0$
+
+    \State $g_{j+1} = -s_j g_j$
+    \State $g_j = c_j g_j$
+
+    \If{$\abs{g_{j+1}} / \norm{\vect{b}}_2 < \varepsilon$}
+    \State $m=j$; \textbf{break}
+    \EndIf
+    \EndFor
+
+    \State Solve $\bar{\mat{H}}_m \vect{y}_m = \bar{\vect{g}}_m$ for $\vect{y}_m$ (via back-substitution)
+    \State $\tilde{\vect{x}} = \vect{x}_0 + \mat{M}^{-1} \mat{V}_m \vect{y}_m$
+    \State $\vect{r} = \vect{b} - \mat{A} \tilde{\vect{x}}$
+    \State $\vect{x}_0 = \tilde{\vect{x}}$
+    \EndWhile
+  \end{algorithmic}
+\end{algorithm}
+実際の実装では，基底ベクトル $V=[\vect{v}_i]$ と，前処理を適用した基底 $\hat{V}=[\mat{M}^{-1}\vect{v}_i]$ を分けて保持する必要がある．
+
+\begin{algorithm}[H]
+  \caption{Implementation of right-preconditioned GMRES(m) method (based on LIS)}
+  \label{Alg:IMP_LIS_FGMRES}
+  \setlength{\baselineskip}{17pt}
+  \begin{algorithmic}[1]
+    \State Set an initial value $\vect{x}_0$
+    \State Compute $\vect{r} = \vect{b} - \mat{A} \vect{x}_0$
+    \While{$\norm{\vect{r}}_2 / \norm{\vect{b}}_2 > \varepsilon$}
+    \State $\beta = \norm{\vect{r}}_2$
+    \State $\vect{v}_1 = \vect{r} / \beta$
+    \State Set $\vect{g} = \beta \vect{e}_1 \in \mathbb{R}^{m+1}$
+    \State $c \leftarrow 0$, $s \leftarrow 0$
+
+    \For{$j=1, 2, \dots, m$}
+    \State $\vect{z}_j = \mat{M}^{-1} \vect{v}_j$
+    \State $\vect{w} = \mat{A} \vect{z}_j$
+    \For{$i=1, 2, \dots, j$}
+    \State $h_{i,j} = \inp{\vect{w}}{\vect{v}_i}$
+    \State $\vect{w} = \vect{w} - h_{i,j} \vect{v}_i$
+    \EndFor
+    \State $h_{j+1,j} = \norm{\vect{w}}_2$
+    \State $\vect{v}_{j+1} = \vect{w} / h_{j+1,j}$
+
+    \For{$i=1, 2, \dots, j-1$}
+    \State $h_{i,j}^\text{temp} = c_i h_{i,j} + s_i h_{i+1,j}$
+    \State $h_{i+1,j} = -s_i h_{i,j} + c_i h_{i+1,j}$
+    \State $h_{i,j} = h_{i,j}^\text{temp}$
+    \EndFor
+
+    \State $c_j = \dfrac{h_{j,j}}{\sqrt{h_{j,j}^2 + h_{j+1,j}^2}}$
+    \State $s_j = \dfrac{h_{j+1,j}}{\sqrt{h_{j,j}^2 + h_{j+1,j}^2}}$
+
+    \State $h_{j,j} = c_j h_{j,j} + s_j h_{j+1,j}$
+    \State $h_{j+1,j} = 0.0$
+
+    \State $g_{j+1} = -s_j g_j$
+    \State $g_j = c_j g_j$
+
+    \If{$\abs{g_{j+1}} < tol$}
+    \State $m=j$; \textbf{break}
+    \EndIf
+    \EndFor
+
+    \State Let $\bar{\mat{H}}_m$ be the $m \times m$ upper triangular matrix $h_{i,j}$
+    \State Let $\bar{\vect{g}}_m$ be the $m \times 1$ vector $g_i$
+    \State Solve $\bar{\mat{H}}_m \vect{y}_m = \bar{\vect{g}}_m$ for $\vect{y}_m$ (via back-substitution)
+
+    \State Let $\mat{Z}_m = [\vect{z}_1, \dots, \vect{z}_m]$
+    \State $\vect{x} = \vect{x}_0 + \mat{Z}_m \vect{y}_m$
+
+    \State $\vect{r} = \vect{b} - \mat{A} \vect{x}$
+    \State $\vect{x}_0 = \vect{x}$
+    \EndWhile
+  \end{algorithmic}
+\end{algorithm}

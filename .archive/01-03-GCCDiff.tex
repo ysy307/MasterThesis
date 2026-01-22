@@ -1,0 +1,18 @@
+\subsection{GCC式の微分形}
+定式化に伴い飽和度$\Sw$の微分が必要になるため，GCC式$\mathcal{F}_\mathrm{GCC}$と水分保持関数$\mathcal{F}_\mathrm{WRF}$を微分形に変形する．
+\begin{align}
+  \Sw &= \mathcal{F}_\mathrm{WRF}\pab{P_\mathrm{ice}-\mathcal{F}_\mathrm{GCC}\pab{T^{\ast}, P, P_\mathrm{ice}}}\notag\\
+  \label{Eq:Sw_form}
+  &= \mathcal{F}_\mathrm{WRF}\pab{P_\mathrm{iw}}
+\end{align}
+GCC式の全微分は，温度微分と圧力微分の和として表される．
+\begin{equation}
+  \label{Eq:GCC_differential}
+  \odif{\Sw} = \pdv{\Sw}{P} \odif{P} +\pdv{\Sw}{P_\mathrm{ice}} \odif{P_\mathrm{ice}} + \pdv{\Sw}{T^{\ast}} \odif{T^{\ast}} 
+\end{equation}
+\eqref{Eq:Sw_form}式を考慮すれば，\eqref{Eq:GCC_differential}式は次のように表される．
+\begin{align}
+  \odif{\Sw} &= \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{P} \odif{P} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{P_\mathrm{ice}} \odif{P_\mathrm{ice}} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{T^{\ast}} \odif{T^{\ast}}\notag\\
+  \label{Eq:GCC_differential_form}
+  &= \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}-1} \odif{P} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\odif{P_\mathrm{ice}} - \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\frac{L_\mathrm{f} \rho_\mathrm{ice}}{T^{{\ast}}} \odif{T^{\ast}}
+\end{align}

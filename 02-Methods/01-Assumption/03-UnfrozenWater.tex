@@ -1,0 +1,54 @@
+\subsection{GCC式を用いた不凍水量の表現}
+\label{Sec:GCC_UnfrozenWater}
+
+飽和土の凍結・融解過程における液状水・氷分布と，脱水・給水過程における液状水・空気分布が等しいと仮定する\parencite{Williams-1964}．
+このとき液状水と空気の吸引力 $P_\mathrm{aw}=P_\mathrm{a}-\Pw$ と不凍水と氷の cryogenic suction $P_\mathrm{iw}=P_\mathrm{ice}-\Pw$ を等しいとすれば，水分保持関数（Water Retention Function, WRF）を用いて $T^\ast$ の関数として不凍水量を推定できる\parencite{Black-1989}．
+たとえば，WRF として van Genuchten (vG) 式\parencite{van-Genuchten-1980}を選べば，凍土存在下での液状水飽和度 $\Sw$ は次式で与えられる．
+\begin{equation}
+  \label{Eq:van_Genuchten_cryogenic}
+  \Sw = \pab{1 + \abs{\alpha P_\mathrm{iw}}^n}^m
+\end{equation}
+ここで $\alpha, n, m$ は vG パラメータである．
+$P_\mathrm{iw}$ は \eqref{Eq:GCC_vapor_constant_2_integrated} 式により
+\begin{equation}
+  \label{Eq:P_iw}
+  P_\mathrm{iw} = \pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}} - 1} \Pw - L_\mathrm{f} \rho_\mathrm{ice} \ln \frac{T^\ast}{T^\ast_\mathrm{f}}
+\end{equation}
+\begin{figure}[hbp]
+  \centering
+  \includegraphics[width=.98\linewidth,pagebox=cropbox,clip]{schematic-gcc-withEXP.pdf}
+  \caption{土中の液状水の動態に関する概念図．(a) 脱水過程，(b) 凍結過程．}\label{fig:GCC}
+\end{figure}
+\begin{figure}[hbp]
+  \includegraphics[width=.98\linewidth,pagebox=cropbox,clip]{GCC_vs_T.pdf}
+  \caption{異なる条件下でのCryogenic Suction，\eqref{Eq:P_iw}との関係}\label{fig:Piw}
+\end{figure}
+と表される．
+これを \eqref{Eq:van_Genuchten_cryogenic} に代入すれば
+\begin{equation}
+  \label{Eq:van_Genuchten_cryogenic_2}
+  \Sw = \Bab{1+\abs{\alpha \bab{\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}-1}\Pw - L_\mathrm{f} \rho_\mathrm{ice} \ln{\frac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}}}^n}^{m}
+\end{equation}
+\eqref{Eq:van_Genuchten_cryogenic_2}を用いることで，不凍水量を求めることで間接的に含氷量を求めることができる．他のWRFを用いることも可能であるが，その詳細については別節で述べる．
+定式化に伴い飽和度$\Sw$の微分が必要になるため，GCC式$\mathcal{F}_\mathrm{GCC}$と水分保持関数$\mathcal{F}_\mathrm{WRF}$を微分形に変形する．
+\begin{align}
+  \Sw & = \mathcal{F}_\mathrm{WRF}\pab{P_\mathrm{ice}-\mathcal{F}_\mathrm{GCC}\pab{T^{\ast}, \Pw, P_\mathrm{ice}}}\notag \\
+  \label{Eq:Sw_form}
+      & = \mathcal{F}_\mathrm{WRF}\pab{P_\mathrm{iw}}
+\end{align}
+GCC式の全微分は，温度微分と圧力微分の和として表される．
+\begin{equation}
+  \label{Eq:GCC_differential}
+  \odif{\Sw} = \pdv{\Sw}{\Pw} \odif{\Pw} +\pdv{\Sw}{P_\mathrm{ice}} \odif{P_\mathrm{ice}} + \pdv{\Sw}{T^{\ast}} \odif{T^{\ast}}
+\end{equation}
+\eqref{Eq:Sw_form}を考慮すれば，\eqref{Eq:GCC_differential}は次のように表される．
+\begin{align}
+  \label{Eq:GCC_differential_form}
+  \odif{\Sw} & = \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{\Pw} \odif{\Pw} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{P_\mathrm{ice}} \odif{P_\mathrm{ice}} \notag                  \\
+             & + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{T^{\ast}} \odif{T^{\ast}}\notag                                                                                                                                    \\
+             & = \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}-1} \odif{\Pw} - \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\frac{L_\mathrm{f} \rho_\mathrm{ice}}{T^{{\ast}}} \odif{T^{\ast}}
+\end{align}
+
+これにより，GCC 式とWRFを組み合わせて不凍水量を評価でき，後続章で輸送式に利用可能である．
+
+\clearpage

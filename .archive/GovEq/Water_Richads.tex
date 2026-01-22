@@ -1,0 +1,88 @@
+\subsection{水分移動支配方程式の要素方程式への定式化}
+非等温下の飽和凍結過程での水移動の支配方程式はRichards式に氷生成の時間依存項を追加することで次のように表される\citep{Hansson-2004,Watanabe-2007}．ただし，Einsteinの総和規則を用いるものとする．\citep{Nicolsky-2009}
+% \begin{equation}
+%   \eqlabel{GovWat}
+%   \pdv{\lo{\theta}{u}(h)}{t}+\dfrac{\lo{\rho}{ice}}{\lo{\rho}{w}}\pdv{\lo{\theta}{ice}(T)}{t}=\opdv{\xii}\left[\mathrm{K}\lo{k}{r}\pdv{h}{\xii}+\mathrm{K}\lo{k}{r}\right]
+% \end{equation}
+% ただし，$\lo{\theta}{u}(h)$，$\lo{\theta}{ice}$はそれぞれ不凍水，氷の体積分率$[\si{L^3~L^{-3}}]$，$\lo{\rho}{w}$，$\lo{\rho}{ice}$は水，氷の密度$[1000,~931\si{kg~m^{-3}}]$，$h$は圧力水頭$[\SI{}{L}]$，$t$は時間$[\SI{}{T}]$，$T$は温度$[\SI{}{\degreeCelsius}]$，$\mathrm{K}$は圧力勾配による液状水移動の透水係数テンソル$[\SI{}{L~T^{-1}}]$，$\lo{k}{r}$は凍結率を考慮した補正係数である．\\
+% ここで間隙率の氷の割合である凍結率$Fr$を導入する．ただし，$\ab\{Fr\in\R \vbar  0\leq Fr \leq 1\}$である．$\lo{k}{r}$は凍結率を使って~\eqref{Eq:DefKFr}式のように定義する．
+% \begin{align}
+%   Fr \coloneqq \dfrac{\lo{\theta}{ice}}{n}\eqlabel{DefFr}\\
+%   \eqlabel{DefKFr}
+%   \lo{k}{r}\coloneqq 10^{-\Omega Fr}
+% \end{align}
+% ここで$\lo{k}{r}$の値域は$\Bab{\lo{k}{r}\in\R \vbar  10^{-\Omega}\leq \lo{k}{r} \leq 1}$である．ここで，$\Omega$は凍結すると透水係数のオーダーがどれだけ小さくなるのかのパラメータであり，本研究では3を用いる．\\
+% 支配方程式の第1項，第2項について考える．飽和条件であれば$h\geq 0$であるので$\lo{\theta}{u}(h)$は圧力に依存せず常に一定であり，土壌の体積含水率$\lo{\theta}{T}$は$\lo{\theta}{u}$と$\lo{\theta}{ice}$の和で表せるので
+% \begin{equation}
+%   \eqlabel{DefThetaI}
+%   \lo{\theta}{u}=\lo{\theta}{T}-\lo{\theta}{ice}
+% \end{equation}
+% ~\eqref{Eq:GovWat}の第1項，第2項は，\eqref{Eq:DefThetaI}を用いて書き換えることができる．
+% \begin{equation}
+%   \eqlabel{TraWat12}
+%   \pdv{(\lo{\theta}{T}-\lo{\theta}{ice})}{t}+\dfrac{\lo{\rho}{ice}}{\lo{\rho}{w}}\pdv{\lo{\theta}{ice}(T)}{t}=\zeta\pdv{\lo{\theta}{ice}}{t}
+% \end{equation}
+% ここで$\zeta=\dfrac{\lo{\rho}{ice}}{\lo{\rho}{w}}-1$とおく．\\
+% 境界$\Gamma$で囲まれた領域$\Omega$にGalerkin法を用いて定式化する．最初に全体座標系の基底関数$\NI$ (Basis function)と節点$I$での値を用いて圧力，相対透水係数の試行関数$\hh$，$\Krh$ (Trial function)を表すと，
+% \begin{equation}
+%   \eqlabel{Defhh}
+%   \hh=\NJ\hj\qquad J=1,2,\ldots,n
+% \end{equation}
+% \begin{equation}
+%   \eqlabel{DefThh}
+%   \Krh=\NJ\Krj\qquad J=1,2,\ldots,n
+% \end{equation}
+% ここで，$n$は三角形有限要素分割における節点総数である．\\
+% 本研究では水平方向の流れのみ考えるので\eqref{Eq:GovWat}式の重力項は無視する．重み関数$\NJ$ (Weight function)を利用し，重み付き残差法 (Method of Weighted Residual, MWR)を用いると次式が導かれる．ただし$J=1,2,\ldots,n$である．
+% \begin{align}
+%   &\iintO{\NI\bab{\zeta\pdv{\lo{\theta}{ice}}{t}-\opdv{\xii}\pab{\mathrm{K}\Krh\pdv{\hh}{\xii}}}}=0\notag\\
+%   \eqlabel{WeakWat}
+%   \zeta&\iintO{\NI\pdv{\lo{\theta}{ice}}{t}}-\iintO{\NI\mathrm{K}\Krh\pdv[order=2]{h}{\xii}}-\iintO{\NI\mathrm{K}\ppdv{\Krh}{\hh}{\xii}}=0
+% \end{align}
+% ここで外向きの法線ベクトルを次のようにおく．
+% \begin{equation}
+%   \nii=
+%   \eqlabel{DefDefVecNjormal}
+%   \begin{bmatrix}
+%     {n}_{x_1} \\ {n}_{x_2}
+%   \end{bmatrix}
+% \end{equation}
+% さらに，$\mathbf{f}$を次のようにおく．
+% \begin{equation}
+%   \mathbf{f}=
+%   \eqlabel{DefVecf}
+%   \begin{bmatrix}
+%     \displaystyle\NI\Krh\pdv{\hh}{\xii} & \displaystyle\NI\Krh\pdv{\hh}{\xii}
+%   \end{bmatrix}
+% \end{equation}
+% Gaussの発散定理 (Divergence theorem)を用いれば次のようにあらわせる．
+% \begin{align}
+%   &\iintO{\Div{f}}=\ointC{\mathbf{f}\cdot\nii}\\
+%   &\iintO{\Div{f}}=\iintO{\pdv{\NI}{\xii}\Krh\pdv{\hh}{\xii}}+\iintO{\NI\pdv{\Krh}{\xii}\pdv{\hh}{\xii}}+\iintO{\NI\Krh\pdv[order=2]{\hh}{\xii}}\notag\\
+%   &\ointC{\mathbf{f}\cdot\nii}=\ointC{\NI\Krh\pdv{\hh}{\xii}\cdot\nii}\notag\\
+%   &\iintO{\bab{K\ppdv{\NI}{\hh}{\xii}+\NI\ppdv{K}{\hh}{\xii}+\NI K \pdv[order=2]{\hh}{\xii}}}=\ointC{\NI K\pdv{\hh}{\xii}\cdot\nii}\notag\\
+%   \eqlabel{GauDf}
+%   &\iintO{\NI K\pdv[order=2]{\hh}{\xii}}=\ointC{\NI K\pdv{\hh}{\xii}\cdot\nii}-\iintO{K\ppdv{\NI}{\hh}{\xii}}-\iintO{\NI\ppdv{K}{\hh}{\xii}}
+% \end{align}
+% ~\eqref{Eq:WeakWat},~\eqref{Eq:Defhh},~\eqref{Eq:GauDf}式より
+% \begin{equation}
+%   \eqlabel{GauDWeakWat}
+%   \zeta\iintO{\NI\NJ\pdv{\Thj}{t}}+\iintO{\Kj\ppdv{\NI}{\NJ}{\xii}\hj}-\ointC{\NJ\Kj\pdv{\hh}{\xii}\cdot\nii}=0
+% \end{equation}
+% 境界$\lo{\Gamma}{1}$上でFlux boundary conditionを既知流量$q$として\eqref{Eq:GauDf}式中に組むこむと，
+% \begin{equation}
+%   \eqlabel{WeakWatFBC}
+%   \zeta\iintO{\NI\NJ\pdv{\Thj}{t}}+\iintO{\Kj\ppdv{\NI}{\NJ}{\xii}\hj}-\oint_{\lo{\Gamma}{1}}{\NJ q}\mathrm{d}{\Gamma}=0
+% \end{equation}
+% ~\eqref{Eq:WeakWatFBC}式は各要素について合計したものとして表せるので，
+% \begin{equation}
+%   \sum_{e=1}^{N_e}\Bab{\zeta\iintOj{\NI\NJ\pdv{\Thj}{t}}+\iintOj{\Kj\ppdv{\NI}{\NJ}{\xii}\hj}-\int_{\lo{\Gamma}{1}^e}{\NJ q}\mathrm{d}{\Gamma}}=0
+% \end{equation}
+% ここで$N_e$は総要素数である．境界条件がDirichlet境界条件またはFluxが0で与えられる場合に限り，最終的に次のようになる．
+% \begin{itembox}[l]{水分移動の要素方程式}
+%   \begin{equation}
+%     \eqlabel{DiscWeakWat}
+%     \bon{P}{\textit{w}}{e}=\zeta\iintOj{\NI\NJ\pdv{\Thj}{t}}+\iintOj{\Kj\ppdv{\NI}{\NJ}{\xii}\hj}
+%   \end{equation}
+% \end{itembox}
+% ただし$w=1,2,3$である．

@@ -1,0 +1,54 @@
+\subsection{水分移動における支配方程式}
+\label{Sec:HydrauilicGoverning}
+
+\cref{Sec:MassConservationBasic}で導出した質量保存則の基礎式 (\eqref{Eq:MassConservation_Water})に対して，\eqref{Eq:Theta_Def,Eq:Qvstar}を用いれば
+\begin{equation}
+  \label{Eq:MassConservation_Water_Expanded}
+  \pdv{}{t} \bab{\pab{\rho_\mathrm{w} \Qw + \rho_\mathrm{ice} \Qice + \rho_\mathrm{w} \Qv^\star}} + \div\bab{\rho_\mathrm{w} \pab{\vect{j}_\mathrm{WL} + \vect{j}_\mathrm{WV}}} + S_\mathrm{H} = 0
+\end{equation}
+時間微分項を展開すると，
+\begin{align}
+  \label{Eq:MassConservation_Water_TimeDerivative}
+  \pdv{}{t} & \pab{\rho_\mathrm{w} \Qw + \rho_\mathrm{ice} \Qice + \rho_\mathrm{w} \Qv^\star} \notag                                                                                                                                                                                                                            \\
+            & = \rho_\mathrm{w} \pdv{\Qw}{t} + \Qw \pdv{\rho_\mathrm{w}}{t} + \rho_\mathrm{ice} \pdv{\Qice}{t} + \Qice \pdv{\rho_\mathrm{ice}}{t} + \rho_\mathrm{w} \pdv{\Qv^\star}{t} + \Qv^\star \pdv{\rho_\mathrm{w}}{t} \notag                                                                                              \\
+            & = \rho_\mathrm{w} \pab{\pdv{\Qw}{T} \pdv{T}{t} + \pdv{\Qw}{\Pw} \pdv{\Pw}{t}} + \Qw \pab{\pdv{\rho_\mathrm{w}}{T} \pdv{T}{t} + \pdv{\rho_\mathrm{w}}{\Pw} \pdv{\Pw}{t}} \notag                                                                                                \\
+            & \quad + \rho_\mathrm{ice} \pab{\pdv{\Qice}{T} \pdv{T}{t} + \pdv{\Qice}{\Pw} \pdv{\Pw}{t}} + \Qice \pab{\pdv{\rho_\mathrm{ice}}{T} \pdv{T}{t} + \pdv{\rho_\mathrm{ice}}{\Pw} \pdv{\Pw}{t}} \notag                                                                              \\
+            & \quad + \rho_\mathrm{w} \pab{\pdv{\Qv^\star}{T} \pdv{T}{t} + \pdv{\Qv^\star}{\Pw} \pdv{\Pw}{t}} + \Qv^\star \pab{\pdv{\rho_\mathrm{w}}{T} \pdv{T}{t} + \pdv{\rho_\mathrm{w}}{\Pw} \pdv{\Pw}{t}} \notag                                                                        \\
+            & = \pab{\rho_\mathrm{w} \pdv{\Qw}{T} + \rho_\mathrm{ice} \pdv{\Qice}{T} + \rho_\mathrm{w} \pdv{\Qv^\star}{T} + \Qw \pdv{\rho_\mathrm{w}}{T} + \Qice \pdv{\rho_\mathrm{ice}}{T} + \Qv^\star \pdv{\rho_\mathrm{w}}{T}} \pdv{T}{t} \notag                                                                             \\
+            & \quad + \pab{\rho_\mathrm{w} \pdv{\Qw}{\Pw} + \rho_\mathrm{ice} \pdv{\Qice}{\Pw} + \rho_\mathrm{w} \pdv{\Qv^\star}{\Pw} + \Qw \pdv{\rho_\mathrm{w}}{\Pw} + \Qice \pdv{\rho_\mathrm{ice}}{\Pw} + \Qv^\star \pdv{\rho_\mathrm{w}}{\Pw}} \pdv{\Pw}{t}
+\end{align}
+となる．ここで，次のように変数を整理する．
+\begin{subequations}
+  \label{Eq:MassConservation_Water_Coefficient_T}
+  \begin{equation}
+    \label{Eq:MassConservation_Water_Coefficient_T_Def}
+    C_\mathrm{HT} = \rho_\mathrm{w} \pdv{\Qw}{T} + \rho_\mathrm{ice} \pdv{\Qice}{T} + \rho_\mathrm{w} \pdv{\Qv^\star}{T} + \Qw \pdv{\rho_\mathrm{w}}{T} + \Qice \pdv{\rho_\mathrm{ice}}{T} + \Qv^\star \pdv{\rho_\mathrm{w}}{T}
+  \end{equation}
+  \begin{equation}
+    \label{Eq:MassConservation_Water_Coefficient_P}
+    C_\mathrm{HH} = \rho_\mathrm{w} \pdv{\Qw}{\Pw} + \rho_\mathrm{ice} \pdv{\Qice}{\Pw} + \rho_\mathrm{w} \pdv{\Qv^\star}{\Pw} + \Qw \pdv{\rho_\mathrm{w}}{\Pw} + \Qice \pdv{\rho_\mathrm{ice}}{\Pw} + \Qv^\star \pdv{\rho_\mathrm{w}}{\Pw}
+  \end{equation}
+\end{subequations}
+
+また，\eqref{Eq:LiquidFlux_final3,Eq:VaporFlux_final}に示した水分フラックス密度の式を用いれば，発散項は次式で表される．
+\begin{align}
+  \nabla\cdot & \bab{\rho_\mathrm{w} \pab{\vect{j}_\mathrm{WL} + \vect{j}_\mathrm{WV}}} \notag                                                                                                                                     \\
+              & = \nabla\cdot\bab{-\rho_\mathrm{w} \pab{K_\mathrm{wP}\nabla \Pw - K_\mathrm{wP} \rho_\mathrm{w} g \nabla z + K_\mathrm{wT} \nabla T + K_\mathrm{vP} \nabla \Pw + K_\mathrm{vT} \nabla T}} \notag \\
+              & = \nabla\cdot\bab{-\rho_\mathrm{w} \pab{\pab{K_\mathrm{wP} + K_\mathrm{vP}} \nabla \Pw - K_\mathrm{wP} \rho_\mathrm{w} g \nabla z + \pab{K_\mathrm{wT} + K_\mathrm{vT}} \nabla T}} \notag                 \\
+              & = \nabla\cdot\bab{-\rho_\mathrm{w} \pab{K_\mathrm{P} \nabla \Pw - K_\mathrm{wP} \rho_\mathrm{w} g \nabla z + K_\mathrm{T} \nabla T}} \label{Eq:MassConservation_Water_Divergence}
+\end{align}
+ここで，液相および気相水分フラックスはいずれも圧力勾配および温度勾配に対して線形に応答するため，同一の駆動力に対応する項をまとめ，有効な透水係数として再定義する．
+\begin{subequations}
+  \label{Eq:MassConservation_Water_CombinedConductivity}
+  \begin{align}
+    \label{Eq:MassConservation_Water_CombinedConductivity_P}
+    K_\mathrm{P} & \coloneq K_\mathrm{wP} + K_\mathrm{vP} \\
+    \label{Eq:MassConservation_Water_CombinedConductivity_T}
+    K_\mathrm{T} & \coloneq K_\mathrm{wT} + K_\mathrm{vT}
+  \end{align}
+\end{subequations}
+以上より，水分移動に関する支配方程式は\eqref{Eq:MassConservation_Water_Expanded,Eq:MassConservation_Water_TimeDerivative,Eq:MassConservation_Water_Divergence}を組み合わせて得られる．
+\begin{equation}
+  \label{Eq:HydraulicGoverning_Final}
+  C_\mathrm{HT} \pdv{T}{t} + C_\mathrm{HH} \pdv{\Pw}{t} - \nabla\cdot\bab{\rho_\mathrm{w} \pab{K_\mathrm{P} \nabla \Pw - K_\mathrm{wP} \rho_\mathrm{w} g \nabla z + K_\mathrm{T} \nabla T}} + S_\mathrm{H} = 0
+\end{equation}

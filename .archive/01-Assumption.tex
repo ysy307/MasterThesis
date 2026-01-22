@@ -1,0 +1,341 @@
+\section{前提条件}
+\subsection{一般化Clausius-Clapeyron式}
+\label{Sec:GCC}
+
+一般化Clausius-Clapeyron式（Generalized Clausius-Clapeyron equation, GCC）は，固体，液体，気体の三相が平衡状態にあるときの圧力と温度の関係を表す．GCC式は比較的水分量が多い状態の土壌においての適用を基に導出をされているが，凍土中の水分移動が問題になるのは水分量が多い状態であるため，GCC式は凍土の水分移動においても適用可能である．
+まず，単一系におけるHelmholtzの自由エネルギー$F$は以下のように表される．
+\begin{equation}
+  \label{Eq:Helmholtz}
+  F\bab{T;X} = U\pab{T;X} - TS\pab{T;X}
+\end{equation}
+ここで，$U$は内部エネルギー，$S$はエントロピー，$T$は温度，$X$は物質量である．ただし，Helmholtzの自由エネルギー$F$のが$T$について微分可能とする．また，圧力が状態量で一意に表現することができればGibbsの自由エネルギー$G$は以下のように表される.
+\begin{equation}
+  \label{Eq:Gibbs}
+  G\bab{T,p;V} = F\bab{T;V\pab{T,p;N},N} + pV\pab{T,p;N}
+\end{equation}
+よって，Gibbsの自由エネルギー$G$は\eqref{Eq:Helmholtz}式を用いて次のように表される．
+\begin{equation}
+  G\bab{T,p;V} = U\pab{T;V\pab{T,p;N},N} - TS\pab{T;V\pab{T,p;N},N} + pV\pab{T,p;N}
+\end{equation}
+簡単のため，引数を省略し次のようにあらわす．
+\begin{equation}
+  \label{Eq:Gibbs_Simple}
+  G = U - TS + pV
+\end{equation}
+ここで，内部エネルギーとエントロピーの温度微分を結ぶ関係は次のように表される．
+\begin{equation}
+  \label{Eq:Energy_Entropy_differential}
+  \pdv{U}{T} = T\pdv{S}{T}
+\end{equation}
+よってHelmholtzの自由エネルギー$F$の温度微分は次のように表される．
+\begin{align}
+  \pdv{F}{T} &= \pdv{U}{T} - S - T\pdv{S}{T}\notag\\
+  &= T\pdv{S}{T} - S - T\pdv{S}{T}= - S\\
+\end{align}
+また，状態量としての圧力はHelmholtzの自由エネルギー$F$の体積微分として表せるので，
+\begin{equation}
+  \label{Eq:Pressure_differential}
+  \pdv{F}{V} = -p
+\end{equation}
+同様に物質量$N$についても同様の量である化学ポテンシャル$\mu$を考える．
+\begin{equation}
+  \label{Eq:Chemical_potential_differential}
+  \pdv{F}{N} = \mu
+\end{equation}
+よって，Helmholtzの自由エネルギー$F$の全微分は，\eqref{Eq:Energy_Entropy_differential}，\eqref{Eq:Pressure_differential}，\eqref{Eq:Chemical_potential_differential}式を用いて次のように表される．
+\begin{equation}
+  \label{Eq:Helmholtz_differential}
+  \odif{F} = - S\odif{T} -p\odif{V} + \mu\odif{N}
+\end{equation}
+\eqref{Eq:Helmholtz_differential}式を用いて，\eqref{Eq:Gibbs_Simple}式の両辺の全微分を取ると，
+\begin{align}
+  \odif{G}  &= - S\odif{T} - p\odif{V} + \mu\odif{N} + V\odif{p} + p\odif{V}\notag\\
+  \label{Eq:Gibbs_differential}
+          &= - S\odif{T} + V\odif{p} + \mu\odif{N}
+\end{align}
+\begin{wrapfigure}[17]{r}[0pt]{0.5\textwidth}
+ \centering
+  \begin{tikzpicture}[scale=1.0] % スケール調整はお好みで
+      \usetikzlibrary{calc, arrows.meta} % arrows.meta を追加 (calc は既存)
+
+      % 共通の圧力矢印スタイルを定義
+      \tikzset{pressurearrow/.style={
+          -{LaTeX[length=4.0mm, width=3.6mm]}, % 矢印の先端形状とサイズ
+          line width=1.2mm                    % 線の太さ
+          }
+      }
+
+      % 座標やサイズを調整しやすくするための変数定義（任意）
+      \def\waterHeight{2}
+      \def\iceHeight{3}
+      \def\blockY{0.2} % ブロックの下端のY座標
+      \def\containerTop{5}
+      \def\containerBottom{0}
+      \def\containerLeft{0}
+      \def\containerRight{7}
+      \def\pressureArrowStartY{6} % 圧力矢印の開始Y座標
+      \def\pressureLabelY{5.5}    % 圧力ラベルの共通Y座標 (お好みで調整)
+
+      % 外側の容器の線
+      \draw (\containerLeft,\containerBottom) rectangle (\containerRight,\containerTop);
+
+      % 水の部分 (左下)
+      \coordinate (waterSW) at (0.2,\blockY); % 左下隅の座標
+      \coordinate (waterNE) at (3.5,\waterHeight); % 右上隅の座標
+      \fill[pattern=north west lines, pattern color=blue!50] (waterSW) rectangle (waterNE);
+      \draw (waterSW) rectangle (waterNE);
+      \node[fill=white, text=black, font=\bfseries, inner sep=2pt, rounded corners=1pt] at ($(waterSW)!0.5!(waterNE)$) {Water};
+
+      % 氷の部分 (右下)
+      \coordinate (iceSW) at (3.5,\blockY); % 左下隅の座標
+      \coordinate (iceNE) at (6.8,\iceHeight); % 右上隅の座標
+      \fill[pattern=north east lines, pattern color=cyan!30] (iceSW) rectangle (iceNE);
+      \draw (iceSW) rectangle (iceNE);
+      \node[fill=white, text=black, font=\bfseries, inner sep=2pt, rounded corners=1pt] at ($(iceSW)!0.5!(iceNE)$) {Ice};
+
+      % 蒸気の部分 (上部全体)
+      \node at (3.5,3.5) {Vapor};
+      % 蒸気と水の境界線
+      \draw (0.2,\waterHeight) -- (3.5,\waterHeight);
+      % 蒸気と氷の境界線
+      \draw (3.5,\iceHeight) -- (6.8,\iceHeight);
+      % 水と氷の間の境界線
+      \draw (3.5,\blockY) -- (3.5, \waterHeight); % 水ブロックの高さまで
+
+      % 容器の上部の線 (Vaporと接する部分)
+      \draw (0.2,\waterHeight) -- (0.2,\containerTop-0.2);
+      \draw (6.8,\iceHeight) -- (6.8,\containerTop-0.2);
+      \draw (0.2,\containerTop-0.2) -- (6.8,\containerTop-0.2);
+
+      % --- 圧力矢印とラベル ---
+      % 圧力 P (全体にかかる)
+      \draw[pressurearrow] (3.5,\pressureArrowStartY) -- (3.5,\containerTop-1.2); % スタイル適用
+      \node[right, xshift=3mm] at (3.5, \pressureLabelY) {$P_\mathrm{v}$}; % Y座標とxshift調整
+
+      % 水面にかかる圧力 P_w
+      \draw[pressurearrow] (1.75,\pressureArrowStartY) -- (1.75,\waterHeight+0.2); % スタイル適用
+      \node[left, xshift=-3mm] at (1.75, \pressureLabelY) {$P$}; % Y座標とxshift調整
+      \node[below] at (1.75,\containerBottom-0.3) {$P_2 = P_\mathrm{v} + P$}; % P_w を P に修正
+
+      % 氷面にかかる圧力 P_f
+      \draw[pressurearrow] (5.25,\pressureArrowStartY) -- (5.25,\iceHeight+0.2); % スタイル適用
+      \node[right, xshift=3mm] at (5.25, \pressureLabelY) {$P_\mathrm{ice}$}; % Y座標とxshift調整
+      \node[below] at (5.25,\containerBottom-0.3) {$P_1 = P_\mathrm{v} + P_\mathrm{ice}$};
+  \end{tikzpicture}
+  \caption{固相，液相，気相の三相それぞれに異なる圧力が加わっている状況における，各相間の平衡状態を表す概念図}
+  \label{Fig:GCC_diagram}
+\end{wrapfigure}
+ここで，Fig.~\ref{Fig:GCC_diagram}に示すように，氷相に水蒸気のみに一様に働く圧力を$P_\mathrm{ice}$，液相に水蒸気のみに一様に働く圧力を$P$とすれば，常に$P_\mathrm{ice}$と$P$は共通の蒸気圧$P_\mathrm{v}$を関して関係づけられる．ここで，水と氷の全静水圧はそれぞれ
+\begin{subequations}
+  \begin{align}
+    \label{Eq:Pressure_1}
+    P_2&= P_\mathrm{v} + P\\
+    \label{Eq:Pressure_2}
+    P_1&= P_\mathrm{v} + P_\mathrm{ice} 
+  \end{align}
+\end{subequations}
+ここで，$T_\mathrm{f}$をこれらの条件下における水の凝固点と考え，三相が平衡状態にあるときの温度とする．
+液相・氷相において，平衡が成り立つとすると，それらのGibbsの自由エネルギーは等しくなるので，
+\begin{equation}
+  G_1 = G_2
+\end{equation}
+ここで，$G_1$，$G_2$はそれぞれ氷相，液相のGibbsの自由エネルギーである．これは，系に何らかの変化が生じたとき，2つの自由エネルギーが等しい量だけ変化しなければならないことを意味する．すなわち，
+\begin{equation}
+  \label{Eq:Gibbs_Equilibrium}
+  \odif{G_1} = \odif{G_2}
+\end{equation}
+物質平衡が成り立っているとして，\eqref{Eq:Gibbs_differential}式を用いて\eqref{Eq:Gibbs_Equilibrium}式を表すと，
+\begin{equation}
+  \label{Eq:Gibbs_Equilibrium_2}
+  -S_1\odif{T} + \nu_1\odif{P_1} = -S_2\odif{T} + \nu_2\odif{P_2}
+\end{equation}
+ここで，$\nu_1$，$\nu_2$はそれぞれ氷相，液相の比体積であり，$\odif{P_1}$と，$\odif{P_2}$は，それぞれ氷と水に加わる圧力の全変化を示している．これら2つの圧力は一般には等しくない．
+\eqref{Eq:Gibbs_Equilibrium_2}式を\eqref{Eq:Pressure_1}，\eqref{Eq:Pressure_2}式を用いて整理すると，
+\begin{equation}
+  \nu_1\pab{\odv{p_\mathrm{v}}{T}+\odv{P_\mathrm{ice}}{T}} - S_1 = \nu_2\pab{\odv{p_\mathrm{v}}{T}+\odv{P}{T}} - S_2
+\end{equation}
+さらに整理して
+\begin{equation}
+  \label{Eq:Gibbs_Equilibrium_3}
+  \nu_2\odv{P}{T} - \nu_1\odv{P_\mathrm{ice}}{T} + \odv{p_\mathrm{v}}{T}\pab{\nu_2 - \nu_1} = S_2 - S_1
+\end{equation}
+ここで，液相から氷相への相変化において，エンタルピーの変化は次のように表される．
+\begin{equation}
+  \label{Eq:Enthalpy_Change}
+  H_\mathrm{fus}\pab{T;N} = T\Bab{S\pab{T; V_\mathrm{liquid}\pab{T;N},N}-S\pab{T; V_\mathrm{solid}\pab{T;N},N}}
+\end{equation}
+ここで，$H_\mathrm{fus}$は液相から固相への凝固潜熱であり，$V_\mathrm{liquid}$，$V_\mathrm{solid}$はそれぞれ液相，固相の体積である．液状水から氷への相変化に対して\eqref{Eq:Enthalpy_Change}式を用いると，
+\begin{equation}
+  \label{Eq:Enthalpy_Change_2}
+  S_2 - S_1 = \frac{L_\mathrm{f}}{T}
+\end{equation}
+ただし，$L_\mathrm{f}$は水の液・固相間の凍結潜熱である．\eqref{Eq:Gibbs_Equilibrium_3}式に\eqref{Eq:Enthalpy_Change_2}式を代入することで，GCC式を得ることができる．
+
+\begin{NoteBox}{Generalized Clausius-Clapeyron式}{GCCE}
+  \eqref{Eq:GCC_main}式は，凍土における相平衡の基礎となる一般化Clausius-Clapeyron式（Generalized Clausius-Clapeyron equation, GCC）である．
+  \begin{equation}
+    \label{Eq:GCC_main}
+    \nu_2\odv{P}{T} - \nu_1\odv{P_\mathrm{ice}}{T} + \odv{p_\mathrm{v}}{T}\pab{\nu_2 - \nu_1} = \frac{L_\mathrm{f}}{T}
+  \end{equation}
+\end{NoteBox}
+\begin{enumerate}[label=Case \arabic*：]
+  \item 氷の圧力は一定に保たれ，水の圧力のみが変化するとするとき．\\
+  このとき，氷の圧力の温度微分は0となるので，\eqref{Eq:GCC_main}式は次のように表される．
+  \begin{equation}
+    \label{Eq:GCC_ice_constant}
+    \odv{P}{T} = \frac{L_\mathrm{f}}{\nu_2 T} + \odv{P_\mathrm{v}}{T}\pab{\frac{\nu_1}{\nu_2}-1}
+  \end{equation}
+  \eqref{Eq:GCC_ice_constant}式の右辺第二項は十分に小さいとすれば，
+  \begin{equation}
+    \label{Eq:GCC_ice_constant_approx}
+    \odv{P}{T} \approx \frac{L_\mathrm{f}}{\nu_2 T} = \frac{L_\mathrm{f}\rho_\mathrm{w}}{T}
+  \end{equation}
+  ここで，$\rho_\mathrm{w}$は水の密度である．
+  $\SI{1}{atm}$のとき，水は$T_\mathrm{f}^{\ast}=\SI{273.15}{K}$で凍結するので，常微分方程式\eqref{Eq:GCC_ice_constant_approx}式は
+  \begin{align}
+    \int_{0}^{P} \odif{P} &= \int_{T^{{\ast}}_\mathrm{f}}^{T^{{\ast}}} \frac{L_\mathrm{f}\rho_\mathrm{w}}{T}\odif{T}\notag\\
+    \label{Eq:GCC_ice_constant_approx_2}
+    P &= L_\mathrm{f} \rho_\mathrm{w} \ln{\frac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}
+  \end{align}
+
+  \item 蒸気圧$P_\mathrm{v}$が温度に依存しないと仮定するとき．\\
+  このとき，\eqref{Eq:GCC_main}式は次のように表される．
+  \begin{equation}
+    \label{Eq:GCC_vapor_constant}
+      \nu_2\odv{P}{T} - \nu_1\odv{P_\mathrm{ice}}{T} = \frac{L_\mathrm{f}}{T}
+  \end{equation}
+  \eqref{Eq:GCC_vapor_constant}式を整理すれば，
+  \begin{equation}
+    \label{Eq:GCC_vapor_constant_2}
+    \odv{P_\mathrm{ice}}{T} = \frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\odv{P}{T} - \frac{L_\mathrm{f}\rho_\mathrm{ice}}{T}
+  \end{equation}
+  ここで，$\rho_\mathrm{ice}$は氷の密度である．
+  常微分方程式\eqref{Eq:GCC_vapor_constant_2}式をCase 1と同様に積分すれば，
+  \begin{align}
+    \int_{0}^{P_\mathrm{ice}} \odif{P_\mathrm{ice}} &=\int_{0}^{P} \odif{P} -\int_{T^{{\ast}}_\mathrm{f}}^{T^{{\ast}}} \frac{L_\mathrm{f}\rho_\mathrm{ice}}{T}\odif{T} \\
+    \label{Eq:GCC_vapor_constant_2_integrated}
+    P_\mathrm{ice} &= \frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}P - L_\mathrm{f} \rho_\mathrm{ice} \ln{\frac{T^{\ast}}{T^{\ast}_\mathrm{f}}}
+  \end{align}
+\end{enumerate}
+
+\subsection{GCC式を用いた不凍水量の表現}
+\begin{wrapfigure}[30]{r}[0pt]{0.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{schematic-gcc-withEXP.pdf}
+  \caption{土中の液状水の動態についての概念図．(a) 脱水過程において飽和土壌から不飽和土壌へ遷移する図，(b) 凍結過程において飽和土壌から凍土へ遷移する図．}\label{fig:GCC}
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{GCC_vs_T.pdf}
+  \caption{異なる条件下でのCryogenic Suction，\eqref{Eq:P_iw}式}\label{fig:Piw}
+\end{wrapfigure}
+Fig.~\ref{fig:GCC}に示したように，飽和土が凍結・融解する過程の液状水--氷の分布と飽和土中の脱水・給水過程の液状水--空気の分布が等しいと仮定する\citep{Williams-1964}．このとき，液状水と空気のsuction~$P_\mathrm{aw}=P_\mathrm{a}-P$と不凍水と氷のcryogenic suction~$P_\mathrm{iw}=P_\mathrm{ice}-P$が等しいとすれば，不凍水の圧力を絶対温度$T^{\ast}$の関数として，水分保持関数(Water Retension Function, WRF)を用いて推定することができる．これらの適用性については実験的に\textcite{Black-1989}で示されている．
+ここで，説明のために水分保持関数として広く使われているvan Genuchten (vG) 式\citep{van-Genuchten-1980}を用いる．
+前述した仮定を用いることで，vG式は
+\begin{equation}
+  \label{Eq:van_Genuchten_cryogenic}
+  \Sw = \pab{1+\left|\alpha P_\mathrm{iw} \right|^n}^{m}
+\end{equation}
+ここで，$\Sw$は不凍水の飽和度，$\alpha$，$n$，$m$はvG式のパラメータである．
+このとき，$P_\mathrm{iw}$は\eqref{Eq:GCC_vapor_constant_2_integrated}式を用いて次のように表される．
+\begin{equation}
+  \label{Eq:P_iw}
+  P_\mathrm{iw} = \pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}-1}P - L_\mathrm{f} \rho_\mathrm{ice} \ln{\frac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}
+\end{equation}
+\eqref{Eq:P_iw}式を\eqref{Eq:van_Genuchten_cryogenic}式に代入し，vGパラメータに適当に制約をつければ絶対値は外すことができるので，最終的に水分保持関数は次のように表される．
+\begin{align}
+  \Sw &= \Bab{1+\left|\alpha \bab{\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}-1}P - L_\mathrm{f} \rho_\mathrm{ice} \ln{\frac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}} \right|^n}^{m}\notag\\
+  \label{Eq:van_Genuchten_cryogenic_2}
+  &= \Bab{1+\alpha \bab{\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}-1}P - L_\mathrm{f} \rho_\mathrm{ice} \ln{\frac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}} ^n}^{m}
+\end{align}
+\eqref{Eq:van_Genuchten_cryogenic_2}式を用いることで，不凍水量を求めることで間接的に含氷量を求めることができる．他の水分保持関数を用いることも可能であるが，その詳細については別節で述べる．
+\subsection{GCC式の微分形}
+定式化に伴い飽和度$\Sw$の微分が必要になるため，GCC式$\mathcal{F}_\mathrm{GCC}$と水分保持関数$\mathcal{F}_\mathrm{WRF}$を微分形に変形する．
+\begin{subequations}
+  \begin{align}
+    \Sw &= \mathcal{F}_\mathrm{WRF}\pab{P_\mathrm{ice}-\mathcal{F}_\mathrm{GCC}\pab{T^{\ast}, P, P_\mathrm{ice}}}\notag\\
+    \label{Eq:Sw_form}
+    &= \mathcal{F}_\mathrm{WRF}\pab{P_\mathrm{iw}}
+  \end{align}
+\end{subequations}
+GCC式の全微分は，温度微分と圧力微分の和として表される．
+\begin{equation}
+\label{Eq:GCC_differential}
+  \odif{\Sw} = \pdv{\Sw}{P} \odif{P} +\pdv{\Sw}{P_\mathrm{ice}} \odif{P_\mathrm{ice}} + \pdv{\Sw}{T^{\ast}} \odif{T^{\ast}} 
+\end{equation}
+\eqref{Eq:Sw_form}式を考慮すれば，\eqref{Eq:GCC_differential}式は次のように表される．
+\begin{align}
+  \odif{\Sw} &= \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{P} \odif{P} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{P_\mathrm{ice}} \odif{P_\mathrm{ice}} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{T^{\ast}} \odif{T^{\ast}}\notag\\
+  &= \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}-1} \odif{P} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\odif{P_\mathrm{ice}} - \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\frac{L_\mathrm{f} \rho_\mathrm{ice}}{T^{{\ast}}} \odif{T^{\ast}}
+\end{align}
+% \begin{equation}
+%   \label{Eq:GCC_differential_form}
+%   \odv{P_\mathrm{ice}}{T} = \frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\odv{P}{T} - \frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^{\ast}}
+% \end{equation}
+% ここで，$\rho_\mathrm{ice}$，$\rho_\mathrm{w}$はそれぞれ氷，液状水の密度である．nonseg-m
+% \begin{equation}
+%   S_h= -\frac{L_\mathrm{f}}{g} \ln{\frac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}
+% \end{equation}
+% \begin{equation}
+%   \odv{S_h}{T} =-\frac{L_\mathrm{f}}{g T^{\ast}}
+% \end{equation}
+% \begin{equation}
+%   \odv[order=2]{S_h}{T} =\frac{L_\mathrm{f}}{g{T^{\ast}}^{2}}
+% \end{equation}
+% nonseg-Pa
+% \begin{equation}
+%   S_P= - L_\mathrm{f} \rho_\mathrm{w} \ln{\frac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}
+% \end{equation}
+% \begin{equation}
+%   \odv{S_P}{T} =-\frac{L_\mathrm{f} \rho_\mathrm{w}}{T^{{\ast}}}
+% \end{equation}
+% \begin{equation}
+%   \odv[order=2]{S_P}{T} = \frac{L_\mathrm{f} \rho_\mathrm{w}}{{T^{{\ast}}}^{2}}
+% \end{equation}
+% seg-m
+% \begin{equation}
+%   S_h= \dfrac{\pab{\dfrac{\rho_\mathrm{ice}}{\rho_\mathrm{w}} - 1}P- L_\mathrm{f} \rho_\mathrm{ice} \ln{\dfrac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}} {\rho_\mathrm{w} g}
+% \end{equation}
+% \begin{equation}
+%   \odv{S_h}{T} =- \frac{L_\mathrm{f} \rho_\mathrm{ice}}{\rho_\mathrm{w} g T^{{\ast}}}
+% \end{equation}
+% \begin{equation}
+%   \odv[order=2]{S_h}{T} =\frac{L_\mathrm{f} \rho_\mathrm{ice}}{\rho_\mathrm{w} g {T^{{\ast}}}^{2}}
+% \end{equation}
+% seg-Pa
+% \begin{equation}
+%   S_P=\pab{\dfrac{\rho_\mathrm{ice}}{\rho_\mathrm{w}} - 1}P - L_\mathrm{f} \rho_\mathrm{ice} \ln{\dfrac{T^{{\ast}}}{T^{{\ast}}_\mathrm{f}}}
+% \end{equation}
+% \begin{equation}
+%   \odv{S_P}{T} =- \frac{L_\mathrm{f} \rho_\mathrm{ice}}{T^{{\ast}}}
+% \end{equation}
+% \begin{equation}
+%   \odv[order=2]{S_P}{T} = \frac{L_\mathrm{f} \rho_\mathrm{ice}}{{T^{{\ast}}}^{2}}
+% \end{equation}
+
+間隙水，間隙氷の体積圧縮係数をそれぞれ$K_\mathrm{w}$，$K_\mathrm{ice}$とすると，
+\begin{subequations}
+  \label{Eq:Compressibility}
+  \begin{align}
+    \odif{\rho_\mathrm{w}} &= \frac{\rho_\mathrm{w}}{K_\mathrm{w}}\odif{P}\\
+    \odif{\rho_\mathrm{ice}} &= \frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\odif{P_\mathrm{ice}}
+  \end{align}
+\end{subequations}
+
+体積熱容量
+\begin{equation}
+  C_\mathrm{p} = \rho_\mathrm{s}c_\mathrm{s}\pab{1-\phivv} + \rho_\mathrm{w}c_\mathrm{w}\Qw + \rho_\mathrm{ice}c_\mathrm{ice}\pab{\phivv-\Qw}
+\end{equation}
+体積熱容量の微分
+\begin{align}
+  \pdv{C_\mathrm{p}}{T} &= \rho_\mathrm{w}c_\mathrm{w}\pdv{\Qw}{T} - \rho_\mathrm{ice}c_\mathrm{ice}\pdv{\Qw}{T}\notag\\
+  &=\pab{\rho_\mathrm{w}c_\mathrm{w}-\rho_\mathrm{ice}c_\mathrm{ice}}\pdv{\Qw}{h}\pdv{h}{T}
+\end{align}
+見かけの体積熱容量
+\begin{align}
+  C_\mathrm{a} &= \rho_\mathrm{s}c_\mathrm{s}\pab{1-\phivv} + \rho_\mathrm{w}c_\mathrm{w}\Qw + \rho_\mathrm{ice}c_\mathrm{ice}\pab{\phivv-\Qw} + L_\mathrm{f}\rho_\mathrm{ice}\pdv{\Qice}{T}\notag\\
+  &=\rho_\mathrm{s}c_\mathrm{s}\pab{1-\phivv} + \rho_\mathrm{w}c_\mathrm{w}\Qw + \rho_\mathrm{ice}c_\mathrm{ice}\pab{\phivv-\Qw} - L_\mathrm{f}\rho_\mathrm{ice}\pdv{\Qw}{T}\notag\\
+  &=\rho_\mathrm{s}c_\mathrm{s}\pab{1-\phivv} + \rho_\mathrm{w}c_\mathrm{w}\Qw + \rho_\mathrm{ice}c_\mathrm{ice}\pab{\phivv-\Qw} - L_\mathrm{f}\rho_\mathrm{ice}\pdv{\Qw}{h}\pdv{h}{T}
+\end{align}
+見かけの体積熱容量の微分
+\begin{align}
+  \pdv{C_\mathrm{a}}{T} &= \pdv{\rho_\mathrm{w}}{T}c_\mathrm{w}\Qw+ \rho_\mathrm{w}c_\mathrm{w}\pdv{\Qw}{T} - \rho_\mathrm{ice}c_\mathrm{ice}\pdv{\Qw}{T} - L_\mathrm{f}\rho_\mathrm{ice}\pdv[order=2]{\Qw}{T}\notag\\
+  &=\pdv{\rho_\mathrm{w}}{T}c_\mathrm{w}\Qw+\pab{\rho_\mathrm{w}c_\mathrm{w}-\rho_\mathrm{ice}c_\mathrm{ice}}\pdv{\Qw}{h}\pdv{h}{T}-L_\mathrm{f}\rho_\mathrm{ice}\pdv[order=2]{h}{T}
+\end{align}

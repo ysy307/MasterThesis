@@ -1,0 +1,254 @@
+\subsection{三角形二次要素}
+三角形二次要素ではFig.~\ref{Fig:triangle-2nd-order}のように三角形一次要素の節点の中点にさらに節点を追加することで次数を上げる．
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[scale=1.5]
+    \coordinate[label=below left:O](O)at(0,0);
+    \coordinate(XS)at(-0.5,0);
+    \coordinate(XL)at(8,0);
+    \coordinate(YS)at(0,-0.5);
+    \coordinate(YL)at(0,5);
+    \draw[semithick,-{Latex}] (XS)--(XL)node[right]{$x$};
+    \draw[semithick,-{Latex}] (YS)--(YL)node[above]{$y$};
+    \coordinate[label=below:$P_1\pab{x_1,y_1}$](P1)at(0.85,0.75);
+    \coordinate[label=above right:$P_2\pab{x_2,y_2}$](P2)at(6,1.5);
+    \coordinate[label=above right:$P_3\pab{x_3,y_3}$](P3)at(3,4);
+    \coordinate[label=below right:$P_4\pab{x_4,y_4}$](P4)at(3.425,1.125);
+    \coordinate[label=above right:$P_5\pab{x_5,y_5}$](P5)at(4.5,2.75);
+    \coordinate[label=left:$P_6\pab{x_6,y_6}$](P6)at(1.925,2.375);
+
+    \draw (P1)--(P2)--(P3)--cycle;
+    \fill[black] (P1) circle (2pt);
+    \fill[black] (P2) circle (2pt);
+    \fill[black] (P3) circle (2pt);
+    \fill[black] (P4) circle (2pt);
+    \fill[black] (P5) circle (2pt);
+    \fill[black] (P6) circle (2pt);
+  \end{tikzpicture}
+  \caption{三角形二次要素の節点配置}
+  \label{Fig:triangle-2nd-order}
+\end{figure}
+三角形二次要素では温度は次のように補間される．
+\begin{equation}
+  \label{Eq:triangle-2nd-order}
+  T= a_m + b_m x + c_m y + d_m x^2 + e_m xy + f_m y^2
+\end{equation}
+未知数は6つであるので，6つの節点が必要である．三角形二次要素の各節点上で\eqref{Eq:triangle-2nd-order}式を満たすとすると，
+\begin{equation}
+  \label{Eq:triangle-2nd-order-matrix}
+  \begin{bmatrix}
+    1 & x_1 & y_1 & x_1^2 & x_1y_1 & y_1^2\\
+    1 & x_2 & y_2 & x_2^2 & x_2y_2 & y_2^2\\
+    1 & x_3 & y_3 & x_3^2 & x_3y_3 & y_3^2\\
+    1 & x_4 & y_4 & x_4^2 & x_4y_4 & y_4^2\\
+    1 & x_5 & y_5 & x_5^2 & x_5y_5 & y_5^2\\
+    1 & x_6 & y_6 & x_6^2 & x_6y_6 & y_6^2
+  \end{bmatrix}
+  \begin{bmatrix}
+    a_m\\
+    b_m\\
+    c_m\\
+    d_m\\
+    e_m\\
+    f_m
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    T_1\\
+    T_2\\
+    T_3\\
+    T_4\\
+    T_5\\
+    T_6
+  \end{bmatrix}
+\end{equation}
+ここで，$T_1$，$T_2$，$T_3$，$T_4$，$T_5$，$T_6$はそれぞれ節点$P_1$，$P_2$，$P_3$，$P_4$，$P_5$，$P_6$における温度である．
+\eqref{Eq:triangle-2nd-order-matrix}式を解くことで，各要素における係数$a_m$，$b_m$，$c_m$，$d_m$，$e_m$，$f_m$を求めることができる．
+\eqref{Eq:triangle-2nd-order-matrix}式を解くと，面積座標での補間関数が得られる．
+\begin{subequations}
+  \label{Eq:triangle-2nd-order-psi}
+  \begin{align}
+    \label{Eq:triangle-2nd-order-psi1}
+    \psi_1 &= \xi_1\pab{2\xi_1-1}\\
+    \label{Eq:triangle-2nd-order-psi2}
+    \psi_2 &= \xi_2\pab{2\xi_2-1}\\
+    \label{Eq:triangle-2nd-order-psi3}
+    \psi_3 &= \xi_3\pab{2\xi_3-1}\\
+    \label{Eq:triangle-2nd-order-psi4}
+    \psi_4 &= 4\xi_1\xi_2\\
+    \label{Eq:triangle-2nd-order-psi5}
+    \psi_5 &= 4\xi_2\xi_3\\
+    \label{Eq:triangle-2nd-order-psi6}
+    \psi_6 &= 4\xi_3\xi_1
+  \end{align}
+  ここで\eqref{Eq:Relxi}式を用いれば，\eqref{Eq:triangle-2nd-order-psi}式は基底関数の基本ルールを満たしていることが確認出来る．
+  \begin{equation*}
+    \psi_1 + \psi_2 + \psi_3 + \psi_4 + \psi_5 + \psi_6 = 1
+  \end{equation*}
+\end{subequations}
+\eqref{Eq:triangle-2nd-order-psi}式の基底関数の偏微分を求めると，
+\begin{subequations}
+  \label{Eq:triangle-2nd-order-psi-diff}
+  \begin{align}
+    \pdv{\psi_1}{\xi_1} &= 4\xi_1 - 1, &\pdv{\psi_1}{\xi_2} &= 0, &\pdv{\psi_1}{\xi_3} &= 0  
+    \tag{\theequation a, b, c} \\
+    \pdv{\psi_2}{\xi_1} &= 0, &\pdv{\psi_2}{\xi_2} &= 4\xi_2 - 1, &\pdv{\psi_2}{\xi_3} &= 0  
+    \tag{\theequation d, e, f} \\
+    \pdv{\psi_3}{\xi_1} &= 0, &\pdv{\psi_3}{\xi_2} &= 0, &\pdv{\psi_3}{\xi_3} &= 4\xi_3 - 1  
+    \tag{\theequation g, h, i} \\
+    \pdv{\psi_4}{\xi_1} &= 4\xi_2, &\pdv{\psi_4}{\xi_2} &= 4\xi_1, &\pdv{\psi_4}{\xi_3} &= 0  
+    \tag{\theequation j, k, l} \\
+    \pdv{\psi_5}{\xi_1} &= 0, &\pdv{\psi_5}{\xi_2} &= 4\xi_3, &\pdv{\psi_5}{\xi_3} &= 4\xi_2  
+    \tag{\theequation m, n, o} \\
+    \pdv{\psi_6}{\xi_1} &= 4\xi_3, &\pdv{\psi_6}{\xi_2} &= 0, &\pdv{\psi_6}{\xi_3} &= 4\xi_1  
+    \tag{\theequation p, q, r}
+  \end{align}
+\end{subequations}
+
+
+
+$\vect{\psi}^\top\vect{\psi}$の面積分は次のようになる．
+\begin{align}
+  &\iint_{\Omega^e}\vect{\psi}^\top\vect{\psi}\odif{\Omega^e}\notag\\
+  &=\iint_{\Omega^e}\begin{bmatrix}
+    \psi_1 \psi_1 & \psi_2 \psi_1 & \psi_3 \psi_1 & \psi_4 \psi_1 & \psi_5 \psi_1 & \psi_6 \psi_1 \\
+    \psi_1 \psi_2 & \psi_2 \psi_2 & \psi_3 \psi_2 & \psi_4 \psi_2 & \psi_5 \psi_2 & \psi_6 \psi_2 \\
+    \psi_1 \psi_3 & \psi_2 \psi_3 & \psi_3 \psi_3 & \psi_4 \psi_3 & \psi_5 \psi_3 & \psi_6 \psi_3 \\
+    \psi_1 \psi_4 & \psi_2 \psi_4 & \psi_3 \psi_4 & \psi_4 \psi_4 & \psi_5 \psi_4 & \psi_6 \psi_4 \\
+    \psi_1 \psi_5 & \psi_2 \psi_5 & \psi_3 \psi_5 & \psi_4 \psi_5 & \psi_5 \psi_5 & \psi_6 \psi_5 \\
+    \psi_1 \psi_6 & \psi_2 \psi_6 & \psi_3 \psi_6 & \psi_4 \psi_6 & \psi_5 \psi_6 & \psi_6 \psi_6
+  \end{bmatrix}\odif{\Omega^e}\notag\\
+  \label{Eq:tri-basis-integral-Second}
+  \begin{split}
+    &=\iint_{\Omega^e}
+    \left[
+      \begin{array}{ccc}
+        4 \xi_{1}^{4} - 4 \xi_{1}^{3} + \xi_{1}^{2} & 4 \xi_{1}^{2} \xi_{2}^{2} - 2 \xi_{1}^{2} \xi_{2} - 2 \xi_{1} \xi_{2}^{2} + \xi_{1} \xi_{2} & 4 \xi_{1}^{2} \xi_{3}^{2} - 2 \xi_{1}^{2} \xi_{3} - 2 \xi_{1} \xi_{3}^{2} + \xi_{1} \xi_{3} \\
+        4 \xi_{1}^{2} \xi_{2}^{2} - 2 \xi_{1}^{2} \xi_{2} - 2 \xi_{1} \xi_{2}^{2} + \xi_{1} \xi_{2} & 4 \xi_{2}^{4} - 4 \xi_{2}^{3} + \xi_{2}^{2} & 4 \xi_{2}^{2} \xi_{3}^{2} - 2 \xi_{2}^{2} \xi_{3} - 2 \xi_{2} \xi_{3}^{2} + \xi_{2} \xi_{3} \\
+        4 \xi_{2}^{2} \xi_{3}^{2} - 2 \xi_{2}^{2} \xi_{3} - 2 \xi_{2} \xi_{3}^{2} + \xi_{2} \xi_{3} & 4 \xi_{2}^{2} \xi_{3}^{2} - 2 \xi_{2}^{2} \xi_{3} - 2 \xi_{2} \xi_{3}^{2} + \xi_{2} \xi_{3} & 4 \xi_{3}^{4} - 4 \xi_{3}^{3} + \xi_{3}^{2} \\
+        8 \xi_{1}^{3} \xi_{2} - 4 \xi_{1}^{2} \xi_{2} & 8 \xi_{1} \xi_{2}^{3} - 4 \xi_{1} \xi_{2}^{2} & 8 \xi_{1} \xi_{2} \xi_{3}^{2} - 4 \xi_{1} \xi_{2} \xi_{3} \\
+        8 \xi_{1}^{2} \xi_{2} \xi_{3} - 4 \xi_{1} \xi_{2} \xi_{3} & 8 \xi_{2}^{3} \xi_{3} - 4 \xi_{2}^{2} \xi_{3} & 8 \xi_{2} \xi_{3}^{3} - 4 \xi_{2} \xi_{3}^{2} \\
+        8 \xi_{1}^{3} \xi_{3} - 4 \xi_{1}^{2} \xi_{3} & 8 \xi_{1} \xi_{2}^{2} \xi_{3} - 4 \xi_{1} \xi_{2} \xi_{3} & 8 \xi_{1} \xi_{3}^{3} - 4 \xi_{1} \xi_{3}^{2} \\
+      \end{array}
+    \right.\\
+    &\left.
+      \begin{array}{ccc}
+        8 \xi_{1}^{3} \xi_{2} - 4 \xi_{1}^{2} \xi_{2} & 8 \xi_{1}^{2} \xi_{2} \xi_{3} - 4 \xi_{1} \xi_{2} \xi_{3} & 8 \xi_{1}^{3} \xi_{3} - 4 \xi_{1}^{2} \xi_{3} \\
+        8 \xi_{1} \xi_{2}^{3} - 4 \xi_{1} \xi_{2}^{2} & 8 \xi_{2}^{3} \xi_{3} - 4 \xi_{2}^{2} \xi_{3} & 8 \xi_{1} \xi_{2}^{2} \xi_{3} - 4 \xi_{1} \xi_{2} \xi_{3} \\
+        8 \xi_{1} \xi_{2} \xi_{3}^{2} - 4 \xi_{1} \xi_{2} \xi_{3} & 8 \xi_{2} \xi_{3}^{3} - 4 \xi_{2} \xi_{3}^{2} & 8 \xi_{1} \xi_{3}^{3} - 4 \xi_{1} \xi_{3}^{2} \\
+        16 \xi_{1}^{2} \xi_{2}^{2} & 16 \xi_{1} \xi_{2}^{2} \xi_{3} & 16 \xi_{1}^{2} \xi_{2} \xi_{3} \\
+        16 \xi_{1} \xi_{2}^{2} \xi_{3} & 16 \xi_{2}^{2} \xi_{3}^{2} & 16 \xi_{1} \xi_{2} \xi_{3}^{2} \\
+        16 \xi_{1}^{2} \xi_{2} \xi_{3} & 16 \xi_{1} \xi_{2} \xi_{3}^{2} & 16 \xi_{1}^{2} \xi_{3}^{2} \\
+      \end{array}
+    \right]\odif{\Omega^e}
+  \end{split}
+\end{align}
+\eqref{Eq:tri-basis-integral}式を用いて，\eqref{Eq:tri-basis-integral-Second}式を計算すると，
+\begin{align}
+  \iint_{\Omega^e}\vect{\psi}^\top\vect{\psi}\odif{\Omega^e} &=
+ \begin{bmatrix}
+    \dfrac{A_m}{30} & - \dfrac{A_m}{180} & - \dfrac{A_m}{180} & 0 & - \dfrac{A_m}{45} & 0\\[2mm]
+    - \dfrac{A_m}{180} & \dfrac{A_m}{30} & - \dfrac{A_m}{180} & 0 & 0 & - \dfrac{A_m}{45}\\[2mm]
+    - \dfrac{A_m}{180} & - \dfrac{A_m}{180} & \dfrac{A_m}{30} & - \dfrac{A_m}{45} & 0 & 0\\[2mm]
+    0 & 0 & - \dfrac{A_m}{45} & \dfrac{8 A_m}{45} & \dfrac{4 A_m}{45} & \dfrac{4 A_m}{45}\\[2mm]
+    - \dfrac{A_m}{45} & 0 & 0 & \dfrac{4 A_m}{45} & \dfrac{8 A_m}{45} & \dfrac{4 A_m}{45}\\[2mm]
+    0 & - \dfrac{A_m}{45} & 0 & \dfrac{4 A_m}{45} & \dfrac{4 A_m}{45} & \dfrac{8 A_m}{45}
+  \end{bmatrix}\notag\\
+  \label{Eq:tri-basis-integral-Second-matrix}
+  &=\dfrac{A_m}{180}\begin{bmatrix}
+    6 & -1 & -1 & 0 & -4 & 0\\
+    -1 & 6 & -1 & 0 & 0 & -4\\
+    -1 & -1 & 6 & -4 & 0 & 0\\
+    0 & 0 & -4 & 32 & 16 & 16\\
+    -4 & 0 & 0 & 16 & 32 & 16\\
+    0 & -4 & 0 & 16 & 16 & 32
+  \end{bmatrix}
+\end{align}
+次に，$\mat{B}$マトリックスについて考える．
+\begin{align}
+  \mat{B} &= 
+  \begin{bmatrix}
+    \pdv{\psi_1}!{x} & \pdv{\psi_2}!{x} & \pdv{\psi_3}!{x} & \pdv{\psi_4}!{x} & \pdv{\psi_5}!{x} & \pdv{\psi_6}!{x}\\
+    \pdv{\psi_1}!{y} & \pdv{\psi_2}!{y} & \pdv{\psi_3}!{y} & \pdv{\psi_4}!{y} & \pdv{\psi_5}!{y} & \pdv{\psi_6}!{y}
+  \end{bmatrix}\notag\\
+  &=
+  \begin{bmatrix}
+    \displaystyle\sum_{i=1}^{3}\pdv{\psi_1}!{\xi_i}\pdv{\xi_i}!{x} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_2}!{\xi_i}\pdv{\xi_i}!{x} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_3}!{\xi_i}\pdv{\xi_i}!{x} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_4}!{\xi_i}\pdv{\xi_i}!{x} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_5}!{\xi_i}\pdv{\xi_i}!{x} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_6}!{\xi_i}\pdv{\xi_i}!{x}\\
+    \displaystyle\sum_{i=1}^{3}\pdv{\psi_1}!{\xi_i}\pdv{\xi_i}!{y} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_2}!{\xi_i}\pdv{\xi_i}!{y} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_3}!{\xi_i}\pdv{\xi_i}!{y} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_4}!{\xi_i}\pdv{\xi_i}!{y} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_5}!{\xi_i}\pdv{\xi_i}!{y} & \displaystyle\sum_{i=1}^{3}\pdv{\psi_6}!{\xi_i}\pdv{\xi_i}!{y}
+  \end{bmatrix}
+\end{align}
+\eqref{Eq:AreaSp}式，\eqref{Eq:triangle-2nd-order-psi-diff}式を用いれば，$\mat{B}$マトリックスは次のようになる．
+\begin{align}
+  \mat{B} &= \dfrac{1}{2A_m}
+  \begin{bmatrix}
+    \pab{4\xi_1-1}b_1 & \pab{4\xi_2-1}b_2 & \pab{4\xi_3-1}b_3 & 4\pab{\xi_2 b_1+\xi_1 b_2} & 4\pab{\xi_3 b_2+\xi_2 b_3} & 4\pab{\xi_3 b_1+\xi_1 b_3}\\
+    \pab{4\xi_1-1}c_1 & \pab{4\xi_2-1}c_2 & \pab{4\xi_3-1}c_3 & 4\pab{\xi_2 c_1+\xi_1 c_2} & 4\pab{\xi_3 c_2+\xi_2 c_3} & 4\pab{\xi_3 c_1+\xi_1 c_3}
+  \end{bmatrix}
+\end{align}
+$\mat{R}$マトリックスがIsotropicであれば，
+\begin{align}
+  &\iint_{\Omega^e}\mat{B}^\top\mat{R}\mat{B}\odif{\Omega^e}\notag\\
+  &=\small\dfrac{\lambda}{12A_m}
+  \left[
+    \begin{array}{cccc}
+       3b_1^2 + 3b_2^2  & -b_1b_2 - c_1c_2  & -b_1b_3 - c_1c_3 & 4b_1b_2 + 4c_1c_2 \\
+      -b_1b_2 - c_1c_2  &  3b_1^2 + 3c_2^2  & -b_2b_3 - c_2c_3 & 4b_1b_2 + 4c_1c_2 \\
+      -b_1b_3 - c_1c_3  & -b_2b_3 - c_2c_3  &  3b_3^2 + 3c_3^2 & 0                 \\
+      4b_1b_2 + 4c_1c_2 & 4b_1b_2 + 4c_1c_2 & 0                & 8b_1^2 + 8b_1b_2 + 8b_2^2 + 8c_1^2 + 8c_1c_2 + 8c_2^2 \\
+      0                 & 4b_2b_3 + 4c_2c_3 & 4b_2b_3 + 4c_2c_3 & 4b_1b_2+8b_1b_3+4b_2^2+4b_2b_3+4c_1c_2+8c_1c_3+4c_2^2+4c_2c_3 \\
+      4b_1b_3+4c_1c_3  & 0                 & 4b_1b_3+4c_1c_3  & 4b_1^2+4b_1b_2+4b_1b_3+8b_2b_3+4c_1^2+4c_1c_2+4c_1c_3+8c_2c_3
+    \end{array}
+  \right.\notag\\
+&\small\left.
+  \begin{array}{cc}
+    0                 & 4b_1b_3 + 4c_1c_3 \\
+    4b_2b_3 + 4c_2c_3 & 0                 \\
+    4b_2b_3 + 4c_2c_3 & 4b_1b_3 + 4c_1c_3 \\
+    4b_1b_2 + 8b_1b_3 + 4b_2^2 + 4b_2b_3 + 4c_1c_2 + 8c_1c_3 + 4c_2^2 + 4c_2c_3 & 4b_1^2+4b_1b_2+4b_1b_3+8b_2b_3+4c_1^2+4c_1c_2+4c_1c_3+8c_2c_3\\
+    8b_2^2 + 8b_2b_3 + 8b_3^2 + 8c_2^2 + 8c_2c_3 + 8c_3^2 & 8b_1b_2+4b_1b_3+4b_2b_3+4b_3^2+8c_1c_2+4c_1c_3+4c_2c_3+4c_3^2\\
+    8b_1b_2 + 4b_1b_3 + 4b_2b_3 + 4b_3^2 + 8c_1c_2 + 4c_1c_3 + 4c_2c_3 + 4c_3^2 & 8b_1^2 + 8b_1b_3 + 8b_3^2 + 8c_1^2 + 8c_1c_3 + 8c_3^2
+  \end{array}
+  \right]
+  \normalsize
+\end{align}
+一方$\mat{R}$マトリックスがAnisotropicであれば，
+\begin{align*}
+  \small
+  &\iint_{\Omega^e}\mat{B}^\top\mat{R}\mat{B}\odif{\Omega^e}=\dfrac{1}{12A_m}\\
+  &3 \lambda_{xx} b_{1}^{2} + 6 \lambda_{xy} b_{1} c_{1} + 3 \lambda_{yy} c_{1}^{2} &\qquad D^e(1,1)\\
+  &- \lambda_{xx} b_{1} b_{2} + \lambda_{xy} \pab{- b_{1} c_{2} - b_{2} c_{1}} - \lambda_{yy} c_{1} c_{2} &\qquad D^e(1,2)\\
+  &- \lambda_{xx} b_{1} b_{3} + \lambda_{xy} \pab{- b_{1} c_{3} - b_{3} c_{1}} - \lambda_{yy} c_{1} c_{3} &\qquad D^e(1,3)\\
+  &4 \lambda_{xx} b_{1} b_{2} + \lambda_{xy} \pab{4 b_{1} c_{2} + 4 b_{2} c_{1}} + 4 \lambda_{yy} c_{1} c_{2} &\qquad D^e(1,4)\\
+  &0 &\qquad D^e(1,5)\\
+  &4 \lambda_{xx} b_{1} b_{3} + \lambda_{xy} \pab{4 b_{1} c_{3} + 4 b_{3} c_{1}} + 4 \lambda_{yy} c_{1} c_{3} &\qquad D^e(1,6)\\
+  &- \lambda_{xx} b_{1} b_{2} + \lambda_{xy} \pab{- b_{1} c_{2} - b_{2} c_{1}} - \lambda_{yy} c_{1} c_{2} &\qquad D^e(2,1)\\
+  &3 \lambda_{xx} b_{2}^{2} + 6 \lambda_{xy} b_{2} c_{2} + 3 \lambda_{yy} c_{2}^{2} &\qquad D^e(2,2)\\
+  &- \lambda_{xx} b_{2} b_{3} + \lambda_{xy} \pab{- b_{2} c_{3} - b_{3} c_{2}} - \lambda_{yy} c_{2} c_{3} &\qquad D^e(2,3)\\
+  &4 \lambda_{xx} b_{1} b_{2} + \lambda_{xy} \pab{4 b_{1} c_{2} + 4 b_{2} c_{1}} + 4 \lambda_{yy} c_{1} c_{2} &\qquad D^e(2,4)\\
+  &4 \lambda_{xx} b_{2} b_{3} + \lambda_{xy} \pab{4 b_{2} c_{3} + 4 b_{3} c_{2}} + 4 \lambda_{yy} c_{2} c_{3} &\qquad D^e(2,5)\\
+  &0 &\qquad D^e(2,6)\\
+  &- \lambda_{xx} b_{1} b_{3} + \lambda_{xy} \pab{- b_{1} c_{3} - b_{3} c_{1}} - \lambda_{yy} c_{1} c_{3} &\qquad D^e(3,1)\\
+  &- \lambda_{xx} b_{2} b_{3} + \lambda_{xy} \pab{- b_{2} c_{3} - b_{3} c_{2}} - \lambda_{yy} c_{2} c_{3} &\qquad D^e(3,2)\\
+  &3 \lambda_{xx} b_{3}^{2} + 6 \lambda_{xy} b_{3} c_{3} + 3 \lambda_{yy} c_{3}^{2} &\qquad D^e(3,3)\\
+  &0 &\qquad D^e(3,4)\\
+  &4 \lambda_{xx} b_{2} b_{3} + \lambda_{xy} \pab{4 b_{2} c_{3} + 4 b_{3} c_{2}} + 4 \lambda_{yy} c_{2} c_{3} &\qquad D^e(3,5)\\
+  &4 \lambda_{xx} b_{1} b_{3} + \lambda_{xy} \pab{4 b_{1} c_{3} + 4 b_{3} c_{1}} + 4 \lambda_{yy} c_{1} c_{3} &\qquad D^e(3,6)\\
+  &4 \lambda_{xx} b_{1} b_{2} + \lambda_{xy} \pab{4 b_{1} c_{2} + 4 b_{2} c_{1}} + 4 \lambda_{yy} c_{1} c_{2} &\qquad D^e(4,1)\\
+  &4 \lambda_{xx} b_{1} b_{2} + \lambda_{xy} \pab{4 b_{1} c_{2} + 4 b_{2} c_{1}} + 4 \lambda_{yy} c_{1} c_{2} &\qquad D^e(4,2)\\
+  &0 &\qquad D^e(4,3)\\
+  &\lambda_{xx} \pab{8 b_{1}^{2} + 8 b_{1} b_{2} + 8 b_{2}^{2}} + \lambda_{xy} \pab{16 b_{1} c_{1} + 8 b_{1} c_{2} + 8 b_{2} c_{1} + 16 b_{2} c_{2}} \notag\\ &+ \lambda_{yy} \pab{8 c_{1}^{2} + 8 c_{1} c_{2} + 8 c_{2}^{2}} &\qquad D^e(4,4)\\
+  &\lambda_{xx} \pab{4 b_{1} b_{2} + 8 b_{1} b_{3} + 4 b_{2}^{2} + 4 b_{2} b_{3}} + \lambda_{xy} \pab{4 b_{1} c_{2} + 8 b_{1} c_{3} + 4 b_{2} c_{1} + 8 b_{2} c_{2} + 4 b_{2} c_{3} + 8 b_{3} c_{1} + 4 b_{3} c_{2}} \notag\\ &+ \lambda_{yy} \pab{4 c_{1} c_{2} + 8 c_{1} c_{3} + 4 c_{2}^{2} + 4 c_{2} c_{3}} &\qquad D^e(4,5)\\
+  &\lambda_{xx} \pab{4 b_{1}^{2} + 4 b_{1} b_{2} + 4 b_{1} b_{3} + 8 b_{2} b_{3}} + \lambda_{xy} \pab{8 b_{1} c_{1} + 4 b_{1} c_{2} + 4 b_{1} c_{3} + 4 b_{2} c_{1} + 8 b_{2} c_{3} + 4 b_{3} c_{1} + 8 b_{3} c_{2}} \notag\\ &+ \lambda_{yy} \pab{4 c_{1}^{2} + 4 c_{1} c_{2} + 4 c_{1} c_{3} + 8 c_{2} c_{3}} &\qquad D^e(4,6)\\
+  &0 &\qquad D^e(5,1)\\
+  &4 \lambda_{xx} b_{2} b_{3} + \lambda_{xy} \pab{4 b_{2} c_{3} + 4 b_{3} c_{2}} + 4 \lambda_{yy} c_{2} c_{3} &\qquad D^e(5,2)\\
+  &4 \lambda_{xx} b_{2} b_{3} + \lambda_{xy} \pab{4 b_{2} c_{3} + 4 b_{3} c_{2}} + 4 \lambda_{yy} c_{2} c_{3} &\qquad D^e(5,3)\\
+  &\lambda_{xx} \pab{4 b_{1} b_{2} + 8 b_{1} b_{3} + 4 b_{2}^{2} + 4 b_{2} b_{3}} + \lambda_{xy} \pab{4 b_{1} c_{2} + 8 b_{1} c_{3} + 4 b_{2} c_{1} + 8 b_{2} c_{2} + 4 b_{2} c_{3} + 8 b_{3} c_{1} + 4 b_{3} c_{2}} \notag\\ & + \lambda_{yy} \pab{4 c_{1} c_{2} + 8 c_{1} c_{3} + 4 c_{2}^{2} + 4 c_{2} c_{3}} &\qquad D^e(5,4)\\
+  &\lambda_{xx} \pab{8 b_{2}^{2} + 8 b_{2} b_{3} + 8 b_{3}^{2}} + \lambda_{xy} \pab{16 b_{2} c_{2} + 8 b_{2} c_{3} + 8 b_{3} c_{2} + 16 b_{3} c_{3}} \notag\\ & + \lambda_{yy} \pab{8 c_{2}^{2} + 8 c_{2} c_{3} + 8 c_{3}^{2}} &\qquad D^e(5,5)\\
+  &\lambda_{xx} \pab{8 b_{1} b_{2} + 4 b_{1} b_{3} + 4 b_{2} b_{3} + 4 b_{3}^{2}} + \lambda_{xy} \pab{8 b_{1} c_{2} + 4 b_{1} c_{3} + 8 b_{2} c_{1} + 4 b_{2} c_{3} + 4 b_{3} c_{1} + 4 b_{3} c_{2} + 8 b_{3} c_{3}} \notag\\ &+ \lambda_{yy} \pab{8 c_{1} c_{2} + 4 c_{1} c_{3} + 4 c_{2} c_{3} + 4 c_{3}^{2}} &\qquad D^e(5,6)\\
+  &4 \lambda_{xx} b_{1} b_{3} + \lambda_{xy} \pab{4 b_{1} c_{3} + 4 b_{3} c_{1}} + 4 \lambda_{yy} c_{1} c_{3} &\qquad D^e(6,1)\\
+  &0 &\qquad D^e(6,2)\\
+  &4 \lambda_{xx} b_{1} b_{3} + \lambda_{xy} \pab{4 b_{1} c_{3} + 4 b_{3} c_{1}} + 4 \lambda_{yy} c_{1} c_{3} &\qquad D^e(6,3)\\
+  &\lambda_{xx} \pab{4 b_{1}^{2} + 4 b_{1} b_{2} + 4 b_{1} b_{3} + 8 b_{2} b_{3}} + \lambda_{xy} \pab{8 b_{1} c_{1} + 4 b_{1} c_{2} + 4 b_{1} c_{3} + 4 b_{2} c_{1} + 8 b_{2} c_{3} + 4 b_{3} c_{1} + 8 b_{3} c_{2}} \notag\\ & + \lambda_{yy} \pab{4 c_{1}^{2} + 4 c_{1} c_{2} + 4 c_{1} c_{3} + 8 c_{2} c_{3}} &\qquad D^e(6,4)\\
+  &\lambda_{xx} \pab{8 b_{1} b_{2} + 4 b_{1} b_{3} + 4 b_{2} b_{3} + 4 b_{3}^{2}} + \lambda_{xy} \pab{8 b_{1} c_{2} + 4 b_{1} c_{3} + 8 b_{2} c_{1} + 4 b_{2} c_{3} + 4 b_{3} c_{1} + 4 b_{3} c_{2} + 8 b_{3} c_{3}} \notag\\ & + \lambda_{yy} \pab{8 c_{1} c_{2} + 4 c_{1} c_{3} + 4 c_{2} c_{3} + 4 c_{3}^{2}} &\qquad D^e(6,5)\\
+  &\lambda_{xx} \pab{8 b_{1}^{2} + 8 b_{1} b_{3} + 8 b_{3}^{2}} + \lambda_{xy} \pab{16 b_{1} c_{1} + 8 b_{1} c_{3} + 8 b_{3} c_{1} + 16 b_{3} c_{3}} \notag\\ &+ \lambda_{yy} \pab{8 c_{1}^{2} + 8 c_{1} c_{3} + 8 c_{3}^{2}} &\qquad D^e(6,6)\\
+\end{align*}

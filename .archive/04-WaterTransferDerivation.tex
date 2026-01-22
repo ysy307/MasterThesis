@@ -1,0 +1,120 @@
+\section{水分移動支配方程式の導出}
+ある領域$V$に含まれる流体の質量$M\pab{t}$はある点$\vect{r}\pab{x_1,x_2,x_3}$の流体の密度$\rho\pab{\vect{r},t}$とその点の体積$\odif{V}$の積分で表される．
+\begin{equation}
+  \label{Eq:Density}
+  M\pab{t} = \iiint_V \rho\pab{\vect{r},t}\odif{V}
+\end{equation}
+領域$V$の表面$S$について，面積要素$\odif{S}$，$S$に対して垂直で外向きの単位法線ベクトル$\vect{n}$を導入し，面積要素ベクトル$\odif{\vect{S}}$を定める．
+\begin{equation}
+  \odif{\vect{S}} = \vect{n}\odif{S}
+\end{equation}
+微小面積$\odif{S}$を通って流出する流体の体積はそのときの流体の速度$\vect{v}\pab{\vect{r},t}$を用いて表される．
+\begin{equation}
+  \label{Eq:vel_Volume}
+  \abs{\vect{v}\pab{\vect{r},t}}\odif{S}\cos\theta = \vect{v}\pab{\vect{r},t}\cdot\odif{\vect{S}}
+\end{equation}
+ここで$\theta$は$\vect{v}$と$\vect{n}$のなす角である．この体積に密度をかけたものがある単位時間あたりに流出する流体の質量となる．$S$全体である微小時間$\odif{t}$の間に外向きに流出する流体の質量は\eqref{Eq:vel_Volume}を領域$S$全体で積分することで求められる．これをガウスの発散定理で表すと，
+\begin{equation}
+  \iint_S\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}\cdot\odif{\vect{S}}\odif{t}=\iiint_V\nabla\cdot\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}}\odif{V}\odif{t}= \iiint_V\Div\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}}\odif{V}
+\end{equation}
+質量保存則が成り立つようにすれば，領域$V$内の流体の質量変化量$\odif{M}$は，表面$S$を通じて流出する流体の質量と流体の湧き出し量$Q_\mathrm{H}$と等しくなる．
+\begin{equation}
+  \odif{M\pab{t}}+\iiint_V\bab{\Div\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}} + Q_\mathrm{H}}\odif{V}\odif{t} = 0
+\end{equation}
+両辺を$\odif{t}>0$で割って，\eqref{Eq:Density}を用いて整理すると
+\begin{align}
+  \label{Eq:Continuity_Integral}
+   & \odv{M\pab{t}}{t}+\iiint_V\bab{\Div\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}}+ Q_\mathrm{H}}\odif{V}\notag             \\
+   & =\iiint_V\bab{\pdv{\rho\pab{\vect{r},t}}{t}+\Div\pab{\rho\pab{\vect{r},t}\vect{v}\pab{\vect{r},t}} + Q_\mathrm{H}} \odif{V}=0
+\end{align}
+\eqref{Eq:Continuity_Integral}は任意の$\vect{r}$についていたるところで成り立つので，積分の中身は0となる．よって，連続の式は
+\begin{equation}
+  \label{Eq:Continuity}
+  \pdv{\rho}!{t}+\Div\pab{\rho\vect{v}}+ Q_\mathrm{H} =0
+\end{equation}
+\eqref{Eq:Continuity}は連続の式と呼ばれ，流体の質量保存則を表す．ここで連続の式を土壌間隙に適用する．
+このとき，間隙に対する密度$\rho_\mathrm{void}$は次のように定義される．
+\begin{equation}
+  \label{Eq:rho_void}
+  \rho_\mathrm{void} \coloneq \rho_\mathrm{w}\phiv \Sw+\rho_\mathrm{ice}\phiv \Sice
+\end{equation}
+この時，領域$V$の表面$S$からの流出は液状水のみであり氷は不動であるとすれば，\eqref{Eq:Continuity}は\eqref{Eq:rho_void}と水分フラックス$\vect{q}$を用いて次のように表される．．
+\begin{equation}
+  \label{Eq:Continuity_void}
+  \pdv{\rho_\mathrm{void}}!{t}+\Div\pab{\rho_\mathrm{w}\vect{q}}+ Q_\mathrm{H} =0
+\end{equation}
+ここでDarcy's lawにより，鉛直上向きを正，圧縮方向を負とすることに注意すれば$\vect{q}$は次のように表される．
+\begin{equation}
+  \label{Eq:Darcy_Flux}
+  \vect{q} = -\frac{k_0 k_\mathrm{r}}{\mu_\mathrm{w}}\pab{\nabla P-\rho_\mathrm{w}\vect{g}}
+\end{equation}
+ここで水の粘性係数$\mu_\mathrm{w}~\bab{\si{Pa.s}}$の表し方の一つとして次のようなものがある．
+\begin{equation}
+  \label{Eq:mu_w}
+  \mu_\mathrm{w}=2.1\times 10^{-6}\exp\pab{\frac{1808.5}{273.15+T}}
+\end{equation}
+\eqref{Eq:Continuity_void}を\eqref{Eq:rho_void}と\eqref{Eq:Darcy_Flux}を用いて表すと，
+\begin{equation}
+  \label{Eq:Continuity_void2}
+  \pdv{\pab{\rho_\mathrm{w}\phiv \Sw+\rho_\mathrm{ice}\phiv \Sice}}!{t}-\nabla\cdot\bab{\rho_\mathrm{w}\frac{k_0 k_\mathrm{r}}{\mu_\mathrm{w}}\pab{\nabla P-\rho_\mathrm{w}\vect{g}}}+ Q_\mathrm{H} =0
+\end{equation}
+\eqref{Eq:Continuity_void2}の左辺をLeibniz ruleで展開すると，\eqref{Eq:Sw_Sice_Relation_Diff}を用いれば次のようになる．
+\begin{align}
+  \pdv{\pab{\rho_\mathrm{w}\phiv \Sw+\rho_\mathrm{ice}\phiv \Sice}}!{t} & =\Sw\phiv\pdv{\rho_\mathrm{w}}!{t}+\rho_\mathrm{w}\phiv\pdv{\Sw}!{t}+\rho_\mathrm{w}\Sw\pdv{\phiv}!{t}+\Sice\phiv\pdv{\rho_\mathrm{ice}}!{t}+\rho_\mathrm{ice}\phiv\pdv{\Sice}!{t}+\rho_\mathrm{ice}\Sice\pdv{\phiv}!{t}\notag \\
+  \label{Eq:Continuity_void_strain_chain}
+                                                                        & =\Sw\phiv\pdv{\rho_\mathrm{w}}!{t}+\Sice\phiv\pdv{\rho_\mathrm{ice}}!{t}+\pab{\rho_\mathrm{w}-\rho_\mathrm{ice}}\phiv\pdv{\Sw}!{t}+\pab{\rho_\mathrm{w}\Sw+\rho_\mathrm{ice}\Sice}\pdv{\phiv}!{t}
+\end{align}
+\eqref{Eq:Continuity_void_strain_chain}の第1，2項について考える．\eqref{Eq:Sw_Sice_Relation}，\eqref{Eq:Compressibility}，\eqref{Eq:GCC_differential_form}を用いれば次のようになる．
+\begin{align}
+   & \Sw\phiv\pdv{\rho_\mathrm{w}}!{t}+\Sice\phiv\pdv{\rho_\mathrm{ice}}!{t}                                                                                                                                                                                                                                                                                                                    \\
+   & = \Sw\phiv \pdv{\rho_\mathrm{w}}!{t}+ \pab{1-\Sw}\phiv\pdv{\rho_\mathrm{ice}}!{t}\notag                                                                                                                                                                                                                                                                                                    \\
+   & = \frac{\rho_\mathrm{w}}{K_\mathrm{w}}\Sw\phiv\pdv{P}!{t} +\Sw\phiv\pdv{\rho_\mathrm{w}}!{T}\pdv{T}!{t} + \frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\pab{1-\Sw}\phiv\pdv{P_\mathrm{ice}}!{t}\notag                                                                                                                                                                                \\
+   & = \frac{\rho_\mathrm{w}}{K_\mathrm{w}}\Sw\phiv\pdv{P}!{t} +\Sw\phiv\pdv{\rho_\mathrm{w}}!{T}\pdv{T}!{t} + \frac{\rho_\mathrm{ice}}{K_\mathrm{ice}}\pab{1-\Sw}\phiv\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pdv{P}!{t} - \frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}\pdv{T}!{t}}\notag                                                                         \\
+  \label{Eq:Continuity_void_strain_chain_12}
+   & =\rho_\mathrm{w}\bab{\frac{\Sw\phiv}{K_\mathrm{w}}+\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}^2}\pdv{P}!{t}+\rho_\mathrm{w}\bab{\frac{\Sw\phiv}{\rho_\mathrm{w}}\pdv{\rho_\mathrm{w}}!{T}-\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}}\pdv{T}!{t}
+\end{align}
+\eqref{Eq:Continuity_void_strain_chain}の第3項について考える．
+\begin{align}
+   & \pab{\rho_\mathrm{w}-\rho_\mathrm{ice}}\phiv\pdv{\Sw}!{t}\notag                                                                                                                                                                 \\
+   & =\pab{\rho_\mathrm{w}-\rho_\mathrm{ice}}\phiv\pab{\pdv{\Sw}!{P}\pdv{P}!{t}+\pdv{\Sw}!{T}\pdv{T}!{t}}\notag                                                                                                \\
+  \label{Eq:Continuity_void_strain_chain_3}
+   & =\rho_\mathrm{w}\bab{\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{P}}\pdv{P}!{t}+\rho_\mathrm{w}\bab{\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{T}}\pdv{T}!{t}
+\end{align}
+\eqref{Eq:Continuity_void_strain_chain}の第4項について考える．
+\begin{align}
+  \pab{\rho_\mathrm{w}\Sw+\rho_\mathrm{ice}\Sice}\pdv{\phiv}!{t} & =\rho_\mathrm{w}\bab{\Sw+\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pab{1-\Sw}}\pdv{\phiv}!{t}\notag               \\
+  \label{Eq:Continuity_void_strain_chain_4}
+                                                                 & =-\rho_\mathrm{w}\bab{\Sw+\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}!{t} 
+\end{align}
+を\eqref{Eq:Continuity_void_strain_chain_12}，\eqref{Eq:Continuity_void_strain_chain_3}，\eqref{Eq:Continuity_void_strain_chain_4}を\eqref{Eq:Continuity_void_strain_chain}に代入すれば，
+\begin{align}
+  \label{Eq:Continuity_void_strain_chain_5}
+   & \pdv{\pab{\rho_\mathrm{w}\phiv \Sw+\rho_\mathrm{ice}\phiv \Sice}}!{t}                                                                                                                                                                                                                                                                                                                            \\
+   & = \rho_\mathrm{w}\bab{\frac{\Sw\phiv}{K_\mathrm{w}}+\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}^2}\pdv{P}!{t}+\rho_\mathrm{w}\bab{\frac{1}{\rho_\mathrm{w}}\Sw\phiv\pdv{\rho_\mathrm{w}}{T}-\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}}\pdv{T}!{t}\notag \\
+   & +\rho_\mathrm{w}\bab{\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{P}}\pdv{P}!{t}+\rho_\mathrm{w}\bab{\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{T}}\pdv{T}!{t}-\rho_\mathrm{w}\bab{\Sw+\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}!{t}\notag                                               \\
+   & =\rho_\mathrm{w}\bab{\frac{\Sw\phiv}{K_\mathrm{w}}+\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}^2+\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{P}}\pdv{P}!{t}-\rho_\mathrm{w}\bab{\Sw+\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}!{t}\notag                            \\
+   & +\rho_\mathrm{w}\bab{\frac{1}{\rho_\mathrm{w}}\Sw\phiv\pdv{\rho_\mathrm{w}}!{T}-\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}+\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{T}}\pdv{T}!{t}
+\end{align}
+\eqref{Eq:Continuity_void_strain_chain_5}を\eqref{Eq:Continuity_void2}に代入すれば，
+\begin{equation}
+  \label{Eq:Continuity_void_strain_chain_6}
+  \begin{split}
+     & \rho_\mathrm{w}\bab{\frac{\Sw\phiv}{K_\mathrm{w}}+\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}^2+\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{P}}\pdv{P}!{t}-\rho_\mathrm{w}\bab{\Sw+\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}!{t} \\
+     & +\rho_\mathrm{w}\bab{\frac{1}{\rho_\mathrm{w}}\Sw\phiv\pdv{\rho_\mathrm{w}}!{T}-\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}+\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{T}}\pdv{T}!{t}                                                                   \\
+     & -\nabla\cdot\bab{\rho_\mathrm{w}\frac{k_0 k_\mathrm{r}}{\mu_\mathrm{w}}\pab{\nabla P-\rho_\mathrm{w}\vect{g}}}+ Q_\mathrm{H} =0
+  \end{split}
+\end{equation}
+\eqref{Eq:Continuity_void_strain_chain_6}の両辺を$\rho_\mathrm{w}$で割れば，
+\begin{equation}
+  \label{Eq:Continuity_void_strain_chain_7}
+  \begin{split}
+     & \bab{\frac{\Sw\phiv}{K_\mathrm{w}}+\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}^2+\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{P}}\pdv{P}!{t}-\bab{\Sw+\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\pab{1-\Sw}}\pdv{\varepsilon_\mathrm{v}}!{t} \\
+     & +\bab{\frac{1}{\rho_\mathrm{w}}\Sw\phiv\pdv{\rho_\mathrm{w}}!{T}-\frac{\pab{1-\Sw}\phiv}{K_\mathrm{ice}}\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}\frac{L_\mathrm{f}\rho_\mathrm{ice}}{T^\ast}+\pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{T}}\pdv{T}!{t}                                                    \\
+     & -\nabla\cdot\bab{\frac{k_0 k_\mathrm{r}}{\mu_\mathrm{w}}\pab{\nabla P-\rho_\mathrm{w}\vect{g}}}+ S_\mathrm{H} =0
+  \end{split}
+\end{equation}
+ここで，間隙水，間隙氷の圧縮性を認めず，変形も許さなければ，\eqref{Eq:Continuity_void_strain_chain_7}は
+\begin{equation}
+  \label{Eq:Continuity_void_strain_chain_8}
+  \pab{1-\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}}\phiv\pdv{\Sw}!{t}-\nabla\cdot\bab{\frac{k_0 k_\mathrm{r}}{\mu_\mathrm{w}}\pab{\nabla P-\rho_\mathrm{w}\vect{g}}}+ S_\mathrm{H} =0
+\end{equation}

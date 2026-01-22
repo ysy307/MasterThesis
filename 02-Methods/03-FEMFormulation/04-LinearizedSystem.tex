@@ -1,0 +1,291 @@
+\subsection{非線形方程式の線形化}
+\label{Sec:LinearizedSystem}
+
+\cref{Sec:ThermalFEM,Sec:HydraulicFEM}で導出した熱移動・水分移動の有限要素離散化方程式は，非線形連立方程式系となる．これらを数値的に解くため，Newton-Raphson法による線形化を行う．
+
+\subsubsection{Newton-Raphson法による定式化}
+熱移動および水分移動の支配方程式に対し，残差ベクトル$\vect{R}_\mathrm{T}$，$\vect{R}_\mathrm{H}$を次のように定義する．
+\begin{subequations}
+  \begin{align}
+    \vect{R}_\mathrm{T}\pab{\vect{T}, \vect{P}\,} & = \vect{0} \\[2mm]
+    \vect{R}_\mathrm{H}\pab{\vect{T}, \vect{P}\,} & = \vect{0}
+  \end{align}
+\end{subequations}
+ここで，$\vect{T}$および$\vect{P}$はそれぞれ節点温度および節点間隙水圧ベクトルである．
+第$m$回目の反復ステップにおいて，残差ベクトルをTaylor展開し，2次の項を無視して線形化すると次式が得られる．
+\begin{align}
+  \vect{R}_\mathrm{T}\pab{\vect{T}_{n+1}^{m+1}, \vect{P}_{n+1}^{m+1}}
+   & \approx \vect{R}_\mathrm{T}\pab{\vect{T}_{n+1}^{m}, \vect{P}_{n+1}^{m}}
+  + \pdv{\vect{R}_\mathrm{T}}{\vect{T}} \bigg|_{m} \adif{\vect{T}_{n+1}^{m+1}}
+  + \pdv{\vect{R}_\mathrm{T}}{\vect{P}} \bigg|_{m} \adif{\vect{P}_{n+1}^{m+1}} \notag \\
+   & = \vect{0}
+\end{align}
+ここで，$\adif{\vect{T}_{n+1}^{m+1}} = \vect{T}_{n+1}^{m+1} - \vect{T}_{n+1}^{m}$ および $\adif{\vect{P}_{n+1}^{m+1}} = \vect{P}_{n+1}^{m+1} - \vect{P}_{n+1}^{m}$ は更新量を表す．
+水分移動方程式についても同様に展開し，これを行列形式で整理すると以下の更新式が得られる．
+\begin{equation}
+  \begin{bmatrix}
+    \mat{J}_\mathrm{TT} & \mat{J}_\mathrm{TP} \\
+    \mat{J}_\mathrm{HT} & \mat{J}_\mathrm{HH}
+  \end{bmatrix}_{n+1}^{m}
+  \begin{Bmatrix}
+    \adif{\vect{T}} \\
+    \adif{\vect{P}}
+  \end{Bmatrix}_{n+1}^{m+1}
+  = -
+  \begin{Bmatrix}
+    \vect{R}_\mathrm{T} \\
+    \vect{R}_\mathrm{H}
+  \end{Bmatrix}_{n+1}^{m}
+  \label{Eq:NR_System}
+\end{equation}
+ここで，ヤコビアン（接線剛性行列）の各ブロックは次のように定義される．
+\begin{subequations}
+  \begin{align}
+    \label{Eq:Jacobian_Thermal_Blocks}
+    \mat{J}_\mathrm{TT} & = \pdv{\vect{R}_\mathrm{T}}{\vect{T}} , \quad
+    \mat{J}_\mathrm{TP} = \pdv{\vect{R}_\mathrm{T}}{\vect{P}}           \\[2mm]
+    \label{Eq:Jacobian_Hydraulic_Blocks}
+    \mat{J}_\mathrm{HT} & = \pdv{\vect{R}_\mathrm{H}}{\vect{T}} , \quad
+    \mat{J}_\mathrm{HH} = \pdv{\vect{R}_\mathrm{H}}{\vect{P}}
+  \end{align}
+\end{subequations}
+各反復ステップにおいて式\eqref{Eq:NR_System}を解き，残差ベクトルのノルムが許容値以下になるまで解を更新する．
+
+\subsubsection{ヤコビアンおよび残差ベクトルの詳細}
+各項の具体的な導出について述べる．
+変数 $X$ の時刻 $t_{n+1}$ における時間微分項は，時間ステップ情報を含んだBDF係数 $\beta_k$ \unit{[\second^{-1}]} を用いて以下のように近似される．
+\begin{equation}
+  \eval{\pdv{X}{t}}{n+1} \approx \beta_0 X_{n+1} + X_\mathrm{hist}, \quad X_\mathrm{hist} = \sum_{k=1}^{k} \beta_k X_{n+1-k}
+\end{equation}
+ここで，$X_\mathrm{hist}$ は過去の時刻の既知量から定まる履歴項である．
+
+残差ベクトルは，内力項，貯留・慣性項，および外力項の和として構成される．ここで，内力項に含まれるフラックス項は，発散定理（Green-Gaussの定理）により符号が反転することに注意する．
+\begin{align}
+  \vect{R}_\mathrm{T}\pab{\vect{T}_{n+1}^{m}, \vect{P}_{n+1}^{m}}
+   & = \vect{F}^\mathrm{T}_\text{internal} + \vect{F}^\mathrm{T}_\text{transient} - \vect{F}^\mathrm{T}_\text{external} \notag                                                                                                                               \\
+   & = \iiint_{V} \bab{-\nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \cdot \vect{j}_\mathrm{E} + \vect{\psi}_\mathrm{T}^\mathsf{T} \pab{\beta_0 \mathcal{U}_{n+1} + \mathcal{U}_\mathrm{hist}} - \vect{\psi}_\mathrm{T}^\mathsf{T} S_\mathrm{T} } \odif{V} \notag \\
+   & \quad - \iint_{\partial V} \vect{\psi}_\mathrm{T}^\mathsf{T} \vect{Q}_\mathrm{b} \odif{S}
+  \label{Eq:Residual-Thermal}
+\end{align}
+\begin{align}
+  \label{Eq:Residual-Water}
+  \vect{R}_\mathrm{H}\pab{\vect{T}_{n+1}^{m}, \vect{P}_{n+1}^{m}}
+   & = \vect{F}^\mathrm{H}_\text{internal} + \vect{F}^\mathrm{H}_\text{transient} - \vect{F}^\mathrm{H}_\text{external} \notag                                                                                                              \\
+   & = \iiint_{V} \bab{-\nabla\vect{\psi}_\mathrm{H}^\mathsf{T} \cdot \vect{J}_\mathrm{m} + \vect{\psi}_\mathrm{H} \pab{\beta_0 \rho_\mathrm{void, n+1} + \rho_\mathrm{void, hist}} - \vect{\psi}_\mathrm{H} S_\mathrm{H} } \odif{V} \notag \\
+   & \quad - \iint_{\Gamma_\mathrm{HN}} \vect{\psi}_\mathrm{H} q_{\mathrm{HN}} \odif{S}
+\end{align}
+ここで，各項の構成は以下の通りである．
+
+\begin{description}
+  \item [熱外力ベクトル：] $\vect{F}^\mathrm{T}_\text{external}$ \\
+        境界からの既知の熱流入および定数的な熱源項である．
+        \begin{align}
+          \vect{F}^\mathrm{T}_\text{external}
+          % Neumann (influx is -q_N if q_N is outward)
+           & = - \iint_{\partial V_\mathrm{HN}} q_\mathrm{N} \vect{\psi}_\mathrm{T} \odif{S}
+          % Robin constant part
+          + \iint_{\partial V_\mathrm{HC}} \gamma \vect{\psi}_\mathrm{T} \odif{S} \notag              \\
+          % Heat Transfer constant part
+           & \quad + \iint_{\partial V_\mathrm{HH}} h  T_\mathrm{env} \vect{\psi}_\mathrm{T} \odif{S}
+          % Radiation constant part
+          + \iint_{\partial V_\mathrm{HR}} \beta_\mathrm{HR} T_\mathrm{r} \vect{\psi}_\mathrm{T} \odif{S}
+          \label{Eq:F_external_expansion}
+        \end{align}
+
+  \item [熱内力ベクトル：] $\vect{F}^\mathrm{T}_\text{internal}$ \\
+        熱伝導，移流，および温度依存の境界条件に由来する項である．$\vect{j}_\mathrm{E}$ に含まれる熱伝導項（$-\tensor{R}\nabla T$）は，式\eqref{Eq:Residual-Thermal}の$-\nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \cdot \vect{j}_\mathrm{E}$により正の剛性行列となる．
+        \begin{align}
+          \vect{F}^\mathrm{T}_\text{internal}
+           & = \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \tensor{R} \nabla\vect{\psi}_\mathrm{T} \vect{T} \odif{V}
+          - \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \pab{c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL} + c_\mathrm{v}\rho_\mathrm{w} \vect{j}_\mathrm{WV}} \vect{\psi}_\mathrm{T}^\mathsf{T} \vect{T} \odif{V} \notag \\
+           & \quad - \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \pab{\rho_\mathrm{w} L_\mathrm{v} \vect{j}_\mathrm{WV}} \odif{V}
+          - \iiint_{V} \vect{\psi}_\mathrm{T} S_\mathrm{T} \odif{V}\notag                                                                                                                                                            \\
+           & \quad + \iint_{\partial V_\mathrm{HC}} \beta \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \vect{T} \odif{S}
+          + \iint_{\partial V_\mathrm{HH}} h \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \vect{T} \odif{S}
+          + \iint_{\partial V_\mathrm{HR}} \beta_\mathrm{HR} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \vect{T} \odif{S} \notag
+        \end{align}
+
+  \item [熱貯留・慣性ベクトル：] $\vect{F}^\mathrm{T}_\text{transient}$ \\
+        内部エネルギーの時間変化項であり，BDF近似により次のように表される．
+        \begin{equation}
+          \vect{F}^\mathrm{T}_\text{transient}
+          = \beta_0 \iiint_{V} \vect{\psi}_\mathrm{T}^\mathsf{T} \mathcal{U}\pab{\vect{T}_{n+1}, \vect{P}_{n+1}} \odif{V}
+          + \iiint_{V} \vect{\psi}_\mathrm{T}^\mathsf{T} \mathcal{U}_\mathrm{hist} \odif{V}
+        \end{equation}
+
+  \item [水分外力ベクトル：] $\vect{F}^\mathrm{H}_\text{external}$ \\
+        境界からの既知の水分流入および定数的な流出項である．
+        \begin{equation}
+          \vect{F}^\mathrm{H}_\text{external}
+          = - \iint_{\Gamma_\mathrm{HN}} q_{\mathrm{HN}} \vect{\psi}_\mathrm{H} \odif{S}
+          \label{Eq:F_H_external_expansion}
+        \end{equation}
+
+  \item [水分内力ベクトル：] $\vect{F}^\mathrm{H}_\text{internal}$ \\
+        流体移動および圧力依存の境界条件に由来する項である．
+        \begin{equation}
+          \vect{F}^\mathrm{H}_\text{internal}
+          = -\iiint_{V} \nabla\vect{\psi}_\mathrm{H}^\mathsf{T} \cdot \vect{J}_\mathrm{m} \odif{V}
+          - \iiint_{V} \vect{\psi}_\mathrm{H} S_\mathrm{H} \odif{V}
+        \end{equation}
+  \item [水分貯留・慣性ベクトル：] $\vect{F}^\mathrm{H}_\text{transient}$ \\
+        孔隙水量の時間変化項であり，BDF近似により次のように表される．
+        \begin{equation}
+          \vect{F}^\mathrm{H}_\text{transient}
+          = \beta_0 \iiint_{V} \vect{\psi}_\mathrm{H} \rho_\mathrm{void}\pab{\vect{T}_{n+1}, \vect{P}_{n+1}} \odif{V}
+          + \iiint_{V} \vect{\psi}_\mathrm{H} \rho_\mathrm{void, \mathrm{hist}} \odif{V}
+        \end{equation}
+\end{description}
+\eqref{Eq:Jacobian_Thermal_Blocks}の各ヤコビアンブロックは，残差ベクトル\eqref{Eq:Residual-Thermal}の各項を変数$\vect{T}$および$\vect{P}$で偏微分することで得られる．
+以下に，具体的な式を示す．
+\begin{description}
+  \item [熱－熱ブロック：] $\mat{J}_\mathrm{TT}$ \\
+        温度変化に対する熱収支の応答を表す．式\eqref{Eq:J_TT_def}の各項は順に，熱容量，熱伝導，顕熱移流，および水蒸気移動に伴う潜熱輸送の寄与を示す．
+        \begin{equation}
+          \begin{split}
+            \mat{J}_\mathrm{TT}
+             & = \pdv{\vect{F}^\mathrm{T}_\text{internal}}{\vect{T}} + \pdv{\vect{F}^\mathrm{T}_\text{transient}}{\vect{T}} \notag                                                                                              \\
+             & = \beta_0 \iiint_{V} C_\mathrm{TT} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{V}
+            + \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \tensor{R} \nabla\vect{\psi}_\mathrm{T} \odif{V}                                                                                                               \\
+             & \quad - \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \pab{c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL} + c_\mathrm{v}\rho_\mathrm{w} \vect{j}_\mathrm{WV}} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{V}
+            - \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \pab{\rho_\mathrm{w} L_\mathrm{v} K_\mathrm{vT}} \nabla\vect{\psi}_\mathrm{T} \odif{V}                                                                         \\
+             & \quad + \iint_{\partial V_\mathrm{HC}} \beta \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+            + \iint_{\partial V_\mathrm{HH}} h \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+            + \iint_{\partial V_\mathrm{HR}} \beta_\mathrm{HR} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+          \end{split}
+          \label{Eq:J_TT_def}
+        \end{equation}
+  \item [熱－水ブロック：] $\mat{J}_\mathrm{TH}$ \\
+        間隙水圧の変化が熱収支に与える影響を表す．第1項は相変化等に伴う内部エネルギー変化，第2項以降は圧力勾配の変化に起因する流速変動が，顕熱および潜熱輸送へ及ぼす影響項である．
+        \begin{equation}
+          \begin{split}
+            \mat{J}_\mathrm{TH}
+             & = \pdv{\vect{F}^\mathrm{T}_\text{internal}}{\vect{P}} + \pdv{\vect{F}^\mathrm{T}_\text{transient}}{\vect{P}} \notag                                                                                                                                   \\
+             & = \beta_0  \iiint_{V} C_\mathrm{TH} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{P}^\mathsf{T} \odif{V}                                                                                                                                                 \\
+             & \quad + \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \bab{\pab{c_\mathrm{w} \rho_\mathrm{w} K_\mathrm{wP} + c_\mathrm{v} \rho_\mathrm{w} K_\mathrm{vP}} \pab{\vect{\psi}_\mathrm{T}^\mathsf{T} \vect{T}}} \nabla\vect{\psi}_\mathrm{P} \odif{V} \\
+             & \quad + \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \pab{\rho_\mathrm{w} L_\mathrm{v} K_\mathrm{vP}} \nabla\vect{\psi}_\mathrm{P} \odif{V}
+          \end{split}
+          \label{Eq:J_TP_def}
+        \end{equation}
+
+  \item[水－水ブロック：] $\mat{J}_\mathrm{HH}$ \\
+        間隙水圧の変化に対する水分収支の応答を表す項である．
+        \begin{align}
+          \mat{J}_\mathrm{HH} = \pdv{\vect{R}_\mathrm{H}}{\vect{P}}
+           & = \iiint_{V} \beta_0 C_\mathrm{HH} \vect{\psi}_\mathrm{H} \vect{\psi}_\mathrm{H}^\mathsf{T} \odif{V} \notag                   \\
+           & \quad + \iiint_{V} \nabla\vect{\psi}_\mathrm{H}^\mathsf{T} \rho_\mathrm{w} K_\mathrm{P} \nabla\vect{\psi}_\mathrm{H} \odif{V}
+        \end{align}
+
+  \item[水－熱ブロック：] $\mat{J}_\mathrm{HT}$ \\
+        温度変化が水分移動に与える影響を表す連成項である．
+        \begin{align}
+          \mat{J}_\mathrm{HT} = \pdv{\vect{R}_\mathrm{H}}{\vect{T}}
+           & = \iiint_{V} \beta_0 C_\mathrm{HT} \vect{\psi}_\mathrm{H} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{V} \notag                          \\
+           & \quad + \iiint_{V} \nabla\vect{\psi}_\mathrm{H}^\mathsf{T} \rho_\mathrm{w} K_\mathrm{T} \nabla\vect{\psi}_\mathrm{T} \odif{V} \notag \\
+           & \quad - \iiint_{V} \nabla\vect{\psi}_\mathrm{H}^\mathsf{T} \vect{V}_\mathrm{HT} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{V}
+        \end{align}
+        ここで，$C_\mathrm{HT}$ は温度変化に伴う水分貯留量の変化率である．
+        $K_\mathrm{wT}, K_\mathrm{vT}$ は温度勾配による水分輸送係数である．
+        また，$\vect{V}_\mathrm{HT}$ は物性値の温度依存性に起因する補正項であり，$\vect{R}_\mathrm{H}$のフラックス項が負であるため，ヤコビアンへの寄与は負となる．
+        \begin{equation}
+          \vect{V}_\mathrm{HT} = \pdv{\vect{J}_\mathrm{m}}{T} \bigg|_{\nabla P, \nabla T \text{ const}}
+        \end{equation}
+\end{description}
+
+\subsection{修正Picard反復法による線形化}
+\label{Sec:PicardLinearization}
+
+本解析では，温度 $\vect{T}$ と間隙水圧 $\vect{P}$ を同時に解く完全連成解析（Monolithic Approach）を採用する．
+非線形方程式系の解法には，接線剛性行列（Jacobian）の更新を必要としない修正Picard反復法を用いる．
+この手法では，第 $m$ 回目の反復において係数行列内の物性値を既知の解（$\vect{T}^{m}, \vect{P}^{m}$）で評価して固定し，線形化された方程式系を解くことで更新解 $\vect{T}^{m+1}, \vect{P}^{m+1}$ を得る．
+
+離散化された線形方程式系は，以下のブロック行列形式で記述される．
+\begin{equation}
+  \label{Eq:Monolithic-Picard-System}
+  \begin{bmatrix}
+    \mat{K}_\mathrm{TT} & \mat{K}_\mathrm{TH} \\
+    \mat{K}_\mathrm{HT} & \mat{K}_\mathrm{HH}
+  \end{bmatrix}^{m}
+  \begin{Bmatrix}
+    \vect{T} \\
+    \vect{P}
+  \end{Bmatrix}^{m+1}
+  =
+  \begin{Bmatrix}
+    \vect{F}_\mathrm{T} \\
+    \vect{F}_\mathrm{H}
+  \end{Bmatrix}^{m}
+\end{equation}
+ここで，$\mat{K}$は一般化されたシステム行列，$\vect{F}_\mathrm{RHS}$は一般化された外力ベクトルを表す．
+
+\subsubsection{熱移動ブロックの詳細}
+熱移動支配方程式に対応する上段のブロック（$\mat{K}_\mathrm{TT}, \mat{K}_\mathrm{TH}$）および右辺ベクトル $\vect{F}_\mathrm{T}$ は，以下の通り定義される．
+ここで，非線形性の強い移流項（顕熱・潜熱移動）は右辺ベクトルに組み込むことで，左辺行列の安定化を図っている．
+
+\begin{description}
+  \item[熱－熱ブロック：] $\mat{K}_\mathrm{TT}$ \\
+        温度変化に対する慣性項（熱容量）と熱伝導項，および温度に依存する境界条件項から構成される．
+        \begin{align}
+          \mat{K}_\mathrm{TT}
+           & = \iiint_{V} \beta_0 C_\mathrm{TT} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{V}
+          + \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \tensor{R} \nabla\vect{\psi}_\mathrm{T} \odif{V} \notag      \\
+           & \quad + \iint_{\partial V_\mathrm{HC}} \beta \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+          + \iint_{\partial V_\mathrm{HH}} h \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+          + \iint_{\partial V_\mathrm{HR}} \beta_\mathrm{HR} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{S}
+        \end{align}
+
+  \item[熱－水ブロック：] $\mat{K}_\mathrm{TH}$ \\
+        水圧変化が熱収支に与える影響を表す連成項である．ここでは相変化や密度変化に伴う熱容量の連成成分 $C_\mathrm{TH}$ を考慮する．
+        \begin{equation}
+          \mat{K}_\mathrm{TH} = \iiint_{V} \beta_0 C_\mathrm{TH} \vect{\psi}_\mathrm{T} \vect{\psi}_\mathrm{P}^\mathsf{T} \odif{V}
+        \end{equation}
+
+  \item [熱外力ベクトル：] $\vect{F}_\mathrm{T}$ \\
+        境界条件からの既知の流入出，内部発熱に加え，前回の反復値で評価された移流フラックス，および時間積分の履歴項から構成される．
+        \begin{align}
+          \vect{F}_\mathrm{T}
+           & = - \iint_{\partial V_\mathrm{HN}} q_\mathrm{N} \vect{\psi}_\mathrm{T} \odif{S}
+          - \iint_{\partial V_\mathrm{HC}} \gamma \vect{\psi}_\mathrm{T} \odif{S} \notag                                                       \\
+           & \quad + \iint_{\partial V_\mathrm{HH}} h T_\mathrm{env} \vect{\psi}_\mathrm{T} \odif{S}
+          + \iint_{\partial V_\mathrm{HR}} \beta_\mathrm{HR} T_\mathrm{r} \vect{\psi}_\mathrm{T} \odif{S} \notag                               \\
+           & \quad + \iiint_{V} \nabla\vect{\psi}_\mathrm{T}^\mathsf{T} \cdot \vect{j}_\mathrm{adv} \odif{V}
+          + \iiint_{V} \vect{\psi}_\mathrm{T} S_\mathrm{T} \odif{V} \notag                                                                     \\
+           & \quad - \iiint_{V} \vect{\psi}_\mathrm{T}^\mathsf{T} \pab{C_\mathrm{TT} T_\mathrm{hist} + C_\mathrm{TH} P_\mathrm{hist}} \odif{V}
+        \end{align}
+        ここで，$\vect{j}_\mathrm{adv}$ は前回の反復値を用いて算定された，流体移動に伴う顕熱および潜熱フラックスの総和である．
+        \begin{equation}
+          \vect{j}_\mathrm{adv} = \pab{c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL} T + c_\mathrm{v} \rho_\mathrm{w} \vect{j}_\mathrm{WV} T + \rho_\mathrm{w} L_\mathrm{v} \vect{j}_\mathrm{WV}}
+        \end{equation}
+        また，$T_\mathrm{hist}, P_\mathrm{hist}$ はBDF法における時間微分の履歴項 $\sum \beta_k X_{n+1-k}$ に対応する．
+\end{description}
+
+\subsubsection{水分移動ブロックの詳細}
+水分移動支配方程式に対応する下段のブロックおよび右辺ベクトルについても，熱移動と同様に構築される．
+水分移動における非線形項（透水係数など）は，Picard反復により前回の反復値を用いて線形化される．
+
+\begin{description}
+  \item[水－水ブロック：] $\mat{K}_\mathrm{HH}$ \\
+        \begin{equation}
+          \mat{K}_\mathrm{HH}
+          = \iiint_{V} \beta_0 C_\mathrm{HH} \vect{\psi}_\mathrm{H} \vect{\psi}_\mathrm{H}^\mathsf{T} \odif{V}
+          + \iiint_{V} \nabla\vect{\psi}_\mathrm{H}^\mathsf{T} \tensor{K}_\mathrm{H} \nabla\vect{\psi}_\mathrm{H} \odif{V}
+        \end{equation}
+        ここで，$\tensor{K}_\mathrm{H} = \rho_\mathrm{w}(K_\mathrm{wP} + K_\mathrm{vP})$ は物質移動係数の総和である．
+
+  \item[水－熱ブロック：] $\mat{K}_\mathrm{HT}$ \\
+        \begin{equation}
+          \mat{K}_\mathrm{HT}
+          = \iiint_{V} \beta_0 C_\mathrm{HT} \vect{\psi}_\mathrm{H} \vect{\psi}_\mathrm{T}^\mathsf{T} \odif{V}
+          + \iiint_{V} \nabla\vect{\psi}_\mathrm{H}^\mathsf{T} \tensor{K}_\mathrm{T} \nabla\vect{\psi}_\mathrm{T} \odif{V}
+        \end{equation}
+        ここで，$\tensor{K}_\mathrm{T} = \rho_\mathrm{w}(K_\mathrm{wT} + K_\mathrm{vT})$ は温度勾配に起因する水分移動係数である．
+
+  \item[水外力ベクトル：] $\vect{F}_\mathrm{H}$ \\
+        重力項およびソース項を右辺に配置する．重力項は発散定理により正の符号で加算される．
+        \begin{align}
+          \vect{F}_\mathrm{H}
+           & = - \iint_{\Gamma_\mathrm{HN}} q_{\mathrm{HN}} \vect{\psi}_\mathrm{H} \odif{S}
+          + \iiint_{V} \nabla\vect{\psi}_\mathrm{H}^\mathsf{T} \cdot \pab{\rho_\mathrm{w} K_\mathrm{wP} \vect{g}} \odif{V} \notag                                                                        \\
+           & \quad + \iiint_{V} \vect{\psi}_\mathrm{H} S_\mathrm{H} \odif{V} - \iiint_{V} \vect{\psi}_\mathrm{H}^\mathsf{T} \pab{C_\mathrm{HH} P_\mathrm{hist} + C_\mathrm{HT} T_\mathrm{hist}} \odif{V}
+        \end{align}
+\end{description}
