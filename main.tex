@@ -121,7 +121,10 @@
 % マージン設定
 %============================================================================================================
 \usepackage[top=30truemm,bottom=30truemm,left=30truemm,right=20truemm]{geometry}
-\setlength{\baselineskip}{22.5pt}
+\setlength{\baselineskip}{22.35pt}
+\ltjsetparameter{jacharrange={-2}}
+\setlength{\zw}{12.95pt}
+
 % 基本パッケージ
 \usepackage{cancel}
 %============================================================================================================
@@ -337,7 +340,18 @@
 % SI単位
 %============================================================================================================
 \usepackage{siunitx}
-
+\sisetup{
+  % --- リスト (qtylist) ---
+  list-separator       = {，},
+  list-final-separator = {，},
+  list-pair-separator  = {，},
+  list-units           = single,
+  % --- 範囲 (qtyrange) ---
+  range-phrase         = {〜},
+  range-units          = repeat,
+  % --- 積 (qtyproduct) ---
+  product-units        = repeat
+}
 %============================================================================================================
 % レイアウト
 %============================================================================================================
@@ -415,8 +429,6 @@
 % FRONT MATTER
 %============================================================================================================
 \input{00-FrontMatter/01-TitlePage}
-% \input{Frontmatter/Frontmatter}
-% 目次
 \pagenumbering{roman}
 \pagestyle{fancy}
 \fancyhf{}
@@ -427,12 +439,8 @@
   \fancyhead[R]{\sffamily\thepage}
   \renewcommand{\headrulewidth}{0pt}
 }
-\clearpage
-\tableofcontents
-\clearpage
-\listoffigures
-\clearpage
-\listoftables
+\input{00-FrontMatter/02-Abstract}
+\input{00-FrontMatter/03-Contents}
 
 %============================================================================================================
 % MAIN BODY
@@ -449,7 +457,6 @@
   \renewcommand{\headrulewidth}{0pt}
 }
 \part{序論}
-\clearpage
 \input{01-Intro/01-Background}
 
 % Methods

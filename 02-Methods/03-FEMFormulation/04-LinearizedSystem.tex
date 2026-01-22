@@ -192,7 +192,7 @@
         \end{equation}
 \end{description}
 
-\subsection{修正Picard反復法による線形化}
+\subsubsection{修正Picard反復法による線形化}
 \label{Sec:PicardLinearization}
 
 本解析では，温度 $\vect{T}$ と間隙水圧 $\vect{P}$ を同時に解く完全連成解析（Monolithic Approach）を採用する．
@@ -218,7 +218,6 @@
 \end{equation}
 ここで，$\mat{K}$は一般化されたシステム行列，$\vect{F}_\mathrm{RHS}$は一般化された外力ベクトルを表す．
 
-\subsubsection{熱移動ブロックの詳細}
 熱移動支配方程式に対応する上段のブロック（$\mat{K}_\mathrm{TT}, \mat{K}_\mathrm{TH}$）および右辺ベクトル $\vect{F}_\mathrm{T}$ は，以下の通り定義される．
 ここで，非線形性の強い移流項（顕熱・潜熱移動）は右辺ベクトルに組み込むことで，左辺行列の安定化を図っている．
 
@@ -259,7 +258,6 @@
         また，$T_\mathrm{hist}, P_\mathrm{hist}$ はBDF法における時間微分の履歴項 $\sum \beta_k X_{n+1-k}$ に対応する．
 \end{description}
 
-\subsubsection{水分移動ブロックの詳細}
 水分移動支配方程式に対応する下段のブロックおよび右辺ベクトルについても，熱移動と同様に構築される．
 水分移動における非線形項（透水係数など）は，Picard反復により前回の反復値を用いて線形化される．
 
