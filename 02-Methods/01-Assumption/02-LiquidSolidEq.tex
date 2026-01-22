@@ -8,7 +8,7 @@
 \begin{subequations}
   \begin{align}
     \label{Eq:Pressure_1}
-    P_2 & = P_\mathrm{a} + \Pw   \\
+    P_2 & = P_\mathrm{a} + \Pw            \\
     \label{Eq:Pressure_2}
     P_1 & = P_\mathrm{a} + P_\mathrm{ice}
   \end{align}
@@ -18,72 +18,92 @@ $T_\mathrm{f}$を三相が平衡状態にあるときの温度（凝固点）と
 
 \begin{figure}[tbp]
   \centering
-  \begin{tikzpicture}[scale=1.5] % スケール調整はお好みで
-    \usetikzlibrary{calc, arrows.meta} % arrows.meta を追加 (calc は既存)
+  \begin{tikzpicture}[scale=1.5]
 
-    % 共通の圧力矢印スタイルを定義
+    % --- 設定 ---
+    % 共通の圧力矢印スタイル
     \tikzset{pressurearrow/.style={
-    -{LaTeX[length=4.0mm, width=3.6mm]}, % 矢印の先端形状とサイズ
-    line width=1.2mm                    % 線の太さ
-    }
-    }
+    -{Latex[length=4.0mm, width=3.6mm]}, % 矢印先端
+    line width=1.0mm,                    % 線の太さ（少し調整）
+    draw=black                           % 色は黒
+    }}
 
-    % 座標やサイズを調整しやすくするための変数定義（任意）
+    % 変数定義
     \def\waterHeight{2}
     \def\iceHeight{3}
-    \def\blockY{0.2} % ブロックの下端のY座標
+    \def\blockY{0.2}
     \def\containerTop{5}
     \def\containerBottom{0}
     \def\containerLeft{0}
     \def\containerRight{7}
-    \def\pressureArrowStartY{6} % 圧力矢印の開始Y座標
-    \def\pressureLabelY{5.5}    % 圧力ラベルの共通Y座標 (お好みで調整)
+    \def\pressureArrowStartY{5.8} % 矢印開始位置
+    \def\pressureLabelY{5.3}      % ラベル位置
+
+    % --- 描画開始 ---
 
     % 外側の容器の線
-    \draw (\containerLeft,\containerBottom) rectangle (\containerRight,\containerTop);
+    \draw[line width=0.8pt] (\containerLeft,\containerBottom) rectangle (\containerRight,\containerTop);
 
-    % 水の部分 (左下)
-    \coordinate (waterSW) at (0.2,\blockY); % 左下隅の座標
-    \coordinate (waterNE) at (3.5,\waterHeight); % 右上隅の座標
-    \fill[pattern=north west lines, pattern color=blue!50] (waterSW) rectangle (waterNE);
-    \draw (waterSW) rectangle (waterNE);
-    \node[fill=white, text=black, font=\bfseries, inner sep=2pt, rounded corners=1pt] at ($(waterSW)!0.5!(waterNE)$) {Water};
+    % 座標定義
+    \coordinate (waterSW) at (0.2,\blockY);
+    \coordinate (waterNE) at (3.5,\waterHeight);
+    \coordinate (iceSW) at (3.5,\blockY);
+    \coordinate (iceNE) at (6.8,\iceHeight);
 
-    % 氷の部分 (右下)
-    \coordinate (iceSW) at (3.5,\blockY); % 左下隅の座標
-    \coordinate (iceNE) at (6.8,\iceHeight); % 右上隅の座標
-    \fill[pattern=north east lines, pattern color=cyan!30] (iceSW) rectangle (iceNE);
-    \draw (iceSW) rectangle (iceNE);
-    \node[fill=white, text=black, font=\bfseries, inner sep=2pt, rounded corners=1pt] at ($(iceSW)!0.5!(iceNE)$) {Ice};
+    % --- Water (水) ブロック ---
+    % 背景色
+    \fill[grayWater] (waterSW) rectangle (waterNE);
+    % パターン（水平線）: 前の図と統一
+    \fill[pattern={Lines[distance=4pt, line width=0.4pt, angle=0]}] (waterSW) rectangle (waterNE);
+    % 枠線
+    \draw[line width=0.8pt] (waterSW) rectangle (waterNE);
+    % ラベル（白背景）
+    \node[fill=white, text=black, font=\bfseries, inner sep=2pt, rounded corners=1pt] at ($(waterSW)!0.5!(waterNE)$) {\LARGE Water};
 
-    % 蒸気の部分 (上部全体)
-    \node at (3.5,3.5) {Air};
-    % 蒸気と水の境界線
-    \draw (0.2,\waterHeight) -- (3.5,\waterHeight);
-    % 蒸気と氷の境界線
-    \draw (3.5,\iceHeight) -- (6.8,\iceHeight);
-    % 水と氷の間の境界線
-    \draw (3.5,\blockY) -- (3.5, \waterHeight); % 水ブロックの高さまで
+    % --- Ice (氷) ブロック ---
+    % 背景色
+    \fill[grayIce] (iceSW) rectangle (iceNE);
+    % パターン（左上がり斜線）: 前の図と統一
+    \fill[pattern={Lines[distance=4pt, line width=0.4pt, angle=-45]}] (iceSW) rectangle (iceNE);
+    % 枠線
+    \draw[line width=0.8pt] (iceSW) rectangle (iceNE);
+    % ラベル
+    \node[fill=white, text=black, font=\bfseries, inner sep=2pt, rounded corners=1pt] at ($(iceSW)!0.5!(iceNE)$) {\LARGE Ice};
 
-    % 容器の上部の線 (Vaporと接する部分)
-    \draw (0.2,\waterHeight) -- (0.2,\containerTop-0.2);
-    \draw (6.8,\iceHeight) -- (6.8,\containerTop-0.2);
-    \draw (0.2,\containerTop-0.2) -- (6.8,\containerTop-0.2);
+    % --- Air / 蒸気部分 ---
+    \node at (3.5,3.5) {\Large Air};
+
+    % 境界線や容器の内部線
+    % 蒸気と水の境界
+    \draw[thick] (0.2,\waterHeight) -- (3.5,\waterHeight);
+    % 蒸気と氷の境界
+    \draw[thick] (3.5,\iceHeight) -- (6.8,\iceHeight);
+    % 水と氷の境界
+    \draw[thick] (3.5,\blockY) -- (3.5, \waterHeight);
+
+    % 内壁の線（容器の上部内側）
+    \draw[line width=0.8pt] (0.2,\waterHeight) -- (0.2,\containerTop-0.2);
+    \draw[line width=0.8pt] (6.8,\iceHeight) -- (6.8,\containerTop-0.2);
+    \draw[line width=0.8pt] (0.2,\containerTop-0.2) -- (6.8,\containerTop-0.2);
 
     % --- 圧力矢印とラベル ---
-    % 圧力 P (全体にかかる)
-    \draw[pressurearrow] (3.5,\pressureArrowStartY) -- (3.5,\containerTop-1.2);
-    \node[right, xshift=3mm] at (3.5, \pressureLabelY) {$P_\mathrm{a}$};
 
-    % 水面にかかる圧力 P_w
-    \draw[pressurearrow] (1.75,\pressureArrowStartY) -- (1.75,\waterHeight+0.2);
-    \node[left, xshift=-3mm] at (1.75, \pressureLabelY) {$\Pw$};
-    \node[below] at (1.75,\containerBottom-0.3) {$P_2 = P_\mathrm{a} + \Pw$};
+    % 圧力 P_a (中央)
+    % 矢印が突き抜けないように終点を調整
+    \draw[pressurearrow] (3.5,\pressureArrowStartY) -- (3.5, 4.0);
+    \node[right, xshift=2mm] at (3.5, \pressureLabelY) {\Large $P_\mathrm{a}$};
 
-    % 氷面にかかる圧力 P_f
-    \draw[pressurearrow] (5.25,\pressureArrowStartY) -- (5.25,\iceHeight+0.2);
-    \node[right, xshift=3mm] at (5.25, \pressureLabelY) {$P_\mathrm{ice}$};
-    \node[below] at (5.25,\containerBottom-0.3) {$P_1 = P_\mathrm{a} + P_\mathrm{ice}$};
+    % 水面にかかる圧力 P_w (左)
+    % 矢印の終点を水面より少し上に
+    \draw[pressurearrow] (1.75,\pressureArrowStartY) -- (1.75,\waterHeight+0.5);
+    \node[left, xshift=-2mm] at (1.75, \pressureLabelY) {\Large $\Pw$};
+    \node[below] at (1.75,\containerBottom-0.1) {$P_2 = P_\mathrm{a} + \Pw$};
+
+    % 氷面にかかる圧力 P_ice (右)
+    \draw[pressurearrow] (5.25,\pressureArrowStartY) -- (5.25,\iceHeight+0.5);
+    \node[right, xshift=2mm] at (5.25, \pressureLabelY) {\Large $P_\mathrm{ice}$};
+    \node[below] at (5.25,\containerBottom-0.1) {$P_1 = P_\mathrm{a} + P_\mathrm{ice}$};
+
   \end{tikzpicture}
   \caption{固相，液相，気相の三相それぞれに異なる圧力が加わっている状況における，各相間の平衡状態を表す概念図}
   \label{Fig:GCC_diagram}

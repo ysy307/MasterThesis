@@ -8,46 +8,49 @@
 \begin{figure}[tbp]
   \centering
   \begin{tikzpicture}[scale=0.95]
-    % \draw[help lines] (0,0) grid (15,12);
+    % 座標定義
+    \coordinate (p11) at (5,0); \coordinate (p12) at (5,3);
+    \coordinate (p13) at (5,5.25); \coordinate (p14) at (5,7.5);
+    \coordinate (p15) at (5,9); \coordinate (p21) at (9,0);
+    \coordinate (p22) at (9,3); \coordinate (p23) at (9,5.25);
+    \coordinate (p24) at (9,7.5); \coordinate (p25) at (9,9);
 
-    \coordinate (p11) at (5,0);
-    \coordinate (p12) at (5,3);
-    \coordinate (p13) at (5,5.25);
-    \coordinate (p14) at (5,7.5);
-    \coordinate (p15) at (5,9);
-    \coordinate (p21) at (9,0);
-    \coordinate (p22) at (9,3);
-    \coordinate (p23) at (9,5.25);
-    \coordinate (p24) at (9,7.5);
-    \coordinate (p25) at (9,9);
+    % ▼▼▼ グレー背景と模様の設定 ▼▼▼
 
-    \fill[soil]  (p11) rectangle (p22);
-    \node[white] at ($(p11)!0.5!(p22)$) {\Large Soil};
-    \fill[water] (p12) rectangle (p23);
-    \node[white] at ($(p12)!0.5!(p23)$) {\Large Water};
-    \fill[ice]   (p13) rectangle (p24);
-    \node at ($(p13)!0.5!(p24)$) {\Large Ice};
-    % \fill[air]   (p14) rectangle (p25);
+    % --- Soil (土粒子): 20%グレー + 右上がり斜線 ---
+    \fill[graySoil] (p11) rectangle (p22);
+    \fill[pattern={Lines[distance=4pt, line width=0.4pt, angle=45]}] (p11) rectangle (p22);
+    % 文字背景を白く抜く (fill=white)
+    \node[fill=white, inner sep=2pt] at ($(p11)!0.5!(p22)$) {\Large Soil};
+
+    % --- Water (水): 10%グレー + 水平線 ---
+    \fill[grayWater] (p12) rectangle (p23);
+    \fill[pattern={Lines[distance=4pt, line width=0.4pt, angle=0]}] (p12) rectangle (p23);
+    \node[fill=white, inner sep=2pt] at ($(p12)!0.5!(p23)$) {\Large Water};
+
+    % --- Ice (氷): 3%グレー(ほぼ白) + 左上がり斜線 ---
+    \fill[grayIce] (p13) rectangle (p24);
+    \fill[pattern={Lines[distance=4pt, line width=0.4pt, angle=-45]}] (p13) rectangle (p24);
+    \node[fill=white, inner sep=2pt] at ($(p13)!0.5!(p24)$) {\Large Ice};
+
+    % --- Air (空気): 白 + 模様なし ---
     \node at ($(p14)!0.5!(p25)$) {\Large Air};
 
+    % ▲▲▲ 設定ここまで ▲▲▲
+
+    % 枠線
     \draw[line width = 0.5mm] (p11) rectangle (p25);
     \draw[line width = 0.5mm] (p12) -- (p22);
     \draw[line width = 0.5mm] (p13) -- (p23);
     \draw[line width = 0.5mm] (p14) -- (p24);
 
-    % Volume
-    \coordinate (v11) at (0,0);
-    \coordinate (v12) at (0,9);
-    \coordinate (v21) at (4,0);
-    \coordinate (v22) at (4,9);
-    \coordinate (v31) at (1.5,3);
-    \coordinate (v32) at (4,3);
-    \coordinate (v41) at (3.5,0);
-    \coordinate (v42) at (3.5,3);
-    \coordinate (v43) at (3.5,5.25);
-    \coordinate (v44) at (3.5,7.5);
-    \coordinate (v45) at (3.5,9);
-    \coordinate (v51) at (3,5.25);
+    % --- Volume (体積) ---
+    \coordinate (v11) at (0,0); \coordinate (v12) at (0,9);
+    \coordinate (v21) at (4,0); \coordinate (v22) at (4,9);
+    \coordinate (v31) at (1.5,3); \coordinate (v32) at (4,3);
+    \coordinate (v41) at (3.5,0); \coordinate (v42) at (3.5,3);
+    \coordinate (v43) at (3.5,5.25); \coordinate (v44) at (3.5,7.5);
+    \coordinate (v45) at (3.5,9); \coordinate (v51) at (3,5.25);
     \coordinate (v52) at (3,7.5);
 
     \node at ($(v12)!0.5!(v22)+(0,0.5)$) {\LARGE Volume};
@@ -57,20 +60,17 @@
     \draw[line width = 0.5mm] (v51) -- ++(1,0);
     \draw[line width = 0.5mm] (v52) -- ++(1,0);
     \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(v11)+(0.5,0)$) -- ($(v12)+(0.5,0)$) node[midway, left] {\Large $V$};
-    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(v12)+(2,0)$) -- ++(0,-6) node[midway, left] {\Large $\Vvoid$};
 
+    \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] ($(v12)+(2,0)$) -- ++(0,-6) node[midway, left] {\Large $\Vvoid$};
     \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (v41) -- (v42)  node[midway, left] {\Large $\Vs$};
     \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (v42) -- (v43)  node[midway, left] {\Large $\Vw$};
     \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (v43) -- (v44)  node[midway, left] {\Large $\Vice$};
     \draw[{Latex[length=3mm]}-{Latex[length=3mm]},line width = 0.5mm] (v44) -- (v45)  node[midway, left] {\Large $\Va$};
 
-    % mass
-    \coordinate (m11) at (10,0);
-    \coordinate (m12) at (10,3);
-    \coordinate (m13) at (10,5.25);
-    \coordinate (m14) at (10,7.5);
-    \coordinate (m15) at (10,9);
-    \coordinate (m21) at (14,9);
+    % --- Mass (質量) ---
+    \coordinate (m11) at (10,0); \coordinate (m12) at (10,3);
+    \coordinate (m13) at (10,5.25); \coordinate (m14) at (10,7.5);
+    \coordinate (m15) at (10,9); \coordinate (m21) at (14,9);
     \coordinate (m31) at (13,0);
 
     \node at ($(m15)!0.5!(m21)+(0,0.5)$) {\LARGE Mass};
@@ -89,7 +89,6 @@
   \end{tikzpicture}
   \caption{凍土中における四相地盤構造}\label{fig:4Phase_Soil}
 \end{figure}
-
 間隙比$e$ \unit{[-]} および間隙率$\phiv$ \unit{[-]} は次式で定義される．
 \begin{subequations}
   \label{Eq:Void_Definition}
