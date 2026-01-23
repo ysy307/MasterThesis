@@ -5,7 +5,7 @@
 \begin{equation}
   Q_\mathrm{w}=
   \begin{cases}
-    \displaystyle -\pab{L-2R\sin\theta}K_\mathrm{s}\pdv{\Pw}{x} & -R < x < R                 \\
+    \displaystyle -\pab{L-2R\sin\theta}K_\mathrm{s}\pdv{\Pw}{x} & -R < x < R                \\
     \displaystyle -LK_\mathrm{s}\pdv{\Pw}{x}                    & -\dfrac{L}{2}<x<R, R<x<-R
   \end{cases}
 \end{equation}
@@ -20,7 +20,7 @@ $-R<x<R$で$x=R\cos\theta$，$\odif{x}=-R\sin\theta\odif{\theta}$であるとす
 \end{equation}
 したがって，$AB$間の全体としての圧力変化量は\eqref{eq:Takashi_water_flow}式を$-L/2$から$2/L$まで積分したものとなり，これはDum-up headの大きさに等しいので
 \begin{align}
-  P_\mathrm{w, A} - P_\mathrm{w, B} & =\int_{x=-L/2}^{x=L/2}\odif{\Pw}\notag                                                                                                                                             \\
+  P_\mathrm{w, A} - P_\mathrm{w, B} & =\int_{x=-L/2}^{x=L/2}\odif{\Pw}\notag                                                                                                                                                      \\
                                     & =\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\bab{\int_{\theta=0}^{\theta=\pi/2}\dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta} +\dfrac{2}{L} \int_{x=-L/2}^{x=R}\odif{x}}\notag                     \\
                                     & =\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\bab{1-b+\dfrac{1}{\sqrt{1-b^2}}\pab{\dfrac{\pi}{2}+\arctan\dfrac{b}{\sqrt{1-b^2}}}-\dfrac{\pi}{2}}=\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\mathcal{F}\pab{b}
 \end{align}
@@ -53,3 +53,5 @@ Dam-up headが小さくなれば$T_\mathrm{down}^{\max}$は$T_\mathrm{f}$に近�
   V_\mathrm{crit}=\dfrac{2\pi \lambda_\mathrm{f}}{lK_\mathrm{s}C_\mathrm{p}}\dfrac{\pab{T_\mathrm{f}-T_\mathrm{pipe}}}{\pab{T_\infty-T_\mathrm{f}}}\mathcal{F}\pab{\dfrac{2a}{L}, b_\mathrm{crit}}
 \end{equation}
 ただし，$l$は凍土の代表長さであるので，凍結管が複数本あるとそれに伴い$l$が増大することによって，実際に施工可能な限界流速よりも小さくなる．これは，凍土全体が地下水流れに寄与するのではなく，凍土のうちの一部が限界流速を決定するため，この$l$の決定が重要である．
+
+\FloatBarrier

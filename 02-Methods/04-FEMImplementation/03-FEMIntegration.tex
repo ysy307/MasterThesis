@@ -26,7 +26,7 @@
 質量行列や熱容量行列などがこれに該当する．積分点ごとの係数値 $A_p$ を用いて計算される．
 \begin{align}
   \mat{K}_1^e
-   & = \iint_{\Omega^e} \vect{\psi}^\top A(T, \Pw) \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                                        \\
+   & = \iint_{\Omega^e} \vect{\psi}^\top A(T, \Pw) \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                                                 \\
    & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\vect{\psi}(\xi_p)^\top}_{(N_n \times 1)} \underbrace{A_p}_{\text{Scalar}} \underbrace{\vect{\psi}(\xi_p)}_{(1 \times N_n)} \det\mat{J}(\xi_p)
 \end{align}
 
@@ -34,7 +34,7 @@
 熱伝導行列や透水行列などがこれに該当する．積分点ごとのテンソル値 $\mat{M}_p$ を用いて計算される．
 \begin{align}
   \mat{K}_2^e
-   & = \iint_{\Omega^e} \mat{B}^\top \mat{M}(T, \Pw) \mat{B} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                                                          \\
+   & = \iint_{\Omega^e} \mat{B}^\top \mat{M}(T, \Pw) \mat{B} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                                                                   \\
    & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\mat{B}(\xi_p)^\top}_{(N_n \times \text{dim})} \underbrace{\mat{M}_p}_{\text{Tensor}} \underbrace{\mat{B}(\xi_p)}_{(\text{dim} \times N_n)} \det\mat{J}(\xi_p)
 \end{align}
 ここで $\text{dim}$ は空間次元数（2または3）である．
@@ -44,6 +44,8 @@
 （ここでは $\nabla \psi \cdot \vect{V} \psi$ の型を例示する）
 \begin{align}
   \mat{K}_3^e
-   & = \iint_{\Omega^e} \pab{\mat{B}^\top \vect{V}(T, \Pw)} \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                           \\
+   & = \iint_{\Omega^e} \pab{\mat{B}^\top \vect{V}(T, \Pw)} \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                    \\
    & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\pab{\mat{B}(\xi_p)^\top \vect{V}_p}}_{(N_n \times 1)} \underbrace{\vect{\psi}(\xi_p)}_{(1 \times N_n)} \det\mat{J}(\xi_p)
 \end{align}
+
+\FloatBarrier

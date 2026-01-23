@@ -44,11 +44,11 @@ GCC式の全微分は，温度微分と圧力微分の和として表される�
 \eqref{Eq:Sw_form}を考慮すれば，\eqref{Eq:GCC_differential}は次のように表される．
 \begin{align}
   \label{Eq:GCC_differential_form}
-  \odif{\Sw} & = \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{\Pw} \odif{\Pw} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{P_\mathrm{ice}} \odif{P_\mathrm{ice}} \notag                  \\
-             & + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{T^{\ast}} \odif{T^{\ast}}\notag                                                                                                                                    \\
+  \odif{\Sw} & = \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{\Pw} \odif{\Pw} + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{P_\mathrm{ice}} \odif{P_\mathrm{ice}} \notag                           \\
+             & + \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pdv{P_\mathrm{iw}}{T^{\ast}} \odif{T^{\ast}}\notag                                                                                                                           \\
              & = \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\pab{\frac{\rho_\mathrm{ice}}{\rho_\mathrm{w}}-1} \odif{\Pw} - \pdv{\mathcal{F}_\mathrm{WRF}}{P_\mathrm{iw}}\frac{L_\mathrm{f} \rho_\mathrm{ice}}{T^{{\ast}}} \odif{T^{\ast}}
 \end{align}
 
 これにより，GCC 式とWRFを組み合わせて不凍水量を評価でき，後続章で輸送式に利用可能である．
 
-\clearpage
+\FloatBarrier
