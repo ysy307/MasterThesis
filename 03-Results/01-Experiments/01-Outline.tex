@@ -1,167 +1,205 @@
 \subsection{実験概要}
+\label{Sec:ExperimentalSetup}
+実験には，\cref{Fig:experimental_setup}に示す円筒形の凍結実験装置を用いた．装置は内径\qty{0.2}{\meter}，外径\qty{0.23}{\meter}，高さ\qty{0.6}{\meter}のアクリル円筒と，円筒下端から\qty{0.2}{\meter}の位置を貫通する外径\qty{0.006}{\meter}のU字型凍結管で構成される．
+供試体は鳥取砂丘砂を水中充填法により作製し，底部給水・上部排水により飽和状態を維持した．凍結開始前にDarcy流速\qty{1.0}{\meter.\day^{-1}}で36時間以上給水した後，凍結管内にブライン（エチレングリコール水溶液，比重\qty{1100}{\kilogram.\meter^{-3}}）を循環させて内部から冷却した．
 
-\begin{tikzpicture}
-  %==== パラメータ設定 ====
-  \def\r{2cm}
-  \def\h{6cm}
-  \def\t{0.6cm}
-  \def\R{2.6cm}
-  \def\legW{0.2cm}
-  \def\legL{1.5cm}
-  \def\legPosRad{\r}
-  \def\aspect{0.25}
+\subsection{数値解析条件}
+\begin{figure}[btp]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      %==== パラメータ設定 ====
+      \def\r{2cm}
+      \def\h{7cm}
+      \def\t{0.6cm}
+      \def\R{2.6cm}
+      \def\legW{0.2cm}
+      \def\legL{1.5cm}
+      \def\legPosRad{\r}
+      \def\aspect{0.25}
 
-  %==== 色設定 ====
-  \colorlet{soilFill}{gray!5}
-  \colorlet{soilDots}{black!80}
-  \colorlet{plateColor}{gray!60}
-  \colorlet{pipeColor}{gray!20}
-  \colorlet{metalColor}{gray!50}
-  \colorlet{fzPipeColor}{gray!40}
-  \colorlet{fzPipeBorder}{black!70}
+      %==== 色設定 ====
+      \colorlet{soilFill}{gray!5}
+      \colorlet{soilDots}{black!80}
+      \colorlet{plateColor}{gray!60}
+      \colorlet{pipeColor}{gray!20}
+      \colorlet{metalColor}{gray!50}
+      \colorlet{fzPipeColor}{gray!40}
+      \colorlet{fzPipeBorder}{black!70}
 
-  %==== 計算 ====
-  \pgfmathsetlengthmacro{\eCyl}{\r * \aspect}
-  \pgfmathsetlengthmacro{\ePlate}{\R * \aspect}
-  \pgfmathsetlengthmacro{\eLeg}{\legPosRad * \aspect}
+      %==== 計算 ====
+      \pgfmathsetlengthmacro{\eCyl}{\r * \aspect}
+      \pgfmathsetlengthmacro{\ePlate}{\R * \aspect}
+      \pgfmathsetlengthmacro{\eLeg}{\legPosRad * \aspect}
 
-  %=================================================
-  % 1. 最背面：足
-  %=================================================
-  \begin{scope}[shift={({110}:{\legPosRad} and {\eLeg})}]
-    \draw[fill=metalColor, draw=black!70]
-    (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
-  \end{scope}
+      %=================================================
+      % 1. 最背面：足
+      %=================================================
+      \begin{scope}[shift={({110}:{\legPosRad} and {\eLeg})}]
+        \draw[fill=metalColor, draw=black!70]
+        (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
+      \end{scope}
 
-  \begin{scope}[shift={({-150}:{\legPosRad} and {\eLeg})}]
-    \draw[fill=metalColor, draw=black!70]
-    (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
-  \end{scope}
+      \begin{scope}[shift={({-150}:{\legPosRad} and {\eLeg})}]
+        \draw[fill=metalColor, draw=black!70]
+        (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
+      \end{scope}
 
-  % 下の外部パイプ（供給）
-  \draw[double=pipeColor, double distance=10pt, draw=black!70]
-  (0,-\t) -- ++(0,-0.6)
-  to[out=-90, in=180] ++(1.0,-0.6)
-  -- ++(2.0,0);
+      % 下の外部パイプ（供給）
+      \draw[double=pipeColor, double distance=10pt, draw=black!70]
+      (0,-\t) -- ++(0,-0.6)
+      to[out=-90, in=180] ++(1.0,-0.6)
+      -- ++(2.0,0);
 
-  %%%% ADD: 下パイプラベル（供給）
-  \node[
-    anchor=west,
-    fill=white,
-    inner sep=1.5pt,
-    text width=2.4cm,
-    align=left
-  ] at (3.1,-1.8) {\large Water supply};
+      %%%% ADD: 下パイプラベル（供給）
+      \node[
+        anchor=west,
+        fill=white,
+        inner sep=1.5pt,
+        text width=2.2cm,
+        align=left
+      ] at (3.1,-1.8) {\large Water  supply};
 
-  % 手前足
-  \begin{scope}[shift={({-30}:{\legPosRad} and {\eLeg})}]
-    \draw[fill=metalColor, draw=black!70]
-    (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
-  \end{scope}
+      % 手前足
+      \begin{scope}[shift={({-30}:{\legPosRad} and {\eLeg})}]
+        \draw[fill=metalColor, draw=black!70]
+        (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
+      \end{scope}
 
-  %=================================================
-  % 2. 下円盤
-  %=================================================
-  \fill[plateColor]
-  (-\R,0) -- (-\R,-\t)
-  arc (180:360:{\R} and {\ePlate})
-  -- (\R,0)
-  arc (360:180:{\R} and {\ePlate}) -- cycle;
+      %=================================================
+      % 2. 下円盤
+      %=================================================
+      \fill[plateColor]
+      (-\R,0) -- (-\R,-\t)
+      arc (180:360:{\R} and {\ePlate})
+      -- (\R,0)
+      arc (360:180:{\R} and {\ePlate}) -- cycle;
 
-  \fill[plateColor] (0,0) ellipse ({\R} and {\ePlate});
-  \draw[thick] (0,0) ellipse ({\R} and {\ePlate});
-  \draw[thick] (-\R,0)--(-\R,-\t);
-  \draw[thick] ( \R,0)--( \R,-\t);
-  \draw[thick] (-\R,-\t) arc (180:360:{\R} and {\ePlate});
+      \fill[plateColor] (0,0) ellipse ({\R} and {\ePlate});
+      \draw[thick] (0,0) ellipse ({\R} and {\ePlate});
+      \draw[thick] (-\R,0)--(-\R,-\t);
+      \draw[thick] ( \R,0)--( \R,-\t);
+      \draw[thick] (-\R,-\t) arc (180:360:{\R} and {\ePlate});
 
-  %=================================================
-  % 3. 土壌カラム
-  %=================================================
-  \fill[
-    pattern=dots,
-    pattern color=soilDots,
-    preaction={fill=soilFill}
-  ]
-  (-\r,0) -- (-\r,\h)
-  arc (180:360:{\r} and {\eCyl})
-  -- (\r,0)
-  arc (360:180:{\r} and {\eCyl}) -- cycle;
+      %=================================================
+      % 3. 土壌カラム
+      %=================================================
+      \fill[
+        pattern=dots,
+        pattern color=soilDots,
+        preaction={fill=soilFill}
+      ]
+      (-\r,0) -- (-\r,\h)
+      arc (180:360:{\r} and {\eCyl})
+      -- (\r,0)
+      arc (360:180:{\r} and {\eCyl}) -- cycle;
 
-  %=================================================
-  % 4. 内部凍結管
-  %=================================================
-  \def\fzLev{\h/3}
-  \def\fzSep{0.5cm}
-  \def\fzRun{0.8cm}
-  \def\fzRise{0.5cm}
-  \def\fzRad{1.5pt}
+      %=================================================
+      % 4. 内部凍結管
+      %=================================================
+      \def\fzLev{\h/3}
+      \def\fzSep{0.5cm}
+      \def\fzRun{0.8cm}
+      \def\fzRise{0.5cm}
+      \def\fzRad{1.5pt}
 
-  \tikzset{
-    hPipe/.style={
-        double=fzPipeColor,
-        double distance=2*\fzRad,
-        draw=fzPipeBorder,
-        line cap=round,
-        thick
+      \tikzset{
+        hPipe/.style={
+            double=fzPipeColor,
+            double distance=2*\fzRad,
+            draw=fzPipeBorder,
+            line cap=round,
+            thick
+          }
       }
-  }
 
-  \coordinate (OutFront) at (-\fzSep,\fzLev);
-  \coordinate (InFront)  at ( \fzSep,\fzLev);
-  \coordinate (OutBack)  at ($(OutFront)-(\fzRun,\fzRise)$);
-  \coordinate (InBack)   at ($(InFront)-(\fzRun,\fzRise)$);
+      \coordinate (OutFront) at (-\fzSep,\fzLev);
+      \coordinate (InFront)  at ( \fzSep,\fzLev);
+      \coordinate (OutBack)  at ($(OutFront)-(\fzRun,\fzRise)$);
+      \coordinate (InBack)   at ($(InFront)-(\fzRun,\fzRise)$);
 
-  \draw[hPipe] (OutFront)--(OutBack);
-  \draw[hPipe] (InFront)--(InBack);
+      \draw[hPipe] (OutFront)--(OutBack);
+      \draw[hPipe] (InFront)--(InBack);
 
-  \node[anchor=north,fill=white,inner sep=1pt,
-    xshift=1mm,yshift=-1.2mm] at (InBack) {Inlet};
-  \node[anchor=north,fill=white,inner sep=1pt,
-    xshift=-1mm,yshift=-1.2mm] at (OutBack) {Outlet};
+      \node[anchor=north,fill=white,inner sep=1pt,
+        xshift=1mm,yshift=-1.2mm] at (InBack) {Inlet};
+      \node[anchor=north,fill=white,inner sep=1pt,
+        xshift=-1mm,yshift=-1.2mm] at (OutBack) {Outlet};
 
-  %=================================================
-  % 5. 外枠
-  %=================================================
-  \draw[thick] (-\r,0)--(-\r,\h);
-  \draw[thick] ( \r,0)--( \r,\h);
-  \draw[thick] (-\r,0) arc (180:360:{\r} and {\eCyl});
-  \draw[thick] (-\r,\h) arc (180:360:{\r} and {\eCyl});
-  \draw[dashed,thick,gray]
-  (\r,\h) arc (0:180:{\r} and {\eCyl});
+      %=================================================
+      % 5. 外枠
+      %=================================================
+      \draw[thick] (-\r,0)--(-\r,\h);
+      \draw[thick] ( \r,0)--( \r,\h);
+      \draw[thick] (-\r,0) arc (180:360:{\r} and {\eCyl});
+      \draw[thick] (-\r,\h) arc (180:360:{\r} and {\eCyl});
+      \draw[dashed,thick,gray]
+      (\r,\h) arc (0:180:{\r} and {\eCyl});
 
-  %=================================================
-  % 6. 上円盤・排出パイプ
-  %=================================================
-  \fill[plateColor]
-  (-\R,\h)--(-\R,\h+\t)
-  arc (180:360:{\R} and {\ePlate})
-  --(\R,\h)
-  arc (360:180:{\R} and {\ePlate})--cycle;
+      %=================================================
+      % 6. 上円盤・排出パイプ
+      %=================================================
+      \fill[plateColor]
+      (-\R,\h)--(-\R,\h+\t)
+      arc (180:360:{\R} and {\ePlate})
+      --(\R,\h)
+      arc (360:180:{\R} and {\ePlate})--cycle;
 
-  \fill[plateColor] (0,\h+\t) ellipse ({\R} and {\ePlate});
+      \fill[plateColor] (0,\h+\t) ellipse ({\R} and {\ePlate});
 
-  \draw[thick] (-\R,\h) arc (180:360:{\R} and {\ePlate});
-  \draw[thick] (-\R,\h)--(-\R,\h+\t);
-  \draw[thick] ( \R,\h)--( \R,\h+\t);
-  \draw[thick] (-\R,\h+\t) arc (180:360:{\R} and {\ePlate});
-  \draw[thick] (\R,\h+\t) arc (0:180:{\R} and {\ePlate});
+      \draw[thick] (-\R,\h) arc (180:360:{\R} and {\ePlate});
+      \draw[thick] (-\R,\h)--(-\R,\h+\t);
+      \draw[thick] ( \R,\h)--( \R,\h+\t);
+      \draw[thick] (-\R,\h+\t) arc (180:360:{\R} and {\ePlate});
+      \draw[thick] (\R,\h+\t) arc (0:180:{\R} and {\ePlate});
 
-  \begin{scope}[shift={(0,\h+\t)}]
-    \fill[black!60] (0,0) ellipse (0.6cm and 0.2cm);
-    \draw[double=pipeColor, double distance=10pt, draw=black!70]
-    (0,0)--++(0,0.8)
-    to[out=90,in=180] ++(1.0,0.5)
-    --++(2.0,0);
+      \begin{scope}[shift={(0,\h+\t)}]
+        \fill[black!60] (0,0) ellipse (0.6cm and 0.2cm);
+        \draw[double=pipeColor, double distance=10pt, draw=black!70]
+        (0,0)--++(0,0.8)
+        to[out=90,in=180] ++(1.0,0.5)
+        --++(2.0,0);
 
-    %%%% ADD: 上パイプラベル（排出）
-    \node[
-      anchor=west,
-      fill=white,
-      inner sep=1.5pt,
-      text width=2.4cm,
-      align=left
-    ] at (3.1,1.3) {\large Water Discharge};
+        %%%% ADD: 上パイプラベル（排出）
+        \node[
+          anchor=west,
+          fill=white,
+          inner sep=1.5pt,
+          text width=2.2cm,
+          align=left
+        ] at (3.1,1.3) {\large Water Discharge};
 
-  \end{scope}
+      \end{scope}
+    \end{tikzpicture}
+    % \caption{実験装置の模式図}
+    \caption{}
+    \label{Fig:experimental_setup}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-1/Experimental_Domain_FluxBC.pdf}
+    \caption{}
+    \label{Fig:numerical_domain_setup}
+  \end{subfigure}
+  \caption{実験装置の模式図および対応する計算領域．(a) 実験装置の模式図，(b) 数値解析に用いた計算領域．(b) 中のアスタリスクでの熱移動境界条件として，逆解析により推定したパラメータ（底面 (*1) および左右 (*2，*3) の凍結管表面における境界温度）を用いる．}
+  \label{Fig:experiment_and_domain}
+\end{figure}
 
-\end{tikzpicture}
+実験結果との比較を行うため，\cref{Fig:experimental_setup}の実験装置をモデル化した計算領域を\cref{Fig:numerical_domain_setup}に示す．
+解析は凍結管に垂直な断面をとり，二次元水平断面として実施した．
+
+% 境界条件の設定において，装置底面および凍結管表面の熱伝達特性は，実験条件ごとの接触熱抵抗や流体挙動の影響を受けるため，一意に決定することが困難である．
+% そこで本解析では，別途実施した逆解析（第〇節参照）の結果に基づき，以下の有効境界温度を設定した．
+
+% \begin{itemize}
+%   \item \textbf{底面境界（*1）}: 給水による熱供給を考慮し，有効温度 $T_{\mathrm{bot}} = \dots ^\circ\mathrm{C}$ を固定境界条件として与えた．
+%   \item \textbf{凍結管表面（*2，*3）}: ブライン循環による冷却効果を表すため，有効表面温度 $T_{\mathrm{pipe}} = \dots ^\circ\mathrm{C}$ をDirichlet境界として与えた．
+% \end{itemize}
+
+その他の側面境界については断熱条件とした．
+% 初期条件および土質パラメータについては，実験開始時の実測値および第〇節で示した物性値を用いた
+
+\subsection{結果と考察}
+% （ここにグラフの図を配置して，温度変化や凍結深さの一致度について記述）
