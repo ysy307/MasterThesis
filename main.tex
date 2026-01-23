@@ -428,29 +428,17 @@
 
 
 
+\includeonly{03-Results/00-Results}
 \begin{document}
 %============================================================================================================
 % FRONT MATTER
 %============================================================================================================
-\input{00-FrontMatter/01-TitlePage}
-\pagenumbering{roman}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[R]{\sffamily\thepage}
-\renewcommand{\headrulewidth}{0pt}
-\fancypagestyle{plain}{
-  \fancyhf{}
-  \fancyhead[R]{\sffamily\thepage}
-  \renewcommand{\headrulewidth}{0pt}
-}
-\input{00-FrontMatter/02-Abstract}
-\input{00-FrontMatter/03-Contents}
+\input{00-FrontMatter/00-FrontMatter}
 
 %============================================================================================================
 % MAIN BODY
 %============================================================================================================
 % Background
-\clearpage
 \pagenumbering{arabic}
 \pagestyle{fancy}
 \fancyhead[L]{\leftmark}
@@ -461,12 +449,15 @@
   \renewcommand{\headrulewidth}{0pt}
 }
 \part{序論}
-\input{01-Intro/01-Background}
+\include{01-Intro/01-Background}
 
 % Methods
-\clearpage
 \part{手法}
-\input{02-Methods/00-Methods}
+\include{02-Methods/00-Methods}
+
+% Methods
+\part{結果}
+\include{03-Results/00-Results}
 
 \clearpage
 \appendix
@@ -475,8 +466,8 @@
 \makeatother
 
 \addcontentsline{toc}{part}{付録}
-\input{99-Appendix/01-VectorAnalysis}
-% \input{99-Appendix/02-algorithm}
+\include{99-Appendix/01-VectorAnalysis}
+% \include{99-Appendix/02-algorithm}
 
 %============================================================================================================
 % REFERENCES
