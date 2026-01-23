@@ -1,4 +1,38 @@
 \subsection{結果と考察}
-% （ここにグラフの図を配置して，温度変化や凍結深さの一致度について記述）
+\label{Sec:results_discussion}
+
+\subsubsection{逆解析を用いた境界条件推定}
+\label{Sec:bc_estimation}
+\cref{Sec:inv_analysis}で述べた逆解析手法を用いて，境界条件の温度について推定を行った．
+実験期間中の外部環境温度の変化を\cref{Fig:exp_temp_change}に示す．
+また，実験期間中の外部環境温度に関する統計量を\cref{Table:temp_stats}に示す．
+
+まず，\cref{Fig:exp_temp_change}，\cref{Table:temp_stats}より，凍結管表面の熱電対の温度は，往き側・還り側はそれぞれ平均約\qty{-1.44}{\degreeCelsius}，\qty{-1.18}{\degreeCelsius}であり，実験期間中においては比較的安定していたことが分かる．
+また，室温は平均約\qty{5.05}{\degreeCelsius}であり，初期温度場として\qty{5.0}{\degreeCelsius}を設定したことも妥当であり，実験装置周囲の放射熱交換も大きく変動しないと考えられるため，断熱境界条件の妥当性も支持される．
+つまり，実験期間中においては，外部環境温度は比較的一定であったため，逆解析における温度境界条件推定において，境界での温度を時間発展させなくても安定した結果が得られることが期待される．
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-1/Exp_Case3_8.pdf}
+  \caption{実験時の外部環境温度変化}
+  \label{Fig:exp_temp_change}
+\end{figure}
+
+\begin{table}[tbp]
+  \centering
+  \caption{実験期間中の外部環境温度に関する統計量}
+  \label{Table:temp_stats}
+  \begin{tabular}{lccccc}
+    \toprule
+    Variable      & Min        & Median     & Max        & Mean        & Std. Dev.  \\
+    \midrule
+    Inlet         & \num{-1.6} & \num{-1.4} & \num{1.2}  & \num{-1.44} & \num{0.09} \\
+    Outlet        & \num{-1.3} & \num{-1.2} & \num{2.0}  & \num{-1.18} & \num{0.13} \\
+    Room Temp.    & \num{3.9}  & \num{5.0}  & \num{5.7}  & \num{5.05}  & \num{0.28} \\
+    Water Temp.   & \num{3.0}  & \num{3.1}  & \num{4.0}  & \num{3.26}  & \num{0.27} \\
+    Chiller Temp. & \num{-3.1} & \num{-2.8} & \num{-2.7} & \num{-2.83} & \num{0.06} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \FloatBarrier
