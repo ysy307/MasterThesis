@@ -1,0 +1,290 @@
+\subsection{数値解析条件}
+\label{Sec:numerical_conditions}
+
+\subsubsection{計算領域および計算条件}
+\label{Sec:exp_numerical_domain}
+
+\begin{figure}[btp]
+  \centering
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      %==== パラメータ設定 ====
+      \def\r{2cm}
+      \def\h{7cm}
+      \def\t{0.6cm}
+      \def\R{2.6cm}
+      \def\legW{0.2cm}
+      \def\legL{1.5cm}
+      \def\legPosRad{\r}
+      \def\aspect{0.25}
+
+      %==== 色設定 ====
+      \colorlet{soilFill}{gray!5}
+      \colorlet{soilDots}{black!80}
+      \colorlet{plateColor}{gray!60}
+      \colorlet{pipeColor}{gray!20}
+      \colorlet{metalColor}{gray!50}
+      \colorlet{fzPipeColor}{gray!40}
+      \colorlet{fzPipeBorder}{black!70}
+
+      %==== 計算 ====
+      \pgfmathsetlengthmacro{\eCyl}{\r * \aspect}
+      \pgfmathsetlengthmacro{\ePlate}{\R * \aspect}
+      \pgfmathsetlengthmacro{\eLeg}{\legPosRad * \aspect}
+
+      %=================================================
+      % 1. 最背面：足
+      %=================================================
+      \begin{scope}[shift={({110}:{\legPosRad} and {\eLeg})}]
+        \draw[fill=metalColor, draw=black!70]
+        (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
+      \end{scope}
+
+      \begin{scope}[shift={({-150}:{\legPosRad} and {\eLeg})}]
+        \draw[fill=metalColor, draw=black!70]
+        (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
+      \end{scope}
+
+      % 下の外部パイプ（供給）
+      \draw[double=pipeColor, double distance=10pt, draw=black!70]
+      (0,-\t) -- ++(0,-0.6)
+      to[out=-90, in=180] ++(1.0,-0.6)
+      -- ++(2.0,0);
+
+      %%%% ADD: 下パイプラベル（供給）
+      \node[
+        anchor=west,
+        fill=white,
+        inner sep=1.5pt,
+        text width=2.2cm,
+        align=left
+      ] at (3.1,-1.8) {\large Water  supply};
+
+      % 手前足
+      \begin{scope}[shift={({-30}:{\legPosRad} and {\eLeg})}]
+        \draw[fill=metalColor, draw=black!70]
+        (-\legW/2,-\t) rectangle (\legW/2,-\t-\legL);
+      \end{scope}
+
+      %=================================================
+      % 2. 下円盤
+      %=================================================
+      \fill[plateColor]
+      (-\R,0) -- (-\R,-\t)
+      arc (180:360:{\R} and {\ePlate})
+      -- (\R,0)
+      arc (360:180:{\R} and {\ePlate}) -- cycle;
+
+      \fill[plateColor] (0,0) ellipse ({\R} and {\ePlate});
+      \draw[thick] (0,0) ellipse ({\R} and {\ePlate});
+      \draw[thick] (-\R,0)--(-\R,-\t);
+      \draw[thick] ( \R,0)--( \R,-\t);
+      \draw[thick] (-\R,-\t) arc (180:360:{\R} and {\ePlate});
+
+      %=================================================
+      % 3. 土壌カラム
+      %=================================================
+      \fill[
+        pattern=dots,
+        pattern color=soilDots,
+        preaction={fill=soilFill}
+      ]
+      (-\r,0) -- (-\r,\h)
+      arc (180:360:{\r} and {\eCyl})
+      -- (\r,0)
+      arc (360:180:{\r} and {\eCyl}) -- cycle;
+
+      %=================================================
+      % 4. 内部凍結管
+      %=================================================
+      \def\fzLev{\h/3}
+      \def\fzSep{0.5cm}
+      \def\fzRun{0.8cm}
+      \def\fzRise{0.5cm}
+      \def\fzRad{1.5pt}
+
+      \tikzset{
+        hPipe/.style={
+            double=fzPipeColor,
+            double distance=2*\fzRad,
+            draw=fzPipeBorder,
+            line cap=round,
+            thick
+          }
+      }
+
+      \coordinate (OutFront) at (-\fzSep,\fzLev);
+      \coordinate (InFront)  at ( \fzSep,\fzLev);
+      \coordinate (OutBack)  at ($(OutFront)-(\fzRun,\fzRise)$);
+      \coordinate (InBack)   at ($(InFront)-(\fzRun,\fzRise)$);
+
+      \draw[hPipe] (OutFront)--(OutBack);
+      \draw[hPipe] (InFront)--(InBack);
+
+      \node[anchor=north,fill=white,inner sep=1pt,
+        xshift=1mm,yshift=-1.2mm] at (InBack) {Inlet};
+      \node[anchor=north,fill=white,inner sep=1pt,
+        xshift=-1mm,yshift=-1.2mm] at (OutBack) {Outlet};
+
+      %=================================================
+      % 5. 外枠
+      %=================================================
+      \draw[thick] (-\r,0)--(-\r,\h);
+      \draw[thick] ( \r,0)--( \r,\h);
+      \draw[thick] (-\r,0) arc (180:360:{\r} and {\eCyl});
+      \draw[thick] (-\r,\h) arc (180:360:{\r} and {\eCyl});
+      \draw[dashed,thick,gray]
+      (\r,\h) arc (0:180:{\r} and {\eCyl});
+
+      %=================================================
+      % 6. 上円盤・排出パイプ
+      %=================================================
+      \fill[plateColor]
+      (-\R,\h)--(-\R,\h+\t)
+      arc (180:360:{\R} and {\ePlate})
+      --(\R,\h)
+      arc (360:180:{\R} and {\ePlate})--cycle;
+
+      \fill[plateColor] (0,\h+\t) ellipse ({\R} and {\ePlate});
+
+      \draw[thick] (-\R,\h) arc (180:360:{\R} and {\ePlate});
+      \draw[thick] (-\R,\h)--(-\R,\h+\t);
+      \draw[thick] ( \R,\h)--( \R,\h+\t);
+      \draw[thick] (-\R,\h+\t) arc (180:360:{\R} and {\ePlate});
+      \draw[thick] (\R,\h+\t) arc (0:180:{\R} and {\ePlate});
+
+      \begin{scope}[shift={(0,\h+\t)}]
+        \fill[black!60] (0,0) ellipse (0.6cm and 0.2cm);
+        \draw[double=pipeColor, double distance=10pt, draw=black!70]
+        (0,0)--++(0,0.8)
+        to[out=90,in=180] ++(1.0,0.5)
+        --++(2.0,0);
+
+        %%%% ADD: 上パイプラベル（排出）
+        \node[
+          anchor=west,
+          fill=white,
+          inner sep=1.5pt,
+          text width=2.2cm,
+          align=left
+        ] at (3.1,1.3) {\large Water Discharge};
+
+      \end{scope}
+    \end{tikzpicture}
+    % \caption{実験装置の模式図}
+    \caption{}
+    \label{Fig:experimental_setup}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.45\textwidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-1/Experimental_Domain_FluxBC.pdf}
+    \caption{}
+    \label{Fig:numerical_domain_setup}
+  \end{subfigure}
+  \caption{実験装置の模式図および対応する計算領域．(a) 実験装置の模式図，(b) 数値解析に用いた計算領域．(b) 中のアスタリスクでの熱移動境界条件として，逆解析により推定したパラメータ（底面 (*1) および左右 (*2，*3) の凍結管表面における境界温度）を用いる．}
+  \label{Fig:experiment_and_domain}
+\end{figure}
+
+実験結果との比較のため，\cref{Fig:experimental_setup}を基に作成した計算領域を\cref{Fig:numerical_domain_setup}に示した．
+解析は，凍結管軸に垂直な水平断面を対象とした二次元モデルで実施した．
+
+装置底面および凍結管表面の境界条件は，実験ごとの接触熱抵抗や流体挙動に依存するため，一意な決定が困難である．
+そこで本解析では，逆解析により境界温度を同定し，その結果を用いて検証を行った．
+なお，他の境界は断熱境界条件とした．
+また，流体の流入出境界には，実験と同様にDarcy流速\qty{1.0}{\meter.\day^{-1}}を与え，それ以外の境界は流体の出入りがないように不透水境界条件とした．
+逆解析における境界条件の詳細は\cref{Sec:inv_analysis}で後述する．
+
+初期条件として，温度は一様に\qty{5}{\degreeCelsius}，圧力はDarcy流速\qty{1.0}{\meter.\day^{-1}}に対応する分布を与えた．
+飽和多孔質媒体中の初期圧力場は，凍結管群を過ぎる一様流とみなせる．
+速度ポテンシャルは，ラプラス方程式の線形性に基づき，一様流と各凍結管中心 $z_j$ に配置された二重湧き出しの重ね合わせで表現できる\parencite{Tatsumi-FluidDynamics}．
+無限遠流速を $U$，凍結管半径を $a$ とすると，複素速度ポテンシャル $W\pab{z}$ は次式となる．
+\begin{equation}
+  \label{Eq:complex_potential_superposition}
+  W\pab{z} = U \pab{z + \sum_{j=1}^{2} \frac{a^2}{z - z_j}}
+\end{equation}
+ここで，$z$ は複素座標，$z_j$ は $j$ 番目の凍結管の中心座標である．
+このとき，圧力水頭 $h$ は飽和透水係数を用いて，複素ポテンシャルの実部と以下の関係になる．
+\begin{equation}
+  \label{Eq:pressure_head_from_potential}
+  h = -\frac{1}{K_\mathrm{s}} \Re\bab{W\pab{z}}
+\end{equation}
+この解析解と数値的に得られた初期圧力分布を\cref{Fig:initial_pressure_experiment}に示した．
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-1/initial_experiment_comparison.pdf}
+  \caption{圧力水頭の空間分布．(a) 数値解，(b) 解析解，(c) 数値解と解析解の残差．}
+  \label{Fig:initial_pressure_experiment}
+\end{figure}
+
+数値解と解析解を比較することにより，初期圧力分布に対する数値モデルの妥当性を検証した．
+その結果，凍結管周りの残差が少し大きいが，残差の最大ノルム および二乗平均平方根誤差はそれぞれ\num{2.012e-04}，\num{2.917e-05} となり，両者は良好に一致していることが確認され，初期圧力分布の設定が妥当であることが示された．
+
+\subsubsection{使用した物性値}
+\label{Sec:exp_material_properties}
+
+本検証解析においては，実験に用いた鳥取砂丘砂の物理的性質を忠実に再現するため，予備実験によって決定した物性値を用いた．
+熱物性値を\cref{Table:exp_thermal_properties}に，水分特性パラメータを\cref{Table:exp_hydraulic_properties}に示した．
+\begin{table}[tbp]
+  \centering
+  \caption{予備実験により同定された熱物性値}
+  \label{Table:exp_thermal_properties}
+  \begin{tabular}{llcl}
+    \toprule
+    Parameter                                             & Component     & Symbol                 & \multicolumn{1}{c}{Value} \\
+    \midrule
+    Porosity                                              & --            & $\phi$                 & \num{0.4}                 \\
+    \midrule
+    Density                                               & Soil particle & $\rho_\mathrm{s}$      & \num{2684}                \\
+    \multicolumn{1}{r}{[\unit{\kg\per\m\cubed}]}          & Pore water    & $\rho_\mathrm{w}$      & \num{1000}                \\
+                                                          & Ice           & $\rho_\mathrm{ice}$    & \num{917}                 \\
+    \midrule
+    Specific heat                                         & Soil particle & $c_\mathrm{s}$         & \num{636.8}               \\
+    \multicolumn{1}{r}{[\unit{\joule\per\kg\per\kelvin}]} & Pore water    & $c_\mathrm{w}$         & \num{4186}                \\
+                                                          & Ice           & $c_\mathrm{ice}$       & \num{2090}                \\
+    \midrule
+    Thermal conductivity                                  & Soil particle & $\lambda_\mathrm{s}$   & \num{2.44}                \\
+    \multicolumn{1}{r}{[\unit{\watt\per\m\per\kelvin}]}   & Pore water    & $\lambda_\mathrm{w}$   & \num{0.6}                 \\
+                                                          & Ice           & $\lambda_\mathrm{ice}$ & \num{2.2}                 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[tbp]
+  \centering
+  \caption{実測値に基づくDurnerモデルのパラメータ}
+  \label{Table:exp_hydraulic_properties}
+  \begin{tabular}{lcl}
+    \toprule
+    Parameter           & Unit                & \multicolumn{1}{c}{Value} \\
+    \midrule
+    $\theta_\mathrm{s}$ & [--]                & \num{0.39971}             \\
+    $\theta_\mathrm{r}$ & [--]                & \num{0.00671}             \\
+    $\alpha_1$          & [\unit{\m^{-1}}]    & \num{4.034}               \\
+    $\alpha_2$          & [\unit{\m^{-1}}]    & \num{0.04034}             \\
+    $n_1$               & [--]                & \num{8.46152}             \\
+    $n_2$               & [--]                & \num{1.30984}             \\
+    $w_1$               & [--]                & \num{0.72352}             \\
+    $K_\mathrm{s}$      & [\unit{\m.\s^{-1}}] & \num{3.75e-4}             \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth, pagebox=cropbox, clip]{3-1/wrf_durner_tds.pdf}
+  \caption{同定されたパラメータに基づく水分保持関数}
+  \label{Fig:swrc}
+\end{figure}
+
+\subsubsection{逆解析による境界条件の同定}
+\label{Sec:inv_analysis}
+
+実験では管表面温度等が計測されているが，接触熱抵抗や流入条件の不確実性を考慮し，逆解析により有効な境界温度を同定した．
+逆解析にはPEST \parencite{John-2004}を用い，下端からの流入水温度および凍結管表面温度を推定パラメータとした．
+比較対象となる温度観測点は，流速の不均一性の影響を低減するため領域中央の鉛直線上（高さ\qty{0.15}{\meter}から\qty{0.45}{\meter}の7点）に選定した．
+ここで，相変化領域の再現性を最優先とするため，凍結管近傍（高さ\qty{0.20}{\meter}および\qty{0.25}{\meter}）の重み係数を他の点より大きく設定した．
+この重み付けにより，未凍結部全体のフィッティングに引きずられることなく，凍結フロント近傍の挙動を重点的に再現した．
+
+\clearpage
