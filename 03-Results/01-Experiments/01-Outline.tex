@@ -4,6 +4,11 @@
 供試体は鳥取砂丘砂を水中充填法により作製し，底部給水・上部排水により飽和状態を維持した．凍結開始前にDarcy流速\qty{1.0}{\meter.\day^{-1}}で36時間以上給水した後，凍結管内にブライン（エチレングリコール水溶液，比重\qty{1100}{\kilogram.\meter^{-3}}）を循環させて内部から冷却した．
 
 \subsection{数値解析条件}
+\label{Sec:numerical_conditions}
+
+\subsubsection{計算領域および境界条件}
+\label{Sec:exp_numerical_domain}
+
 \begin{figure}[btp]
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
@@ -187,8 +192,65 @@
   \label{Fig:experiment_and_domain}
 \end{figure}
 
-実験結果との比較を行うため，\cref{Fig:experimental_setup}の実験装置をモデル化した計算領域を\cref{Fig:numerical_domain_setup}に示す．
+実験結果との比較を行うため，\cref{Fig:experimental_setup}の実験装置をモデル化した計算領域を\cref{Fig:numerical_domain_setup}に示した．
 解析は凍結管に垂直な断面をとり，二次元水平断面として実施した．
+
+\subsubsection{使用した物性値}
+\label{Sec:exp_material_properties}
+
+本検証解析においては，実験に用いた鳥取砂丘砂の物理的性質を忠実に再現するため，予備実験によって取得した物性値を用いた
+熱物性値を\cref{Table:exp_thermal_properties}に，水分特性パラメータを\cref{Table:exp_hydraulic_properties}に示した．
+\begin{table}[tbp]
+  \centering
+  \caption{予備実験により同定された熱物性値}
+  \label{Table:exp_thermal_properties}
+  \begin{tabular}{llcl}
+    \toprule
+    Parameter                                             & Component     & Symbol                 & \multicolumn{1}{c}{Value} \\
+    \midrule
+    Porosity                                              & --            & $\phi$                 & \num{0.4}                 \\
+    \midrule
+    Density                                               & Soil particle & $\rho_\mathrm{s}$      & \num{2684}                \\
+    \multicolumn{1}{r}{[\unit{\kg\per\m\cubed}]}          & Pore water    & $\rho_\mathrm{w}$      & \num{1000}                \\
+                                                          & Ice           & $\rho_\mathrm{ice}$    & \num{917}                 \\
+    \midrule
+    Specific heat                                         & Soil particle & $c_\mathrm{s}$         & \num{636.8}               \\
+    \multicolumn{1}{r}{[\unit{\joule\per\kg\per\kelvin}]} & Pore water    & $c_\mathrm{w}$         & \num{4186}                \\
+                                                          & Ice           & $c_\mathrm{ice}$       & \num{2090}                \\
+    \midrule
+    Thermal conductivity                                  & Soil particle & $\lambda_\mathrm{s}$   & \num{2.44}                \\
+    \multicolumn{1}{r}{[\unit{\watt\per\m\per\kelvin}]}   & Pore water    & $\lambda_\mathrm{w}$   & \num{0.6}                 \\
+                                                          & Ice           & $\lambda_\mathrm{ice}$ & \num{2.2}                 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[tbp]
+  \centering
+  \caption{実測値に基づくDurnerモデルのパラメータ}
+  \label{Tab:exp_hydraulic_properties}
+  \begin{tabular}{lcl}
+    \toprule
+    Parameter           & Unit                & \multicolumn{1}{c}{Value} \\
+    \midrule
+    $\theta_\mathrm{s}$ & [--]                & \num{0.39971}             \\
+    $\theta_\mathrm{r}$ & [--]                & \num{0.00671}             \\
+    $\alpha_1$          & [\unit{\m^{-1}}]    & \num{4.034}               \\
+    $\alpha_2$          & [\unit{\m^{-1}}]    & \num{0.04034}             \\
+    $n_1$               & [--]                & \num{8.46152}             \\
+    $n_2$               & [--]                & \num{1.30984}             \\
+    $w_1$               & [--]                & \num{0.72352}             \\
+    $K_\mathrm{s}$      & [\unit{\m.\s^{-1}}] & \num{3.75e-4}             \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth, pagebox=cropbox, clip]{3-1/wrf_durner_tds.pdf}
+  \caption{同定されたパラメータに基づく水分保持関数}
+  \label{Fig:swrc}
+\end{figure}
 
 % 境界条件の設定において，装置底面および凍結管表面の熱伝達特性は，実験条件ごとの接触熱抵抗や流体挙動の影響を受けるため，一意に決定することが困難である．
 % そこで本解析では，別途実施した逆解析（第〇節参照）の結果に基づき，以下の有効境界温度を設定した．
