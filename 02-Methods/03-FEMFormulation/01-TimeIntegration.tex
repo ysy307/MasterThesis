@@ -64,7 +64,7 @@
     \tau_2 & = t_{n-1} - t_{n+1} = -( \adif{t_n} +  \adif{t_{n-1}})
   \end{align}
 \end{subequations}
-ここで$P\pab{\tau}$が$k=2$の時のLagrange補間多項式であるとすると，\eqref{Eq:bdf_lagrange}式より
+ここで$P\pab{\tau}$が$k=2$の時のLagrange補間多項式であるとすると，\eqref{Eq:bdf_lagrange}より
 \begin{align}
   P\pab{\tau} = l_0\pab{\tau} \vect{y}^{n+1} + l_1\pab{\tau} \vect{y}^n + l_2\pab{\tau} \vect{y}^{n-1}
 \end{align}
@@ -77,7 +77,7 @@
     l_2\pab{\tau} = \frac{\tau-\tau_0}{\tau_2-\tau_0} \frac{\tau-\tau_1}{\tau_2-\tau_1}
   \end{align}
 \end{subequations}
-ここで各基底関数の微分は\eqref{Eq:bdf2_lagrange_basis}式より
+ここで各基底関数の微分は\eqref{Eq:bdf2_lagrange_basis}より
 \begin{subequations}
   \label{Eq:bdf2_lagrange_basis_diff}
   \begin{align}

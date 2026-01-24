@@ -3,12 +3,15 @@
 
 \subsection{BiCGSTAB}
 
-BiCGSTAB (Biconjugate Gradient Stabilized) 法は，非対称な係数行列を持つ線形方程式系を解くための反復法である\parencite{Vorst-1992}．
-\footnote{JICFuS WIKI，BiCGSTAB法：\url{https://www.jicfus.jp:443/wiki/index.php?Bi-CGSTAB\%20\%E6\%B3\%95}}
+BiCGSTAB (Biconjugate Gradient Stabilized) 法は，非対称な係数行列を持つ線形方程式系を解くための反復法である\parencite{Vorst-1992}
+\footnote{JICFuS WIKI，BiCGSTAB法：\url{https://www.jicfus.jp:443/wiki/index.php?Bi-CGSTAB\%20\%E6\%B3\%95}}．
 
-\begin{algorithm}[H]
-  \caption{Preconditioned Bi-CGSTAB method (Theoretical)}
-  \label{PreBiCGSTAB}
+% ------------------------------------------------------------------
+% Algorithm 1: Theoretical BiCGSTAB
+% Label becomes: Alg:PreBiCGSTAB
+% ------------------------------------------------------------------
+\begin{AlgorithmBox}{Preconditioned Bi-CGSTAB method (Theoretical)}{PreBiCGSTAB}
+  \setlength{\baselineskip}{17pt}
   \begin{algorithmic}[1]
     \State Set an initial value $\vect{x}_0$
     \State Compute the initial residual $\vect{r}_0=\vect{b}-\mat{A}\vect{x}_0$
@@ -33,12 +36,16 @@ BiCGSTAB (Biconjugate Gradient Stabilized) 法は，非対称な係数行列を�
     \State $\vect{p}_{k+1} = \vect{r}_{k+1} + \beta_k (\vect{p}_k - \omega_k \vect{v}_k)$
     \EndFor
   \end{algorithmic}
-\end{algorithm}
+\end{AlgorithmBox}
 
 実際の実装では，行列ベクトル積の回数とベクトル格納に必要なメモリを削減するため，以下のように中間変数を再利用する．
-\begin{algorithm}[H]
-  \caption{Implementation of preconditioned Bi-CGSTAB method}
-  \label{Alg:IMP_PreBiCGSTAB}
+
+% ------------------------------------------------------------------
+% Algorithm 2: Implementation BiCGSTAB
+% Label becomes: Alg:IMP_PreBiCGSTAB
+% ------------------------------------------------------------------
+\begin{AlgorithmBox}{Implementation of preconditioned Bi-CGSTAB method}{IMP_PreBiCGSTAB}
+  \setlength{\baselineskip}{17pt}
   \begin{algorithmic}[1]
     \State Set an initial value $\vect{x}_0=0.0$
     \State Compute the initial residual $\vect{r}_0=\vect{b}-\mat{A}\vect{x}_0$
@@ -89,18 +96,19 @@ BiCGSTAB (Biconjugate Gradient Stabilized) 法は，非対称な係数行列を�
     \EndIf
     \EndFor
   \end{algorithmic}
-\end{algorithm}
+\end{AlgorithmBox}
 
 \subsection{GMRES}
 
 GMRES (Generalized Minimal Residual) 法は，非対称な係数行列を持つ線形方程式系を解くための反復法である\parencite{Saad-1986}
-\footnote{JICFuS WIKI，GMRES法：\url{https://www.jicfus.jp:443/wiki/index.php?GMRES\%28m\%29\%20\%E6\%B3\%95}}
-．
+\footnote{JICFuS WIKI，GMRES法：\url{https://www.jicfus.jp:443/wiki/index.php?GMRES\%28m\%29\%20\%E6\%B3\%95}}．
 右前処理 (Right Preconditioning) を用いたリスタート付き GMRES(m) 法を示す．
 
-\begin{algorithm}[H]
-  \caption{Preconditioned GMRES(m) method (Right Preconditioning)}
-  \label{Alg:PreFullGMRES_Corrected}
+% ------------------------------------------------------------------
+% Algorithm 3: Theoretical GMRES
+% Label becomes: Alg:PreFullGMRES_Corrected
+% ------------------------------------------------------------------
+\begin{AlgorithmBox}{Preconditioned GMRES(m) method (Right Preconditioning)}{PreFullGMRES_Corrected}
   \setlength{\baselineskip}{17pt}
   \begin{algorithmic}[1]
     \State Set an initial value $\vect{x}_0$
@@ -143,12 +151,15 @@ GMRES (Generalized Minimal Residual) 法は，非対称な係数行列を持つ�
     \State $\vect{x}_0 = \tilde{\vect{x}}$
     \EndWhile
   \end{algorithmic}
-\end{algorithm}
+\end{AlgorithmBox}
+
 実際の実装では，基底ベクトル $V=[\vect{v}_i]$ と，前処理を適用した基底 $\hat{V}=[\mat{M}^{-1}\vect{v}_i]$ を分けて保持する必要がある．
 
-\begin{algorithm}[H]
-  \caption{Implementation of right-preconditioned GMRES(m) method (based on LIS)}
-  \label{Alg:IMP_LIS_FGMRES}
+% ------------------------------------------------------------------
+% Algorithm 4: Implementation GMRES
+% Label becomes: Alg:IMP_LIS_FGMRES
+% ------------------------------------------------------------------  
+\begin{AlgorithmBox}{Implementation of right-preconditioned GMRES(m) method}{IMP_LIS_FGMRES}
   \setlength{\baselineskip}{17pt}
   \begin{algorithmic}[1]
     \State Set an initial value $\vect{x}_0$
@@ -200,6 +211,6 @@ GMRES (Generalized Minimal Residual) 法は，非対称な係数行列を持つ�
     \State $\vect{x}_0 = \vect{x}$
     \EndWhile
   \end{algorithmic}
-\end{algorithm}
+\end{AlgorithmBox}
 
 \FloatBarrier
