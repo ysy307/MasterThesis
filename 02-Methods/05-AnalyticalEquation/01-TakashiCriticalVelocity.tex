@@ -1,0 +1,289 @@
+\subsection{高志の限界流速式}
+\label{Sec:TakashiCriticalVelocity}
+
+凍土の成長にしたがって凍土どうしの間隔が狭くなり，地下水の流れの上流部と下流部でDum-up headが大きくなる．
+\begin{figure}[tbp]
+  \centering
+  \begin{tikzpicture}[
+      every node/.style={font=\small},
+      scale=1.2
+    ]
+
+    % --- 定数定義 ---
+    \def\spacing{2.0}
+    \def\pipeRadius{0.1}
+    \def\smallSoilR{0.6}
+    \def\bigSoilR{2.05}
+    \def\soilAngle{15}
+
+    % --- 定数定義 (Overall View用) ---
+    \def\numPipes{8}             % 管の数
+    \def\pipeSpacing{0.6}        % 管の間隔
+    \def\pipeRadiusOverall{0.15} % 管の半径
+    \def\frozenRadiusOverall{0.35} % 凍土の半径
+    \def\flowWidth{4.2}          % 流線の描画幅 (X軸方向)
+
+    % --- スタイル定義 ---
+    \tikzset{
+    thinLine/.style={black, line width=0.2mm},
+    thickLine/.style={black, line width=0.5mm},
+    dimArrow/.style={{Latex[length=2.4mm, width=3mm]}-{Latex[length=2.4mm, width=3mm]}, thinLine},
+    labelArrow/.style={-{Latex[length=2.4mm, width=3mm]}, line width=0.36mm},
+    flowArrowPost/.style={
+        decoration={markings, mark=at position #1 with {\arrow{Latex[length=1.8mm, width=2.2mm]}}},
+        postaction={decorate},
+        line width=0.25mm
+      },
+    mainFlowArrow/.style={-{Latex[length=8mm, width=14mm]}, line width=4.8mm},
+    pointMarker/.style={fill=black, thinLine},
+    labelText/.style={anchor=west, font=\Large, inner sep=0pt},
+    % --- モノクロ用スタイル ---
+    freezePipeMono/.style={thickLine, fill=white},
+    frozenSoilMono/.style={pattern=crosshatch, pattern color=black!70},
+    unfrozenSoilMono/.style={fill=gray!8},
+    centerLine/.style={thinLine, dash pattern=on 5pt off 3pt}
+    }
+
+    %================================================
+    % 凡例 (最上部に配置)
+    %================================================
+    \begin{scope}[shift={(-4.5, 7.0)}, local bounding box=legend]
+      % 未凍土
+      \fill[unfrozenSoilMono] (0,0) rectangle (1,0.5);
+      \draw[thinLine] (0,0) rectangle (1,0.5);
+      \node[anchor=west] at (1.2, 0.25) {\large Unfrozen Soil};
+
+      % 凍土
+      \fill[frozenSoilMono] (4.0,0) rectangle (5.0,0.5);
+      \draw[thickLine] (4.0,0) rectangle (5.0,0.5);
+      \node[anchor=west] at (5.2, 0.25) {\large Frozen Soil};
+
+      % 凍結管
+      \draw[freezePipeMono] (7.7, 0.25) circle (0.25);
+      \node[anchor=west] at (8.15, 0.25) {\large Freezing Pipe};
+    \end{scope}
+
+    %================================================
+    % (a) 全体図 (上段)
+    %================================================
+    % yshiftを調整して上部に配置
+    \begin{scope}[yshift=2.5cm]
+
+      % --- 事前計算 ---
+      \pgfmathsetmacro{\halfPipes}{\numPipes/2}
+      \pgfmathsetmacro{\yStartPos}{-(\numPipes-1)*\pipeSpacing/2}
+      \pgfmathsetmacro{\yEndPos}{(\numPipes-1)*\pipeSpacing/2}
+
+      % ラベル位置の計算
+      \pgfmathsetmacro{\dimLX}{-\frozenRadiusOverall - 0.6}
+      \pgfmathsetmacro{\dimlX}{\frozenRadiusOverall + 1.8}
+      \pgfmathsetmacro{\frozenTop}{\yEndPos + \frozenRadiusOverall}
+      \pgfmathsetmacro{\frozenBottom}{\yStartPos - \frozenRadiusOverall}
+
+      % 交差角度の計算
+      \pgfmathsetmacro{\overlapAngle}{asin((\pipeSpacing/2)/\frozenRadiusOverall)}
+
+      % --- 1. 凍土の描画 ---
+      \pgfmathsetmacro{\loopMax}{\numPipes-1}
+      \foreach \i in {0,...,\loopMax} {
+          \pgfmathsetmacro{\yCoord}{\yStartPos + \i*\pipeSpacing}
+          \fill[frozenSoilMono] (0, \yCoord) circle (\frozenRadiusOverall);
+        }
+
+      % 1-B. 輪郭線の描画
+      % Bottom Circle
+      \draw[thickLine]
+      (0, \yStartPos) ++(180-\overlapAngle:\frozenRadiusOverall)
+      arc (180-\overlapAngle : 360+\overlapAngle : \frozenRadiusOverall);
+
+      % Middle Circles
+      \pgfmathsetmacro{\lastIdx}{\numPipes-2}
+      \foreach \i in {1,...,\lastIdx} {
+          \pgfmathsetmacro{\yCoord}{\yStartPos + \i*\pipeSpacing}
+          \draw[thickLine]
+          (0, \yCoord) ++(-\overlapAngle:\frozenRadiusOverall)
+          arc (-\overlapAngle : \overlapAngle : \frozenRadiusOverall);
+          \draw[thickLine]
+          (0, \yCoord) ++(180-\overlapAngle:\frozenRadiusOverall)
+          arc (180-\overlapAngle : 180+\overlapAngle : \frozenRadiusOverall);
+        }
+
+      % Top Circle
+      \draw[thickLine]
+      (0, \yEndPos) ++(-\overlapAngle:\frozenRadiusOverall)
+      arc (-\overlapAngle : 180+\overlapAngle : \frozenRadiusOverall);
+
+      % --- 2. 凍結管 ---
+      \foreach \i in {0,...,\loopMax} {
+          \pgfmathsetmacro{\yCoord}{\yStartPos + \i*\pipeSpacing}
+          \draw[freezePipeMono] (0, \yCoord) circle (\pipeRadiusOverall);
+        }
+
+      % --- 3. 中心線 ---
+      \draw[centerLine] (-\flowWidth, 0) -- (\flowWidth, 0);
+
+      % --- 4. 流線 ---
+      \foreach \startY/\bendY in {
+          0.5/2.55,
+          1.5/2.75,
+          2.5/3.2,
+          3.5/3.9
+        } {
+          % 上側
+          \draw[flowArrowPost=0.2, flowArrowPost=0.8]
+          (-\flowWidth, \startY)
+          .. controls (-2.0, \startY) and (-1.5, \bendY) .. (0, \bendY)
+          .. controls (1.5, \bendY) and (2.0, \startY) .. (\flowWidth, \startY);
+
+          % 下側
+          \draw[flowArrowPost=0.2, flowArrowPost=0.8]
+          (-\flowWidth, -\startY)
+          .. controls (-2.0, -\startY) and (-1.5, -\bendY) .. (0, -\bendY)
+          .. controls (1.5, -\bendY) and (2.0, -\startY) .. (\flowWidth, -\startY);
+        }
+
+      % --- 5. 寸法線とラベル ---
+      \pgfmathsetmacro{\idxL}{int(\numPipes/2 - 1)}
+      \pgfmathsetmacro{\yL}{\yStartPos + \idxL*\pipeSpacing}
+      \pgfmathsetmacro{\yR}{\yL + \pipeSpacing}
+
+      \draw[thinLine] (0, \yL) -- (\dimLX, \yL);
+      \draw[thinLine] (0, \yR) -- (\dimLX, \yR);
+      \draw[dimArrow] ({\dimLX+0.1}, \yL) -- ({\dimLX+0.1}, \yR) node[midway, left, fill=white, xshift=-2mm,inner sep=0.2pt] {$L$};
+
+      \draw[thinLine] (0, \frozenBottom) -- (\dimlX, \frozenBottom);
+      \draw[thinLine] (0, \frozenTop) -- (\dimlX, \frozenTop);
+      \draw[dimArrow] ({\dimlX-0.1}, \frozenBottom) -- ({\dimlX-0.1}, \frozenTop) node[midway, fill=white] {$l$};
+
+      % (a) ラベル
+      \node[labelText] at (-4.5, -4.5) {\textbf{\Large (a)}};
+
+    \end{scope}
+
+    %================================================
+    % (b) 詳細図 (下段)
+    %================================================
+    % xshiftで中央揃え(-9.25), yshiftで(a)の下に配置
+    \begin{scope}[shift={(-9.25, -10.5)}]
+      \coordinate (A) at (6.5, 3.0);
+      \coordinate (B) at (12.5, 3.0);
+      \coordinate (C_bottom) at (9.5, 0.0);
+      \coordinate (C_top) at (9.5, 6.0);
+      \def\semicircR{2.0}
+      \def\pipeDetailR{0.5}
+
+      % 背景
+      \fill[unfrozenSoilMono] (5.0, 0.0) rectangle (13.5, 6.0);
+
+      % 凍土パターン
+      \fill[frozenSoilMono, even odd rule]
+      ($(C_bottom)-(\semicircR,0)$) arc(180:0:\semicircR) -- cycle
+      (C_bottom) circle (\pipeDetailR);
+      \fill[frozenSoilMono, even odd rule]
+      ($(C_top)-(\semicircR,0)$) arc(180:360:\semicircR) -- cycle
+      (C_top) circle (\pipeDetailR);
+
+      % 枠線
+      \draw[thinLine] (5.5, 6.0) -- (13.0, 6.0);
+      \draw[thinLine] (5.5, 0.0) -- (13.0, 0.0);
+      \draw[dimArrow] (6.5, 7.0) -- ++(6.0, 0) node[midway, above] {$L$};
+      \draw[thinLine] (6.5, 0.0) -- (6.5, 7.5);
+      \draw[thinLine] (12.5, 0.0) -- (12.5, 7.5);
+      \draw[dimArrow] (5.5, 0) -- ++(0, 6.0) node[midway, left] {$L$};
+      % 凍結面
+      % arc
+      \draw[thickLine, -{Latex[length=5mm, width=4mm]}]
+      (5.0, 0.0) -- ($(C_bottom)-(\semicircR,0)$)
+      arc(180:0:\semicircR)
+      -- (13.5, 0.0);
+
+      \draw[thickLine, -{Latex[length=5mm, width=4mm]}]
+      (5.0, 6.0) -- ($(C_top)-(\semicircR,0)$)
+      arc(180:360:\semicircR)
+      -- (13.5, 6.0);
+
+      \draw[freezePipeMono] (C_bottom) circle (\pipeDetailR);
+      \draw[pointMarker] (C_bottom) circle (0.07);
+      \draw[freezePipeMono] (C_top) circle (\pipeDetailR);
+      \draw[pointMarker] (C_top) circle (0.07);
+
+      % ラベル
+      \draw[labelArrow] (C_bottom) -- ++(110:\semicircR) node[below right, xshift=3mm,yshift=-1mm,fill=white,inner sep=1.5pt] {$R$};
+      \draw[labelArrow] (C_bottom) ++(0.8, 0) arc(0:110:0.8);
+      \node[fill=white,inner sep=1.5pt] at ($(C_bottom)+(60:1.1)$) {$\theta$};
+      \draw[labelArrow] (C_bottom) -- node[left, yshift=-1mm] {$a$} ++(-40:\pipeDetailR);
+
+      \draw[pointMarker] (A) circle (0.1);
+      \node[anchor=south east, xshift=-1mm] at (A) {$P_A$};
+      \node[anchor=north east, xshift=-1mm] at (A) {$A$};
+      \node[anchor=west, xshift=1mm] at (A) {$T_{\infty}$};
+
+      \draw[pointMarker] (B) circle (0.1);
+      \node[anchor=south west, xshift=1mm] at (B) {$P_B$};
+      \node[anchor=north west, xshift=1mm] at (B) {$B$};
+
+      \draw[mainFlowArrow] (8.5, 3.0) -- (10.5, 3.0);
+
+      % (b) ラベル (このスコープ内での相対座標)
+      \node[labelText] at (5.0, -1.2) {\textbf{\Large (b)}};
+    \end{scope}
+
+  \end{tikzpicture}
+  \caption{}\label{fig:}
+\end{figure}
+このDum-up headの大きさや凍結管の配置，土壌物性値によって最終的に凍土壁が閉塞するのかが決定される．ここで，地下水流れがある場合の凍土の凍結面の形状を円形とし，凍結管の間の地下水流れを一様な速度断面として考える．また，Dam-up headは凍土壁が完成した時の値を用い，それは凍土壁の前後で凍結管ピッチ$L$の距離だけ離れた二点$A$と$B$に生じると仮定する．
+高志の限界流速式ではある時間経過したのちに凍土壁が閉塞しない状態になったときの熱平衡より，逆に限界Dum-up headを求める考え方をとる．
+地下水流れに対して垂直に凍結面同士を結ぶ土壌断面を考える．ある時刻における凍結面までの半径を$R$とすれば，この断面を流れる水の流量$Q_\mathrm{w}$は
+\begin{equation}
+  Q_\mathrm{w}=
+  \begin{cases}
+    \displaystyle -\pab{L-2R\sin\theta}K_\mathrm{s}\pdv{\Pw}{x} & -R < x < R                \\
+    \displaystyle -LK_\mathrm{s}\pdv{\Pw}{x}                    & -\dfrac{L}{2}<x<R, R<x<-R
+  \end{cases}
+\end{equation}
+$-R<x<R$で$x=R\cos\theta$，$\odif{x}=-R\sin\theta\odif{\theta}$であるとすれば，
+\begin{equation}
+  \label{eq:Takashi_water_flow}
+  \odif{\Pw}=
+  \begin{cases}
+    \displaystyle \frac{Q_\mathrm{w}}{K_\mathrm{s}} \dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta} & -R < x < R                           \\
+    \displaystyle -\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\dfrac{1}{L}\odif{x}                            & -\dfrac{L}{2}<x<-R, R<x<\dfrac{L}{2}
+  \end{cases}
+\end{equation}
+したがって，$AB$間の全体としての圧力変化量は\eqref{eq:Takashi_water_flow}を$-L/2$から$L/2$まで積分したものとなり，これはDum-up headの大きさに等しいので
+\begin{align}
+  P_\mathrm{w, A} - P_\mathrm{w, B} & =\int_{x=-L/2}^{x=L/2}\odif{\Pw}\notag                                                                                                                                                      \\
+                                    & =\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\bab{\int_{\theta=0}^{\theta=\pi/2}\dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta} +\dfrac{2}{L} \int_{x=-L/2}^{x=R}\odif{x}}\notag                     \\
+                                    & =\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\bab{1-b+\dfrac{1}{\sqrt{1-b^2}}\pab{\dfrac{\pi}{2}+\arctan\dfrac{b}{\sqrt{1-b^2}}}-\dfrac{\pi}{2}}=\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\mathcal{F}\pab{b}
+\end{align}
+ただし，$b=R/L$である．次に凍結管との熱交換によって変化した地下水流の温度の計算を行う．上流部の水の温度を$T_\infty$，凍結管を流れた水の温度を$T_\mathrm{down}$とすれば，地下水流は凍結管の間を通過する際に$T_\infty$から$T_\mathrm{down}$に変化する．このとき，地下水流の熱量減少量$Q_\mathrm{wh}$は
+\begin{equation}
+  \label{eq:Takashi_heat_flow}
+  Q_\mathrm{wh}=Q_\mathrm{w}C_\mathrm{p}\pab{T_\infty-T_\mathrm{down}}=\dfrac{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{w,A}-P_\mathrm{w,B}}\pab{T_\infty-T_\mathrm{down}}}{\mathcal{F}\pab{b}}
+\end{equation}
+一方凍結管周りには半径$R$の凍結面ができており，その葉面上では温度$T_\mathrm{f}$，凍結管周りが温度$T_\mathrm{pipe}$で保たれて定常状態であるとする．この時，凍結管に伝達される熱量$Q_\mathrm{fh}$は
+\begin{equation}
+  \label{eq:Takashi_heat_pipe}
+  Q_\mathrm{fh}=2\pi \lambda_\mathrm{f} \dfrac{T_\mathrm{f}-T_\mathrm{pipe}}{\log\dfrac{L}{2a}-\log\dfrac{L}{2R}}
+\end{equation}
+凍結管の間を通る地下水流においては，$Q_\mathrm{wh}$と$Q_\mathrm{fh}$は等しいと考えられるので，
+\begin{align}
+  T_\mathrm{down} & =T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{w,A}-P_\mathrm{w,B}}}\dfrac{\mathcal{F}\pab{b}}{\log\dfrac{L}{2a}-\log\dfrac{L}{2R}}\notag \\
+                  & =T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{w,A}-P_\mathrm{w,B}}}\mathcal{F}\pab{\dfrac{2a}{L}, b}
+\end{align}
+ここで，$\mathcal{F}\pab{2a/L,b}$は$2a/L<b<1$で唯一の最大値を持つ．そこで，$T_\mathrm{down}$が最大となる$b$を$b_\mathrm{crit}$とすれば
+\begin{equation}
+  T_\mathrm{down}^{\max}=T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{w,A}-P_\mathrm{w,B}}}\mathcal{F}\pab{\dfrac{2a}{L}, b_\mathrm{crit}}
+\end{equation}
+Dam-up headが小さくなれば$T_\mathrm{down}^{\max}$は$T_\mathrm{f}$に近づく．この時のDum-up headを限界Dum-up headと呼び，これを求めることが高志の限界流速式の目的である．
+\begin{equation}
+  \label{eq:Takashi_critical}
+  \pab{P_\mathrm{w,A}-P_\mathrm{w,B}}_\mathrm{crit}=\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}}\mathcal{F}\pab{\dfrac{2a}{L}, b_\mathrm{crit}}
+\end{equation}
+本研究では特に平面凍結壁の場合を考えるので，その時の限界流速を$V_\mathrm{crit}$とすれば，
+\begin{equation}
+  V_\mathrm{crit}=\dfrac{2\pi \lambda_\mathrm{f}}{lK_\mathrm{s}C_\mathrm{p}}\dfrac{\pab{T_\mathrm{f}-T_\mathrm{pipe}}}{\pab{T_\infty-T_\mathrm{f}}}\mathcal{F}\pab{\dfrac{2a}{L}, b_\mathrm{crit}}
+\end{equation}
+ただし，$l$は凍土の代表長さであるので，凍結管が複数本あるとそれに伴い$l$が増大することによって，実際に施工可能な限界流速よりも小さくなる．これは，凍土全体が地下水流れに寄与するのではなく，凍土のうちの一部が限界流速を決定するため，この$l$の決定が重要である．
+
+\FloatBarrier
