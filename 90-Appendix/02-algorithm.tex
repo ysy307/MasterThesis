@@ -1,0 +1,232 @@
+\newpage
+\section{数値計算ソルバーのアルゴリズム}
+\label{Sec:Algorithm}
+
+\begin{figure}
+  \begin{algorithm}[H]
+    \small
+    \caption{Assembly of the Mass Term at the Element Level}
+    \label{alg:assemble_Ca}
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+
+    \Input{
+      CRS matrix structure \texttt{A}, \\
+      Structure of elements \texttt{Elements}, \\
+      Nodal temperature vector $\vect{T}$
+    }
+    \Output{Add the contribution of $\displaystyle\int_{\Omega} C_\mathrm{a}\psi_i\psi_j\odif{\Omega}$ to \texttt{A}}
+    \BlankLine
+    \ForEach{element $e\in\mathtt{Elements}$}{
+      $n \leftarrow e.\mathtt{getNumNodes}()$\;
+      \For{$i=1$ \KwTo $n$}{
+        \For{$j=1$ \KwTo $n$}{
+          $val  \leftarrow 0$\;
+          $index\leftarrow A.\mathtt{Find}(e.\mathtt{conn}(i),\,e.\mathtt{conn}(j))$\;
+          \For{$g=1$ \KwTo $e.\mathtt{nGauss}$}{
+            $\xi  \leftarrow e.\mathtt{gauss}(1,g)$\;
+            $\eta \leftarrow e.\mathtt{gauss}(2,g)$\;
+            $w    \leftarrow e.\mathtt{weight}(g)$\;
+            $\det{J} \leftarrow e.\mathtt{Jac\_Det}(\xi,\eta)$\;
+            %%% 1) Interpolate temperature at Gauss point %%%
+            $\displaystyle T_g \leftarrow \sum_{s=1}^{e.\mathtt{nGauss}} e.\psi(s,\xi,\eta)\,\vect{T}(e.\mathtt{conn}(s))$\;
+            $\displaystyle \phivv_g \leftarrow \sum_{s=1}^{e.\mathtt{nGauss}} e.\psi(s,\xi,\eta)\,\vect{\phivv}(e.\mathtt{conn}(s))$\;
+            \If{Type == GCC\_NonSeg\_m}{
+              $\Qw \leftarrow \mathcal{F}_\mathrm{WRF}\pab{\mathcal{F}_\mathrm{GCC}\pab{T_g}}$\;
+              \If{not Compressive}{
+                $\displaystyle C_\mathrm{a}=C_\mathrm{s}\pab{1-\phivv_g}+C_\mathrm{w}\Qw+C_\mathrm{ice}\pab{\phivv_g-\Qw}-L_\mathrm{f}\rho_\mathrm{ice}\pdv{\mathcal{F}_\mathrm{WRF}\pab{\mathcal{F}_\mathrm{GCC}\pab{T_g}}}{h}\pdv{\mathcal{F}_\mathrm{GCC}\pab{T_g}}{T}$\;
+              }
+            }
+            %%% 7) Assemble contribution %%%
+            $\mathrm{val}\leftarrow \mathrm{val} + w\; C_\mathrm{a}\; e.\psi(i,\xi,\eta)\; e.\psi(j,\xi,\eta)\; \det{J}$\;
+            % +\;\frac{dC_a}{dT}\;T_q\;
+            %   e.\psi(i,\xi,\eta)\;e.\psi(j,\xi,\eta)\;J\;w$\;
+          }
+          $A.\mathtt{Val}(\mathrm{index}) = A.\mathtt{Val}(\mathrm{index}) + \mathrm{val}$\;
+        }
+      }
+    }
+  \end{algorithm}
+\end{figure}
+\begin{figure}
+  \begin{algorithm}[H]
+    \small
+    \caption{Assembly of the $\pab{\pdv{C_\mathrm{a}}/{T}}T$ Term at the Element Level}
+    \label{alg:assemble_dCdT_T}
+    \SetKwInOut{Input}{Input}
+    \SetKwInOut{Output}{Output}
+
+    \Input{
+      CRS matrix structure \texttt{A}, \\
+      Structure of elements \texttt{Elements}, \\
+      Nodal temperature vector $\vect{T}$
+    }
+    \Output{Add the contribution of $\displaystyle\int_{\Omega} \pdv{C_\mathrm{a}}{T}T\psi_i\psi_j\odif{\Omega}$ to \texttt{A}}
+    \BlankLine
+    \ForEach{element $e\in\mathtt{Elements}$}{
+      $n \leftarrow e.\mathtt{getNumNodes}()$\;
+      \For{$i=1$ \KwTo $n$}{
+        \For{$j=1$ \KwTo $n$}{
+          $val  \leftarrow 0$\;
+          $index\leftarrow A.\mathtt{Find}(e.\mathtt{conn}(i),\,e.\mathtt{conn}(j))$\;
+          \For{$g=1$ \KwTo $e.\mathtt{nGauss}$}{
+            $\xi  \leftarrow e.\mathtt{gauss}(1,g)$\;
+            $\eta \leftarrow e.\mathtt{gauss}(2,g)$\;
+            $w    \leftarrow e.\mathtt{weight}(g)$\;
+            $\det{J} \leftarrow e.\mathtt{Jac\_Det}(\xi,\eta)$\;
+            %%% 1) Interpolate temperature at Gauss point %%%
+            $\displaystyle T_g \leftarrow \sum_{s=1}^{e.\mathtt{nGauss}} e.\psi(s,\xi,\eta)\,\vect{T}(e.\mathtt{conn}(s))$\;
+            $\displaystyle \phivv_g \leftarrow \sum_{s=1}^{e.\mathtt{nGauss}} e.\psi(s,\xi,\eta)\,\vect{\phivv}(e.\mathtt{conn}(s))$\;
+            \If{Type == GCC\_NonSeg\_m}{
+              $\Qw \leftarrow \mathcal{F}_\mathrm{WRF}\pab{\mathcal{F}_\mathrm{GCC}\pab{T_g}}$\;
+              \If{\texttt{not} Compressive}{
+                $\displaystyle \pdv{C_\mathrm{a}}{T}=\pab{\rho_\mathrm{w}c_\mathrm{w}-\rho_\mathrm{ice}c_\mathrm{ice}}\pdv{\mathcal{F}_\mathrm{WRF}}{h}\pdv{\mathcal{F}_\mathrm{GCC}}{T}-L_\mathrm{f}\rho_\mathrm{ice}\pdv{\mathcal{F}_\mathrm{WRF}}{h}\pdv[order=2]{\mathcal{F}_\mathrm{GCC}}{T}$\;
+              }
+            }
+
+            %%% 7) Assemble contribution %%%
+            $\displaystyle \mathrm{val}\leftarrow \mathrm{val}
+              +w\;\pdv{C_\mathrm{a}}{T}\;T_g\;
+              e.\psi(i,\xi,\eta)\;e.\psi(j,\xi,\eta)\;\det{J}$\;
+          }
+          $A.\mathtt{Val}(\mathrm{index}) = A.\mathtt{Val}(\mathrm{index}) + \mathrm{val}$\;
+        }
+      }
+    }
+  \end{algorithm}
+\end{figure}
+
+\begin{figure}
+  \begin{algorithm}[H]
+    \small
+    \caption{Reverse Cuthill-McKee (RCM) Reordering}
+    \label{alg:rcm_corrected}
+    % \SetKwInOut{Input}{Input}
+    % \SetKwInOut{Output}{Output}
+    % \SetKwProg{Proc}{Procedure}{}{end}
+    % \SetKwFunction{BFS}{BFS}
+    % \SetKwFunction{SortByDegree}{SortByDegree}
+
+    \Input{
+      Undirected graph $G = (V, E)$ \\
+      Node degrees $\deg(v)$ for each $v \in V$
+    }
+    \Output{
+      Permutation vector $P$, where $P[\text{old}] = \text{new}$
+    }
+
+    \Proc{\texttt{FindPeripheralStartNode}($G$, \texttt{visited})}{
+      $u \leftarrow$ an unvisited node with the minimum degree\;
+      $L \leftarrow$ \BFS{$G$, $u$} \tcp*{Get all level sets}
+      $L_{\text{last}} \leftarrow$ last level in $L$\;
+      $s \leftarrow$ a node in $L_{\text{last}}$ with minimum degree\;
+      \KwRet{$s$}\;
+    }
+
+    \tcp{Main procedure}
+    $R \leftarrow$ empty list of length $|V|$\;
+    \texttt{visited} $\leftarrow$ boolean array of size $|V|$, initialized to \texttt{false}\;
+    $count \leftarrow 0$\;
+
+    \While{$count < |V|$}{
+      $s \leftarrow$ \texttt{FindPeripheralStartNode}($G$, \texttt{visited})\;
+
+      $Q \leftarrow$ empty queue\;
+      $Q.\texttt{enqueue}(s)$\;
+      \texttt{visited}[$s$] $\leftarrow$ true\;
+
+      \While{$Q$ is not empty}{
+        $u \leftarrow Q.\texttt{dequeue}()$\;
+        $R[count] \leftarrow u$\;
+        $count \leftarrow count + 1$\;
+
+        $N \leftarrow$ unvisited neighbors of $u$\;
+        $N_{\text{sorted}} \leftarrow$ \SortByDegree{$N$}\;
+
+        \ForEach{$v \in N_{\text{sorted}}$}{
+          \texttt{visited}[$v$] $\leftarrow$ true\;
+          $Q.\texttt{enqueue}(v)$\;
+        }
+      }
+    }
+
+    \tcp{Reverse the Cuthill-McKee order}
+    $P \leftarrow$ array of size $|V|$\;
+    \For{$i = 0$ \KwTo $|V| - 1$}{
+      $P[R[i]] \leftarrow |V| - i$\;
+    }
+    \KwRet{$P$}
+  \end{algorithm}
+\end{figure}
+
+\begin{figure}
+  \begin{algorithm}[H]
+    \small
+    \caption{Multicoloring Preprocessing for Parallel Assembly}
+    \label{alg:multicoloring_detailed_latex}
+
+    % \SetKwInOut{Input}{Input}
+    % \SetKwInOut{Output}{Output}
+
+    \Input{
+      Element connectivity list \texttt{Elements}
+    }
+    \Output{
+      Array \texttt{Colors}, where \texttt{Colors[$e$]} = color index
+    }
+    \BlankLine
+
+    % ======================
+    \tcp{Step 1: Build element adjacency graph}
+    \Proc{\texttt{BuildElementAdjacencyGraph}(\texttt{Elements})}{
+      $G \leftarrow$ empty graph\;
+      $\text{node\_to\_elements} \leftarrow$ empty map\;
+
+      \ForEach{element $e$ with index $i$ in \texttt{Elements}}{
+        $G.\text{add\_node}(i)$\;
+        \ForEach{node $n$ in $e$}{
+          $\text{node\_to\_elements}[n].\text{add}(i)$\;
+        }
+      }
+
+      \ForEach{element $e$ with index $i$ in \texttt{Elements}}{
+        \ForEach{node $n$ in $e$}{
+          \ForEach{neighbor index $j$ in $\text{node\_to\_elements}[n]$}{
+            \If{$i \neq j$}{
+              $G.\text{add\_edge}(i, j)$\;
+            }
+          }
+        }
+      }
+      \KwRet{$G$}
+    }
+    \BlankLine
+
+    % ======================
+    \tcp{Step 2: Greedy graph coloring}
+    \Proc{\texttt{GreedyColoring}($G$)}{
+      \texttt{Colors} $\leftarrow$ array of size $|V(G)|$, initialized to 0\;
+      \ForEach{vertex $v$ in $G$}{
+        \texttt{forbidden\_colors} $\leftarrow$ empty set\;
+        \ForEach{neighbor $u$ of $v$}{
+          \If{\texttt{Colors[$u$]} $\neq 0$}{
+            \texttt{forbidden\_colors.add(Colors[$u$])}\;
+          }
+        }
+        $c \leftarrow 1$\;
+        \While{$c \in$ \texttt{forbidden\_colors}}{
+          $c \leftarrow c + 1$\;
+        }
+        \texttt{Colors[$v$]} $\leftarrow c$\;
+      }
+      \KwRet{\texttt{Colors}}
+    }
+    \BlankLine
+
+    % ======================
+    \tcp{Main procedure}
+    $G \leftarrow \texttt{BuildElementAdjacencyGraph}(\texttt{Elements})$\;
+    \texttt{Colors} $\leftarrow \texttt{GreedyColoring}(G)$\;
+    \Return{\texttt{Colors}}
+  \end{algorithm}
+\end{figure}

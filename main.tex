@@ -36,7 +36,6 @@
   BoldFont    = SourceHanSans-Medium.otf
 ]{Source Han Sans}
 
-% \newjfontfamily\jgothic{Source Han Sans}
 % 欧文見出しフォント（Serifのまま）
 \newfontfamily\esectionfont[
   UprightFont = SourceHanSans-Regular.otf,
@@ -52,11 +51,11 @@
 %============================================================================================================
 \newcommand{\partlabel}{第\thepart 部}
 \titleformat{\part}[block]
-  {\headingfont\Huge\centering}
+  {\headingfont\fontsize{40pt}{60pt}\selectfont\centering}
   {\partlabel}
   {0pt}
   {\\[1ex]}
-\titlespacing*{\part}{0pt}{50pt}{40pt}
+\titlespacing*{\part}{0pt}{0.35\textheight}{40pt}
 %============================================================================================================
 % section 以下の設定
 %============================================================================================================
@@ -472,19 +471,16 @@
 %============================================================================================================
 \usepackage{fancyhdr}
 
-
-
-\includeonly{03-Results/00-Results}
+%============================================================================================================
 \begin{document}
 %============================================================================================================
 % FRONT MATTER
 %============================================================================================================
-\input{00-FrontMatter/00-FrontMatter}
+\include{00-FrontMatter/00-FrontMatter}
 
 %============================================================================================================
 % MAIN BODY
 %============================================================================================================
-% Background
 \pagenumbering{arabic}
 \pagestyle{fancy}
 \fancyhead[L]{\leftmark}
@@ -494,41 +490,22 @@
   \fancyhead[R]{\thepage}
   \renewcommand{\headrulewidth}{0pt}
 }
-\part{序論}
-\include{01-Intro/01-Background}
+
+% Introduction
+\include{01-Introduction/00-Introduction}
 
 % Methods
-\part{手法}
 \include{02-Methods/00-Methods}
 
-% Methods
-\part{結果}
+% Results
 \include{03-Results/00-Results}
 
-\clearpage
-\appendix
-\makeatletter
-\renewcommand{\theequation}{\Alph{section}.\arabic{equation}}
-\makeatother
-
-\addcontentsline{toc}{part}{付録}
-\include{99-Appendix/01-VectorAnalysis}
-% \include{99-Appendix/02-algorithm}
-
 %============================================================================================================
-% REFERENCES
+% BACK MATTER
 %============================================================================================================
-\clearpage
-\addcontentsline{toc}{part}{引用文献}
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[R]{\thepage}
-\renewcommand{\headrulewidth}{0pt}
-\fancypagestyle{plain}{
-  \fancyhf{}
-  \fancyhead[R]{\thepage}
-  \renewcommand{\headrulewidth}{0pt}
-}
-\printbibliography[heading=bibliography, title={引用文献}]
+% Appendix
+\include{90-Appendix/00-Appendix}
+% References
+\include{99-BackMatter/00-BackMatter}
 %============================================================================================================
 \end{document}
