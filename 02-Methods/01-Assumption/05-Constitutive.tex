@@ -145,15 +145,22 @@
         \end{equation}
 \end{enumerate}
 
-\subsubsection{力学的熱物性値の定義}
+また，液状水が凍結する際に，氷が形成されることにより，間隙水量が減少する．この現象を考慮するため，間隙氷量 $\Qice$ を用いて，透水係数は次式で修正される（!TODO:引用入れる）．
+\begin{equation}
+  \label{Eq:Hydraulic_Conductivity_Ice}
+  K_\mathrm{flh} = K_{\mathrm{s}} 10^{-\Omega \Qice}
+\end{equation}
+ここで，$K_\mathrm{flh}$は凍結水含有状態における透水係数 [\unit{\meter.\second^{-1}}]，$\Omega$ は経験的な定数 [--]であり，本研究では $\Omega = 10$ を採用した．
 
-また，間隙水および間隙氷の密度は，それぞれの圧力 $\Pw$， $P_\mathrm{ice}$ に依存するとし，その体積圧縮係数をそれぞれ $K_\mathrm{w}$，$K_\mathrm{ice}$ とすると，以下の関係が成り立つ．
-\begin{subequations}
-  \label{Eq:Compressibility}
-  \begin{align}
-    \odif{\rho_\mathrm{w}}   & = \frac{\rho_\mathrm{w}}{K_\mathrm{w}} \odif{\Pw}                \\
-    \odif{\rho_\mathrm{ice}} & = \frac{\rho_\mathrm{ice}}{K_\mathrm{ice}} \odif{P_\mathrm{ice}}
-  \end{align}
-\end{subequations}
+% \subsubsection{力学的熱物性値の定義}
 
-\FloatBarrier
+% また，間隙水および間隙氷の密度は，それぞれの圧力 $\Pw$， $P_\mathrm{ice}$ に依存するとし，その体積圧縮係数をそれぞれ $K_\mathrm{w}$，$K_\mathrm{ice}$ とすると，以下の関係が成り立つ．
+% \begin{subequations}
+%   \label{Eq:Compressibility}
+%   \begin{align}
+%     \odif{\rho_\mathrm{w}}   & = \frac{\rho_\mathrm{w}}{K_\mathrm{w}} \odif{\Pw}                \\
+%     \odif{\rho_\mathrm{ice}} & = \frac{\rho_\mathrm{ice}}{K_\mathrm{ice}} \odif{P_\mathrm{ice}}
+%   \end{align}
+% \end{subequations}
+
+% \FloatBarrier
