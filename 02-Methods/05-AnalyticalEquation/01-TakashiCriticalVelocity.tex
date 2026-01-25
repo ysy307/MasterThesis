@@ -1,7 +1,7 @@
 \subsection{高志の限界流速式}
 \label{Sec:TakashiCriticalVelocity}
 
-凍土の成長にしたがって凍土どうしの間隔が狭くなり，地下水の流れの上流部と下流部でDum-up headが大きくなる．
+凍土の成長に伴い，隣接する凍結管から広がる凍土同士の間隔が狭まると，上流側と下流側の水位差（Dam-up head）が増大する（\cref{Fig:freezing_model}a）．この水位差，凍結管の配置，および土壌の物性値の相互作用により，最終的に凍土壁が閉塞できるかどうかが決定される．
 \begin{figure}[tbp]
   \centering
   \begin{tikzpicture}[
@@ -229,7 +229,7 @@
   \caption{凍結管列周辺の地下水流と凍土形成の解析モデル．(a) 凍結管列の全体配置，(b) 解析に使用する単位セルと幾何パラメータ．}
   \label{Fig:freezing_model}
 \end{figure}
-このDum-up headの大きさや凍結管の配置，土壌物性値によって最終的に凍土壁が閉塞するのかが決定される．ここで，地下水流れがある場合の凍土の凍結面の形状を円形とし，凍結管の間の地下水流れを一様な速度断面として考える．また，Dam-up headは凍土壁が完成した時の値を用い，それは凍土壁の前後で凍結管ピッチ$L$の距離だけ離れた二点$A$と$B$に生じると仮定する．
+ここで，地下水流れがある場合の凍土の凍結面の形状を円形とし，凍結管の間の地下水流れを一様な速度断面として考える．また，Dam-up headは凍土壁が完成した時の値を用い，それは凍土壁の前後で凍結管ピッチ$L$の距離だけ離れた二点$A$と$B$に生じると仮定する．
 高志の限界流速式ではある時間経過したのちに凍土壁が閉塞しない状態になったときの熱平衡より，逆に限界Dum-up headを求める考え方をとる．
 地下水流れに対して垂直に凍結面同士を結ぶ土壌断面を考える．ある時刻における凍結面までの半径を$R$とすれば，この断面を流れる水の流量$Q_\mathrm{w}$は
 \begin{equation}
@@ -245,23 +245,50 @@ $-R<x<R$で$x=R\cos\theta$，$\odif{x}=-R\sin\theta\odif{\theta}$であるとす
   \label{Eq:Takashi_water_flow}
   \odif{\Pw}=
   \begin{cases}
-    \displaystyle \frac{Q_\mathrm{w}}{K_\mathrm{s}} \dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta} & -R < x < R                           \\[4mm]
-    \displaystyle -\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\dfrac{1}{L}\odif{x}                            & -\dfrac{L}{2}<x<-R, R<x<\dfrac{L}{2}
+    \displaystyle \dfrac{Q_\mathrm{w}}{K_\mathrm{s}} \dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta} & -R < x < R                           \\[4mm]
+    \displaystyle -\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\dfrac{1}{L}\odif{x}                             & -\dfrac{L}{2}<x<-R, R<x<\dfrac{L}{2}
   \end{cases}
 \end{equation}
 したがって，$AB$間の全体としての圧力変化量は\eqref{Eq:Takashi_water_flow}を$-L/2$から$+L/2$まで積分したものとなり，これはDum-up headの大きさに等しいので
 \begin{align}
-  P_\mathrm{A} - P_\mathrm{B} = & - \int_{x=-L/2}^{x=L/2}\odif{\Pw}\notag                                                                                                                                                    \\
-  =                             & - \int_{x=-L/2}^{x=-R}\odif{\Pw}  - \int_{x=-R}^{x=R}\odif{\Pw} - \int_{x=R}^{x=L/2}\odif{\Pw} \notag                                                                                      \\
-  =                             & - \int_{x=-L/2}^{x=-R}\odif{\Pw}  - \int_{\theta=0}^{\theta=\pi}\odif{\Pw} - \int_{x=R}^{x=L/2}\odif{\Pw} \notag                                                                           \\
-  =                             & \int_{x=-L/2}^{x=-R}\odif{\Pw} + \int_{x=-R}^{x=R}\odif{\Pw} + \int_{x=R}^{x=L/2}\odif{\Pw} \notag                                                                                         \\
-  =                             & \dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\bab{\int_{\theta=0}^{\theta=\pi/2}\dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta} +\dfrac{2}{L} \int_{x=-L/2}^{x=R}\odif{x}}\notag                     \\
-  =                             & \dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\bab{1-b+\dfrac{1}{\sqrt{1-b^2}}\pab{\dfrac{\pi}{2}+\arctan\dfrac{b}{\sqrt{1-b^2}}}-\dfrac{\pi}{2}}=\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\mathcal{F}\pab{b}
+  P_\mathrm{A} - P_\mathrm{B}
+   & = - \int_{x=-L/2}^{x=L/2}\odif{\Pw} \notag                                                                                                                                                                                                                                             \\
+   & = - \int_{x=-L/2}^{x=-R}\odif{\Pw} - \int_{x=-R}^{x=R}\odif{\Pw} - \int_{x=R}^{x=L/2}\odif{\Pw} \notag                                                                                                                                                                                 \\
+   & = - \int_{x=-L/2}^{x=-R}\odif{\Pw} - \int_{\theta=\pi}^{\theta=0} \odif{\Pw} - \int_{x=R}^{x=L/2}\odif{\Pw} \notag                                                                                                                                                                     \\
+   & = \dfrac{Q_\mathrm{w}}{K_\mathrm{s}} \int_{x=-L/2}^{x=-R} \dfrac{1}{L}\odif{x} + \dfrac{Q_\mathrm{w}}{K_\mathrm{s}} \int_{\theta=0}^{\theta=\pi} \dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta}  + \dfrac{Q_\mathrm{w}}{K_\mathrm{s}} \int_{x=R}^{x=L/2} \dfrac{1}{L}\odif{x} \notag \\
+   & = \dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\bab{\int_{\theta=0}^{\theta=\pi}\dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta} +　\dfrac{2}{L} \int_{x=-L/2}^{x=R}\odif{x}}\label{Eq:Takashi_pressure_difference}
 \end{align}
-ただし，$b=R/L$である．次に凍結管との熱交換によって変化した地下水流の温度の計算を行う．上流部の水の温度を$T_\infty$，凍結管を流れた水の温度を$T_\mathrm{down}$とすれば，地下水流は凍結管の間を通過する際に$T_\infty$から$T_\mathrm{down}$に変化する．このとき，地下水流の熱量減少量$Q_\mathrm{wh}$は
+\eqref{Eq:Takashi_pressure_difference}の最初の積分部分は，ワイエルシュトラス置換を使えば
+\begin{align*}
+  \int_{\theta=0}^{\theta=\pi}\dfrac{R\sin\theta}{L-2R\sin\theta}\odif{\theta}
+   & = \int_{\theta=0}^{\theta=\pi}\pab{- \dfrac{1}{2} + \dfrac{L/2}{L-2R\sin\theta}}\odif{\theta}                                   \\
+   & = \bab{-\dfrac{1}{2}\theta}_{0}^{\pi} + \int_{t=0}^{t=\infty} \dfrac{L/2}{L-2R\pab{\dfrac{2t}{1+t^2}}} \dfrac{2}{1+t^2}\odif{t} \\
+   & = -\dfrac{\pi}{2} + \int_{t=0}^{t=\infty} \dfrac{L}{L\pab{1+t^2}-4Rt} \odif{t}
+\end{align*}
+凍結が進行している場合，$L>2R$であるので，判別式$D=4R^2-L^2>0$となり，$b=2R/L$とおけば，$t$の広義積分は
+\begin{align*}
+  \int_{t=0}^{t=\infty} \dfrac{L}{L\pab{1+t^2}-4Rt} \odif{t}
+   & =\int_{t=0}^{t=\infty} \dfrac{L}{L t^2-4Rt+L} \odif{t}                                      \\
+   & = \int_{t=0}^{t=\infty} \dfrac{1}{\pab{t-\dfrac{2R}{L}}^2+1-\pab{\dfrac{2R}{L}}^2} \odif{t} \\
+   & = \int_{t=0}^{t=\infty} \dfrac{1}{\pab{t-b}^2+1-b^2} \odif{t}                               \\
+   & = \dfrac{1}{\sqrt{1-b^2}} \bab{\arctan\dfrac{t-b}{\sqrt{1-b^2}}}_{0}^{\infty}               \\
+   & = \dfrac{1}{\sqrt{1-b^2}} \pab{\dfrac{\pi}{2} + \arctan\dfrac{b}{\sqrt{1-b^2}}}             \\
+\end{align*}
+したがって，\eqref{Eq:Takashi_pressure_difference}は
+\begin{align}
+  P_\mathrm{A} - P_\mathrm{B} & =\dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\bab{1-b+\dfrac{1}{\sqrt{1-b^2}}\pab{\dfrac{\pi}{2}+\arctan\dfrac{b}{\sqrt{1-b^2}}}-\dfrac{\pi}{2}} \notag \\
+                              & = \dfrac{Q_\mathrm{w}}{K_\mathrm{s}}\mathcal{F}\pab{b}
+\end{align}
+ここで，関数$\mathcal{F}\pab{b}$は，
+\begin{equation}
+  \mathcal{F}\pab{b}=1-b+\dfrac{1}{\sqrt{1-b^2}}\pab{\dfrac{\pi}{2}+\arctan\dfrac{b}{\sqrt{1-b^2}}}-\dfrac{\pi}{2}
+\end{equation}
+と定義される．
+
+次に凍結管との熱交換によって変化した地下水流の温度の計算を行う．\cref{Fig:freezing_model}bで示すように，上流部の水の温度を$T_\infty$，凍結管を流れた水の温度を$T_\mathrm{down}$とすれば，地下水流は凍結管の間を通過する際に$T_\infty$から$T_\mathrm{down}$に変化する．このとき，地下水流の熱量減少量$Q_\mathrm{wh}$は
 \begin{equation}
   \label{Eq:Takashi_heat_flow}
-  Q_\mathrm{wh}=Q_\mathrm{w}C_\mathrm{p}\pab{T_\infty-T_\mathrm{down}}=\dfrac{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{w,A}-P_\mathrm{w,B}}\pab{T_\infty-T_\mathrm{down}}}{\mathcal{F}\pab{b}}
+  Q_\mathrm{wh}=Q_\mathrm{w}C_\mathrm{p}\pab{T_\infty-T_\mathrm{down}}=\dfrac{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{A}-P_\mathrm{B}}\pab{T_\infty-T_\mathrm{down}}}{\mathcal{F}\pab{b}}
 \end{equation}
 一方凍結管周りには半径$R$の凍結面ができており，その葉面上では温度$T_\mathrm{f}$，凍結管周りが温度$T_\mathrm{pipe}$で保たれて定常状態であるとする．この時，凍結管に伝達される熱量$Q_\mathrm{fh}$は
 \begin{equation}
@@ -270,17 +297,17 @@ $-R<x<R$で$x=R\cos\theta$，$\odif{x}=-R\sin\theta\odif{\theta}$であるとす
 \end{equation}
 凍結管の間を通る地下水流においては，$Q_\mathrm{wh}$と$Q_\mathrm{fh}$は等しいと考えられるので，
 \begin{align}
-  T_\mathrm{down} & =T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{w,A}-P_\mathrm{w,B}}}\dfrac{\mathcal{F}\pab{b}}{\log\dfrac{L}{2a}-\log\dfrac{L}{2R}}\notag \\
-                  & =T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{w,A}-P_\mathrm{w,B}}}\mathcal{F}\pab{\dfrac{2a}{L}, b}
+  T_\mathrm{down} & =T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{A}-P_\mathrm{B}}}\dfrac{\mathcal{F}\pab{b}}{\log\dfrac{L}{2a}-\log\dfrac{L}{2R}}\notag \\
+                  & =T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{A}-P_\mathrm{B}}}\mathcal{F}\pab{\dfrac{2a}{L}, b}
 \end{align}
 ここで，$\mathcal{F}\pab{2a/L,b}$は$2a/L<b<1$で唯一の最大値を持つ．そこで，$T_\mathrm{down}$が最大となる$b$を$b_\mathrm{crit}$とすれば
 \begin{equation}
-  T_\mathrm{down}^{\max}=T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{w,A}-P_\mathrm{w,B}}}\mathcal{F}\pab{\dfrac{2a}{L}, b_\mathrm{crit}}
+  T_\mathrm{down}^{\max}=T_\infty-\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}\pab{P_\mathrm{A}-P_\mathrm{B}}}\mathcal{F}\pab{\dfrac{2a}{L}, b_\mathrm{crit}}
 \end{equation}
 Dam-up headが小さくなれば$T_\mathrm{down}^{\max}$は$T_\mathrm{f}$に近づく．この時のDum-up headを限界Dum-up headと呼び，これを求めることが高志の限界流速式の目的である．
 \begin{equation}
   \label{Eq:Takashi_critical}
-  \pab{P_\mathrm{w,A}-P_\mathrm{w,B}}_\mathrm{crit}=\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}}\mathcal{F}\pab{\dfrac{2a}{L}, b_\mathrm{crit}}
+  \pab{P_\mathrm{A}-P_\mathrm{B}}_\mathrm{crit}=\dfrac{2\pi \lambda_\mathrm{f} \pab{T_\mathrm{f}-T_\mathrm{pipe}}}{K_\mathrm{s}C_\mathrm{p}}\mathcal{F}\pab{\dfrac{2a}{L}, b_\mathrm{crit}}
 \end{equation}
 本研究では特に平面凍結壁の場合を考えるので，その時の限界流速を$V_\mathrm{crit}$とすれば，
 \begin{equation}

@@ -7,17 +7,16 @@
 \begin{equation}
   \label{Eq:GaussPoint_Interp}
   \begin{aligned}
-    T_p              & = \vect{\psi}(\xi_p, \eta_p) \vect{T}^e,            & \nabla T_p              & = \mat{B}(\xi_p, \eta_p)^\top \vect{T}^e            \\
-    P_{\mathrm{w},p} & = \vect{\psi}(\xi_p, \eta_p) \vect{P}_\mathrm{w}^e, & \nabla P_{\mathrm{w},p} & = \mat{B}(\xi_p, \eta_p)^\top \vect{P}_\mathrm{w}^e
+    T_p & = \vect{\psi}\pab{\xi_p, \eta_p} \vect{T}^e,            & \nabla T_p & = \mat{B}\pab{\xi_p, \eta_p}^\top \vect{T}^e   \\
+    P_p & = \vect{\psi}\pab{\xi_p, \eta_p} \vect{P}_\mathrm{w}^e, & \nabla P_p & = \mat{B}\pab{\xi_p, \eta_p}^\top \vect{\Pw}^e
   \end{aligned}
 \end{equation}
-ここで，$\mat{B} = \nabla \vect{\psi}$ は形状関数の空間微分行列である．
-
+ここで，$\mat{B} = \nabla \vect{\psi}$ は形状関数の空間微分行列である。
 これらを用いて，積分点 $p$ における物理係数（スカラー $A$，テンソル $\mat{M}$，ベクトル $\vect{V}$）は，構成則関数 $\mathcal{F}$ を用いて以下のように決定される．
 \begin{equation}
-  A_p = \mathcal{F}_A(T_p, P_{\mathrm{w},p}), \quad
-  \mat{M}_p = \mathcal{F}_M(T_p, P_{\mathrm{w},p}), \quad
-  \vect{V}_p = \mathcal{F}_V(T_p, P_{\mathrm{w},p}, \nabla T_p, \dots)
+  A_p = \mathcal{F}_A\pab{T_p, P_p}, \quad
+  \mat{M}_p = \mathcal{F}_M\pab{T_p, P_p}, \quad
+  \vect{V}_p = \mathcal{F}_V\pab{T_p, P_p, \nabla T_p, \dots}
 \end{equation}
 
 これを踏まえ，各要素行列の数値積分計算式を以下のように記述する．
@@ -26,26 +25,25 @@
 質量行列や熱容量行列などがこれに該当する．積分点ごとの係数値 $A_p$ を用いて計算される．
 \begin{align}
   \mat{K}_1^e
-   & = \iint_{\Omega^e} \vect{\psi}^\top A(T, \Pw) \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                                                 \\
-   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\vect{\psi}(\xi_p)^\top}_{(N_n \times 1)} \underbrace{A_p}_{\text{Scalar}} \underbrace{\vect{\psi}(\xi_p)}_{(1 \times N_n)} \det\mat{J}(\xi_p)
+   & = \iint_{\Omega^e} \vect{\psi}^\top A\pab{T, \Pw} \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                \\
+   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \vect{\psi}\pab{\xi_p}^\top A_p \vect{\psi}\pab{\xi_p} \det\mat{J}\pab{\xi_p}
 \end{align}
 
 \subsubsection{拡散型行列（分布テンソル係数 $\mat{M}$）}
 熱伝導行列や透水行列などがこれに該当する．積分点ごとのテンソル値 $\mat{M}_p$ を用いて計算される．
 \begin{align}
   \mat{K}_2^e
-   & = \iint_{\Omega^e} \mat{B}^\top \mat{M}(T, \Pw) \mat{B} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                                                                   \\
-   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\mat{B}(\xi_p)^\top}_{(N_n \times \text{dim})} \underbrace{\mat{M}_p}_{\text{Tensor}} \underbrace{\mat{B}(\xi_p)}_{(\text{dim} \times N_n)} \det\mat{J}(\xi_p)
+   & = \iint_{\Omega^e} \mat{B}^\top \mat{M}\pab{T, \Pw} \mat{B} \det\mat{J} \odif{\xi}\odif{\eta} \notag                \\
+   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \mat{B}\pab{\xi_p}^\top \mat{M}_p \mat{B}\pab{\xi_p} \det\mat{J}\pab{\xi_p}
 \end{align}
-ここで $\text{dim}$ は空間次元数（2または3）である．
 
 \subsubsection{混合型行列（分布ベクトル係数 $\vect{V}$）}
 移流項などがこれに該当する．積分点ごとのベクトル値 $\vect{V}_p$ を用いて計算される．
 （ここでは $\nabla \psi \cdot \vect{V} \psi$ の型を例示する）
 \begin{align}
   \mat{K}_3^e
-   & = \iint_{\Omega^e} \pab{\mat{B}^\top \vect{V}(T, \Pw)} \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                                                                    \\
-   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \underbrace{\pab{\mat{B}(\xi_p)^\top \vect{V}_p}}_{(N_n \times 1)} \underbrace{\vect{\psi}(\xi_p)}_{(1 \times N_n)} \det\mat{J}(\xi_p)
+   & = \iint_{\Omega^e} \pab{\mat{B}^\top \vect{V}\pab{T, \Pw}} \vect{\psi} \det\mat{J} \odif{\xi}\odif{\eta} \notag                \\
+   & \approx \sum_{p=1}^{N_\mathrm{int}} w_p \pab{\mat{B}\pab{\xi_p}^\top \vect{V}_p} \vect{\psi}\pab{\xi_p} \det\mat{J}\pab{\xi_p}
 \end{align}
 
 \FloatBarrier

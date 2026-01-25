@@ -214,7 +214,7 @@
   {，#3(#1)#4～#5(#2)#6~式}
   {，#3(#1)#4～#5(#2)#6~式}
 
-% 図・表番号
+% 図番号
 \crefformat{figure}{Fig.~#2#1#3}
 \crefrangeformat{figure}{Figs.~#3#1#4--#5#2#6}
 \crefmultiformat{figure}
@@ -228,7 +228,7 @@
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
 
-% --- subfigure 用のフォーマットを追加 ---
+% subfigure番号
 \crefformat{subfigure}{Fig.~#2#1#3}
 \crefrangeformat{subfigure}{Figs.~#3#1#4--#5#2#6}
 \crefmultiformat{subfigure}
@@ -242,6 +242,7 @@
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
 
+% 表番号
 \crefformat{table}{Table~#2#1#3}
 \crefrangeformat{table}{Tables~#3#1#4--#5#2#6}
 \crefmultiformat{table}
@@ -254,7 +255,8 @@
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
-% セクション階層
+
+% part番号
 \crefformat{part}{#2#1#3~部}
 \crefrangeformat{part}{#3#1#4～#5#2#6~部}
 \crefmultiformat{part}
@@ -268,6 +270,7 @@
   {，#3#1#4～#5#2#6~部}
   {，#3#1#4～#5#2#6~部}
 
+% section番号
 \crefformat{section}{#2#1#3~節}
 \crefrangeformat{section}{#3#1#4～#5#2#6~節}
 \crefmultiformat{section}
@@ -281,6 +284,7 @@
   {，#3#1#4～#5#2#6~節}
   {，#3#1#4～#5#2#6~節}
 
+% subsection番号
 \crefformat{subsection}{#2#1#3~小節}
 \crefrangeformat{subsection}{#3#1#4～#5#2#6~小節}
 \crefmultiformat{subsection}
@@ -294,6 +298,7 @@
   {，#3#1#4～#5#2#6~小節}
   {，#3#1#4～#5#2#6~小節}
 
+% subsubsection番号
 \crefformat{subsubsection}{#2#1#3~小小節}
 \crefrangeformat{subsubsection}{#3#1#4～#5#2#6~小小節}
 \crefmultiformat{subsubsection}
@@ -328,40 +333,40 @@
 \renewcommand{\thesubfigure}{\alph{subfigure}}
 
 %============================================================================================================
-% 目次設定
+% TOC Settings
 %============================================================================================================
 \usepackage{tocloft}
 
 % =========================================
-%  1. タイトル（目次・図目次・表目次）の設定
+%  1. Title (TOC, LOF, LOT) Settings
 % =========================================
 \renewcommand{\cfttoctitlefont}{\LARGE\headingfont}
 \renewcommand{\cftloftitlefont}{\LARGE\headingfont}
 \renewcommand{\cftlottitlefont}{\LARGE\headingfont}
 
 % =========================================
-%  2. 図目次 (Figure) の設定
+%  2. Figure List Settings
 % =========================================
-% 先頭に「Fig.」をつける
+% Add "Fig." prefix
 \renewcommand{\cftfigpresnum}{Fig.~}
 
-% 幅の設定（標準フォントのサイズで計算）
+% Set width (calculated with standard font size)
 \settowidth{\cftfignumwidth}{Fig.~00\quad} 
 
-% フォント設定: 全て標準(\normalfont)
+% Font settings: all standard (\normalfont)
 \renewcommand{\cftfigfont}{\normalfont}
 \renewcommand{\cftfigpagefont}{\normalfont}
 
 
 % =========================================
-%  3. 表目次 (Table) の設定
+%  3. Table List Settings
 % =========================================
 \renewcommand{\cfttabpresnum}{Table~}
 
-% 幅の設定
+% Set width (calculated with standard font size)
 \settowidth{\cfttabnumwidth}{Table~00\quad}
 
-% フォント設定: 全て標準(\normalfont)
+% Font settings: all standard (\normalfont)
 \renewcommand{\cfttabfont}{\normalfont}
 \renewcommand{\cfttabpagefont}{\normalfont}
 
@@ -381,8 +386,9 @@
 \renewcommand{\cftsubsecfont}{\normalfont}
 \renewcommand{\cftsubsecpagefont}{\normalfont}
 \addtolength{\cftsubsecnumwidth}{2em}
+
 %============================================================================================================
-% SI単位
+% SI Unit Settings
 %============================================================================================================
 \usepackage{siunitx}
 \sisetup{
@@ -398,13 +404,13 @@
   product-units        = repeat
 }
 %============================================================================================================
-% レイアウト
+% Layout Settings
 %============================================================================================================
 \usepackage{balance}
 \usepackage{indentfirst}
 
 %============================================================================================================
-% 箇条書き
+% 箇条書き設定
 %============================================================================================================
 \usepackage{enumitem}
 \setlist[itemize]{font=\esectionfont\jgothic\bfseries}
@@ -412,26 +418,29 @@
 \setlist[description]{font=\esectionfont\jgothic\bfseries}
 
 \usepackage{../ref/mycolorbox}
-
-% 色定義
+%============================================================================================================
+% Color Definitions
+%============================================================================================================
 \definecolor{soil}{HTML}{996600}
 \definecolor{water}{HTML}{0033CC}
 \definecolor{ice}{HTML}{CCFFFF}
 \definecolor{air}{HTML}{93FFAB}
 \definecolor{vsoil}{HTML}{FFC7AF}
 
-\definecolor{graySoil}{gray}{0.80}  % 20%グレー (少し濃い)
-\definecolor{grayWater}{gray}{0.90} % 10%グレー (薄い)
-\definecolor{grayIce}{gray}{0.97}   % 3%グレー (ほぼ白)
+\definecolor{graySoil}{gray}{0.80}
+\definecolor{grayWater}{gray}{0.90}
+\definecolor{grayIce}{gray}{0.97}
 
-% 付録
+%============================================================================================================
+% Appendix Settings
+%============================================================================================================
 \usepackage{appendix}
 \renewcommand{\appendixname}{付録}
 \renewcommand{\appendixtocname}{付録}
 \renewcommand{\appendixpagename}{付録}
 
 %============================================================================================================
-% コードスニペット設定
+% Code Snippet Settings
 %============================================================================================================
 \usepackage{listings}
 % 参考先
@@ -458,7 +467,7 @@
 }
 
 %============================================================================================================
-% アルゴリズム
+% Algorithm Settings
 %============================================================================================================
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
@@ -467,7 +476,7 @@
 
 
 %============================================================================================================
-% ヘッダー・フッタ設定
+% Header/Footer Settings
 %============================================================================================================
 \usepackage{fancyhdr}
 

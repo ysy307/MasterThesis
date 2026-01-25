@@ -21,7 +21,7 @@
       \item[(a) 温度既定境界 (Dirichlet 境界条件)]
             境界 $\partial V_\mathrm{HD}$ 上において温度が既定される場合，
             \begin{equation}
-              T\pab{\vect{x}, t} = T_\mathrm{D}\pab{\vect{x}}
+              T\,\pab{\vect{x}, t} = T_\mathrm{D}\pab{\vect{x}}
               \qquad \text{for } \vect{x}\in\partial V_\mathrm{HD}
             \end{equation}
 
@@ -39,15 +39,15 @@
             当該境界において水分（液状水・水蒸気）の出入りはないものと仮定すると，境界上のエネルギー収支は以下のように記述される．
             \begin{equation}
               \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n}
-              = \beta\pab{\vect{x}}\,T\pab{\vect{x}, t} + \gamma\pab{\vect{x}}
+              = \beta\pab{\vect{x}}\,T\,\pab{\vect{x}, t} + \gamma\,\pab{\vect{x}}
               \qquad \text{for } \vect{x}\in\partial V_\mathrm{HC}
             \end{equation}
             一方，当該領域において，水分の出入りがある場合には，境界上のエネルギー収支は以下のように記述される．
             \begin{align}
-               & \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n} \notag                                                      \\
-               & = \quad \beta\pab{\vect{x}}\,T\pab{\vect{x}, t} + \gamma\pab{\vect{x}}
-              + c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL}\pab{\vect{x}, t} \cdot \vect{n}\, T\pab{\vect{x}, t} \notag    \\
-               & \qquad + c_\mathrm{v} \rho_\mathrm{w} \vect{j}_\mathrm{WV}\pab{\vect{x}, t} \cdot \vect{n}\, T\pab{\vect{x}, t}
+               & \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n} \notag                                                       \\
+               & = \beta\pab{\vect{x}}\,T\,\pab{\vect{x}, t} + \gamma\,\pab{\vect{x}}
+              + c_\mathrm{w} \rho_\mathrm{w} \vect{j}_\mathrm{WL}\pab{\vect{x}, t} \cdot \vect{n}\, T\,\pab{\vect{x}, t} \notag   \\
+               & \quad + c_\mathrm{v} \rho_\mathrm{w} \vect{j}_\mathrm{WV}\pab{\vect{x}, t} \cdot \vect{n}\, T\,\pab{\vect{x}, t}
               + \rho_\mathrm{w} L_\mathrm{v} \vect{j}_\mathrm{WV}\pab{\vect{x}, t} \cdot \vect{n}
               \qquad \text{for } \vect{x}\in\partial V_\mathrm{HC}
             \end{align}
@@ -57,8 +57,8 @@
             当該境界において水分の出入りはない（不透水境界）と仮定する．このとき，全熱エネルギーフラックスは熱伝達量と釣り合うため，以下のように記述される．
             \begin{equation}
               \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n}
-              = h(\vect{x})
-              \bab{T\pab{\vect{x}, t}-T_\mathrm{env}\pab{\vect{x}, t}}
+              = h\pab{\vect{x}}
+              \bab{T\,\pab{\vect{x}, t}-T_\mathrm{env}\pab{\vect{x}, t}}
               \qquad \text{for } \vect{x}\in\partial V_\mathrm{HH}
             \end{equation}
 
@@ -68,9 +68,9 @@
             \begin{align}
               \vect{j}_\mathrm{E}\pab{\vect{x}, t} \cdot \vect{n}
                & = \varepsilon\sigma F
-              \bab{T\pab{\vect{x}, t}^4 - T_\mathrm{r}\pab{\vect{x}, t}^4} \notag \\
+              \bab{T\,\pab{\vect{x}, t}^4 - T_\mathrm{r}\pab{\vect{x}, t}^4} \notag \\
                & \simeq \alpha_\mathrm{HR}(\vect{x})
-              \bab{T\pab{\vect{x}, t}-T_\mathrm{r}\pab{\vect{x}, t}}
+              \bab{T\,\pab{\vect{x}, t}-T_\mathrm{r}\pab{\vect{x}, t}}
               \qquad \text{for } \vect{x}\in\partial V_\mathrm{HR}
             \end{align}
     \end{description}
