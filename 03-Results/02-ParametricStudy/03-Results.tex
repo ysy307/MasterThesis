@@ -1,12 +1,197 @@
 \subsection{結果}
 \label{Sec:Param_Results}
 
-\subsubsection{双曲線フィッティングによる限界流速の同定}
-それぞれの凍結管間隔・本数に対し，初期流速と凍土が閉塞するまでの時間について双曲線フィッティングを行った．
-凍結管本数が多い条件では，初期流速が閉塞成立の限界（限界流速）に近づくにつれて閉塞時間が急増する傾向が見られたが，双曲線フィッティングはこうした全体的な挙動を概ね良好に捉えることができた．
+\subsubsection{計算された温度場}
+\label{Sec:Param_Results_Temperature}
 
-特に凍結管が2本の場合，フィッティングされた双曲線の漸近値（閉塞時間が無限大となる流速）は，既存の理論式から算出される理論的な限界流速とよく一致した．
-これより，本数値解析結果のフィッティングより得られる漸近値は，理論上の閉塞限界と等価であるとみなせる．
-したがって，以下の考察においては，この数値的な漸近値をその計算ケースにおける「実効的な限界流速」として取り扱う．
+\cref{Fig:12p_1.0m_temperature_distribution} は，12 本配管・配管間隔 \qty{1.0}{\meter} の配置において，初期流速を \qty{0.0}{\meter.\day^{-1}} から \qty{0.3}{\meter.\day^{-1}} まで変化させた場合の温度分布および最終凍結時の断面形状を比較したものである．
+
+まず，最終凍結は必ずしも配管配置の幾何学的中心線（$Y = \qty{15.0}{\meter}$ 断面）で生じるとは限らないことが確認された．この数値的な非対称性は\cref{Sec:Param_Conditions_FreezeEnd}で述べた通り，配管配置および境界条件が対称であっても，計算に用いた有限要素メッシュが完全な対称性を保持していないことに起因する．この結果は，単一断面のみを監視することの潜在的なリスクを示すものであり，複数断面を監視し，最も遅れて発生した凍結を最終閉塞として定義するという，本研究で採用したデータ解析手法の妥当性を裏付けている．なお，この非対称性の影響は極めて小さく，中心線断面とそれ以外の断面における凍結完了時刻の相対差は最大でも \qty{0.5}{\percent} にとどまり，全体的な結論に影響を及ぼすものではない．
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_1.0m_counter_velocity}
+  \caption{12 本配管・配管間隔 \qty{1.0}{\meter} の配置における凍結完了時の温度分布を，地下水流速の違いについて示す．(a) \qty{0.0}{\meter.\day^{-1}}，(b) \qty{0.1}{\meter.\day^{-1}}，(c) \qty{0.2}{\meter.\day^{-1}}，(d) \qty{0.3}{\meter.\day^{-1}}．上段は空間的な温度分布，下段は解析断面（青色破線）に沿った温度プロファイルを示す．黒色破線は凍結等温線（\qty{-0.3}{\degreeCelsius}）を表す．  }
+  \label{Fig:12p_1.0m_temperature_distribution}
+\end{figure}
+
+次に，初期流速の増加に伴い，地下水流による熱輸送が促進され，凍結管下流側により広範な低下した温度のテールが形成されることが確認された（\cref{Fig:12p_1.0m_temperature_distribution}a～d）．その結果，最終凍結が生じる位置は下流側へと移動した．本解析では凍結管が $X = 10$~m に設置されており，最終凍結位置の $X$ 座標は，流速 \qty{0.0}{\meter.\day^{-1}} で \qty{10.0047}{\meter}，\qty{0.1}{\meter.\day^{-1}} で \qty{10.1026}{\meter}，\qty{0.2}{\meter.\day^{-1}} で \qty{10.1452}{\meter}，\qty{0.3}{\meter.\day^{-1}} で \qty{10.3136}{\meter} となった．これは，流速の増加に伴い最大で約 \qty{0.31}{\meter} 下流方向へ移動したことを示している．
+
+\subsubsection{双曲線フィッティングによる限界流速の同定}
+それぞれの凍結管間隔・本数に対し，初期流速と凍土が閉塞するまでの時間について\eqref{Eq:hyperbolic_fitting}を用いて双曲線フィッティングを行った結果を\cref{Fig:fit_results_all}に示す．横軸は初期流速，縦軸は凍結閉塞時間を表している．また，各計算ケースにおけるフィッティングパラメータおよび決定係数 ($R^2$) を\cref{Table:fitting_params}に示す．
+% --- 1ページ目 (2本・4本配管) ---
+\begin{figure}[p]
+  \centering
+  % === 2本配管 ===
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_0.6m_fit.pdf}
+    \caption{2本配管，\qty{0.6}{\meter}}
+    \label{Fig:2p_0.6m_fit}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_0.8m_fit.pdf}
+    \caption{2本配管，\qty{0.8}{\meter}}
+    \label{Fig:2p_0.8m_fit}
+  \end{subfigure}
+
+  \vspace{1em}
+
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_1.0m_fit.pdf}
+    \caption{2本配管，\qty{1.0}{\meter}}
+    \label{Fig:2p_1.0m_fit}
+  \end{subfigure}
+  \hfill
+  % === 4本配管 ===
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_0.6m_fit.pdf}
+    \caption{4本配管，\qty{0.6}{\meter}}
+    \label{Fig:4p_0.6m_fit}
+  \end{subfigure}
+
+  \vspace{1em}
+
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_0.8m_fit.pdf}
+    \caption{4本配管，\qty{0.8}{\meter}}
+    \label{Fig:4p_0.8m_fit}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_1.0m_fit.pdf}
+    \caption{4本配管，\qty{1.0}{\meter}}
+    \label{Fig:4p_1.0m_fit}
+  \end{subfigure}
+
+  \caption{配管本数および配管間隔の違いによる凍結特性のフィッティング結果．}
+  \label{Fig:fit_results_all}
+\end{figure}
+
+% --- 2ページ目 (8本・12本配管) ---
+\begin{figure}[p]
+  \ContinuedFloat
+  \captionsetup{list=no}
+  \centering
+  % === 8本配管 ===
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_0.6m_fit.pdf}
+    \caption{8本配管，\qty{0.6}{\meter}}
+    \label{Fig:8p_0.6m_fit}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_0.8m_fit.pdf}
+    \caption{8本配管，\qty{0.8}{\meter}}
+    \label{Fig:8p_0.8m_fit}
+  \end{subfigure}
+
+  \vspace{1em}
+
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_1.0m_fit.pdf}
+    \caption{8本配管，\qty{1.0}{\meter}}
+    \label{Fig:8p_1.0m_fit}
+  \end{subfigure}
+  \hfill
+  % === 12本配管 ===
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_0.6m_fit.pdf}
+    \caption{12本配管，\qty{0.6}{\meter}}
+    \label{Fig:12p_0.6m_fit}
+  \end{subfigure}
+
+  \vspace{1em}
+
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_0.8m_fit.pdf}
+    \caption{12本配管，\qty{0.8}{\meter}}
+    \label{Fig:12p_0.8m_fit}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_1.0m_fit.pdf}
+    \caption{12本配管，\qty{1.0}{\meter}}
+    \label{Fig:12p_1.0m_fit}
+  \end{subfigure}
+
+  \caption{配管本数および配管間隔の違いによる凍結特性のフィッティング結果．}
+\end{figure}
+
+\begin{table}[htbp]
+  \centering
+  \caption{各計算ケースにおける凍結完了時間のフィッティングパラメータおよび決定係数}
+  \label{Table:fitting_params}
+  \begin{tabular}{ccSSSS} \toprule
+    {配管間隔 $L$}        & {配管本数 $N$} & \multicolumn{3}{c}{フィッティングパラメータ} & {決定係数}                                            \\
+    {[\unit{\meter}]} & {(本)}      & {$a$}                            & {$b$}  & {$V_\mathrm{crit}^\mathrm{n}$} & {$R^2$} \\ \midrule
+    \multirow{4}{*}{0.6}
+                      & 2          & 0.2930                           & 0.7935 & 1.2980                         & 0.9993  \\
+                      & 4          & 0.2915                           & 0.6876 & 1.1210                         & 0.9979  \\
+                      & 8          & -1.9038                          & 2.0854 & 0.9910                         & 0.9690  \\
+                      & 12         & -2.0647                          & 1.7856 & 0.8221                         & 0.9746  \\ \midrule
+    \multirow{4}{*}{0.8}
+                      & 2          & 0.7907                           & 1.0854 & 0.8248                         & 0.9998  \\
+                      & 4          & 0.2934                           & 1.3201 & 0.7552                         & 0.9988  \\
+                      & 8          & 1.4860                           & 0.4167 & 0.5326                         & 0.9999  \\
+                      & 12         & -0.0282                          & 0.8603 & 0.4904                         & 0.9701  \\ \midrule
+    \multirow{4}{*}{1.0}
+                      & 2          & 1.9731                           & 1.1882 & 0.5683                         & 0.9997  \\
+                      & 4          & 1.7800                           & 1.1747 & 0.5167                         & 0.9990  \\
+                      & 8          & 3.0846                           & 0.4439 & 0.3774                         & 0.9998  \\
+                      & 12         & 3.3454                           & 0.3312 & 0.3377                         & 0.9996  \\ \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/combined_fitting_plot.pdf}
+  \caption{Relationship between initial groundwater velocity and the time required to reach \qty{-0.3}{\degreeCelsius}}
+  \label{Fig:combined_fitting_plot}
+\end{figure}
+
+\cref{Fig:fit_results_all,Fig:combined_fitting_plot}および\cref{tab:fitting_params}から明らかなように，全ての解析ケースにおいて，流速の増加に伴い閉塞時間が非線形かつ双曲線的に増大する傾向が確認された．シミュレーション結果とフィッティング曲線の一致度は極めて高く，決定係数 $R^2$ は多くのケースで \num{0.99} 以上を示している．これは，本研究で提案した双曲線モデルが，地下水流という複雑な要因を含む凍結閉塞挙動を，少数のパラメータで効果的に表現できていることを示唆している．
+
+% 特に凍結管が2本の場合，$V_\mathrm{crit}^\mathrm{n}$は，既存の理論式から算出される理論的な限界流速はとよく一致した．
+\cref{Table:Comparison_Critical_Velocities}に示すように，配管間隔ごとに比較すると，数値的に同定された限界流速 $V_\mathrm{crit}^\mathrm{n}$ は理論値 $V_\mathrm{crit}$ と比較して，配管間隔が狭い場合にやや高めに，広い場合にやや低めに評価される傾向が見られた．この差異は，数値モデルが考慮する複雑な熱・流体相互作用効果および凍結完了のスキームが異なるものであり，単純化された理論式では捉えきれない現象を反映していると考えられる．しかしながら，全体として両者の一致度は高く，数値解析から得られた限界流速が理論的枠組みに基づく予測と整合していることを示している．
+\begin{table}[htbp]
+  \caption{凍結管が2本配置された時の理論的限界流速と数値的限界流速の比較}\label{Table:Comparison_Critical_Velocities}
+  \centering
+  \begin{tabular}{ccc}
+    \toprule
+    Pipe distance     & Analytical $V_\mathrm{crit}$   & Numerical $V_\mathrm{crit}^\mathrm{n}$ \\
+    \midrule
+    \qty{0.6}{\meter} & \qty{1.2094}{\meter.\day^{-1}} & \qty{1.2980}{\meter.\day^{-1}}         \\
+    \qty{0.8}{\meter} & \qty{0.9071}{\meter.\day^{-1}} & \qty{0.8248}{\meter.\day^{-1}}         \\
+    \qty{1.0}{\meter} & \qty{0.7257}{\meter.\day^{-1}} & \qty{0.5683}{\meter.\day^{-1}}         \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+この解析結果から，配管配置の幾何学的条件が限界流速に与える影響について，以下の重要な傾向が明らかになった．
+
+第一に，配管間隔 $L$ が限界流速に与える影響である．\cref{Fig:combined_fitting_plot}において，同一の配管本数であっても，間隔が $L=\qty{0.6}{\meter}$（赤線），$\qty{0.8}{\meter}$（緑線），$\qty{1.0}{\meter}$（青線）と増加するにつれて，曲線全体は低流速側へシフトし，その垂直漸近線である限界流速は著しく低下した．この傾向は物理的に妥当である．配管間隔が広い場合，完全な凍結閉塞に至るには各凍結管周りの凍土がより遠くまで成長する必要がある．凍結の進行に伴い，未凍結領域の流路断面積は減少するため，連続の式に従いその領域内の局所流速は増大する．この加速された流れが凍結前線での対流熱伝達を促進し，最終的な閉塞を阻害する要因となる．例えば，8本配管のケースでは，限界流速は $L=\qty{0.6}{\meter}$ での約 \qty{0.99}{\meter.\day^{-1}} から，$L=\qty{1.0}{\meter}$ での約 \qty{0.37}{\meter.\day^{-1}} へと大幅に減少した．
+
+第二に，配管本数 $N$ の影響である．同一の間隔であっても，配管本数が増加すると限界流速は低下する傾向が確認された．一見すると配管本数が多いほど冷却能力が高まると考えられるが，システム全体の安定性は個々の凍結体の成長のみには依存しない．配管本数の増加は，広域的な地下水流に対してより広範な障害物を形成することになる．これにより，凍結管群の上流側で間隙水圧の上昇（dam-up 効果）が生じ，未凍結領域における動水勾配が急勾配化する．ダルシーの法則に従い，この急な勾配が局所的な流速を増大させ，結果としてシステム全体の限界流速を低下させる．すなわち，配管本数の増加は水理学的な観点からは流れを収束させやすく，閉塞に対し不利に働く側面があることが示唆された．
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/derivative_fitted_plot.pdf}
+  \caption{$\odv{\mathcal{F}}/{V}$と流速の関係}\label{Fig:derivative_fitted_plot}
+\end{figure}
+
+さらに，狭い配管間隔（例えば $L=\qty{0.6}{\meter}$）のケースでは，より広い間隔に匹敵するような特異的なプラトーおよびジャンプ現象が観測された（\cref{Fig:derivative_fitted_plot}の赤線および緑線を参照）．低流速域では閉塞時間が低く一定に保たれるプラトー領域が存在する一方，ある閾値を超えると時間が急激に増大するジャンプ領域へと移行する．これは，密な配管配置が初期には流れに対して堅牢であり，水流を効果的に遮断できることを示している．しかし，ひとたび対流熱輸送が支配的になると，わずかな流速の増加でも凍結前線の閉合が妨げられる．単純な双曲線モデルはこの初期の平坦部を完全には再現できていないものの，工学的に最も重要な限界流速については高い精度で予測できているといえる．
 
 \FloatBarrier
