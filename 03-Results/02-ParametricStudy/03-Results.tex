@@ -194,4 +194,45 @@
 
 さらに，狭い配管間隔（例えば $L=\qty{0.6}{\meter}$）のケースでは，より広い間隔に匹敵するような特異的なプラトーおよびジャンプ現象が観測された（\cref{Fig:derivative_fitted_plot}の赤線および緑線を参照）．低流速域では閉塞時間が低く一定に保たれるプラトー領域が存在する一方，ある閾値を超えると時間が急激に増大するジャンプ領域へと移行する．これは，密な配管配置が初期には流れに対して堅牢であり，水流を効果的に遮断できることを示している．しかし，ひとたび対流熱輸送が支配的になると，わずかな流速の増加でも凍結前線の閉合が妨げられる．単純な双曲線モデルはこの初期の平坦部を完全には再現できていないものの，工学的に最も重要な限界流速については高い精度で予測できているといえる．
 
+\subsubsection{代表長さの予測モデルの構築}
+% 代表長さ $l$ の一般化された予測モデルを導出するため，\cref{tab:geometric_parameters} に示す配管配置の幾何学的パラメータを用いて体系的な回帰分析を行った．
+\begin{table}[htbp]
+  \caption{回帰モデル}\label{Table:regression_models}
+  \centering
+  \begin{tabular}{cp{0.15\textwidth}p{0.15\textwidth}p{0.15\textwidth}p{0.25\textwidth}}
+    \toprule
+    Model   & Predictors                                & Scope              & $R^2$                     & Key Findings                                                                                                                                          \\
+    \midrule
+    Model 1 & $l_{\mathrm{total}}$                      & Group-wise, $L$    & \qtyrange{0.948}{0.985}{} & High correlation within groups, but slope varies with the pipe interval. A unified prediction is not possible.                                        \\
+    Model 2 & $l_{\mathrm{total}}\times \pab{2a/L}$     & Group-wise, $L$    & \qtyrange{0.948}{0.985}{} & Confirms that the interaction between the frozen wall length and pipe density, $2a/L$ significantly modulates the slope of the representative length. \\
+    Model 3 & $l_{\mathrm{total}}$, $2a/L$, Interaction & All data (Unified) & \num{0.9771}              & Best performance. It integrates the slope-modulating effect and baseline offsets, providing a robust unified equation.                                \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+初めに，凍土壁の総延長 $l_{\mathrm{total}} = L \cdot (N_{\mathrm{pipe}} - 1)$ と $l$ の単純な線形関係（Model 1）を検討した．このモデルは個々の配管間隔グループ内では高い決定係数 ($R^2$: \qtyrange{0.948}{0.985}{}) を示したが，グループ間で回帰直線の傾きが明確に異なることから，$l_{\mathrm{total}}$ 単独では統一的な定式化に不十分であることが示唆された．そこで，配管密度 $2a/L$ が $l$ の成長率を著しく変化させるという予備的な確認に基づき，配管密度およびその相互作用項を導入した重回帰モデル（Model 3）を構築した．
+
+このフルモデルは，傾きの調整効果とベースラインの補正を統合することで，最も高い予測精度 ($R^2 = 0.9771$) を達成した．導出された回帰式を以下に示す．
+\begin{equation}
+  \label{Eq:predictive_model_l}
+  l = 1.4354 + 0.1043 \cdot l_{\mathrm{total}} - 4.1872 \pab{\frac{2a}{L}} - 0.2049 \cdot l_{\mathrm{total}} \pab{\frac{2a}{L}}
+\end{equation}
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/Regression.pdf}
+  \caption{Multiple regression analysis of the representative length $l$ as a function of the total pipe distance $l_{\mathrm{total}}$ for different pipe spacings $L$. The solid lines represent the regression model (\cref{Eq:predictive_model_l}), and the shaded bands indicate the \qty{95}{\percent} confidence intervals. The regression equation and the coefficient of determination are shown in the upper left.}\label{Fig:DeterminedRegressionModel}
+\end{figure}
+
+ここで，得られた回帰係数は $l$ を支配する物理的メカニズムに関する詳細な知見を与えている．
+
+第一に，$l_{\mathrm{total}}$ の係数は $+0.1043$ であり，正の相関を示した．これは，他の要因が一定であれば，凍土壁の総延長が \qty{1}{\meter} 増加するごとに $l$ が約 \qty{0.1043}{\meter} 増加することを意味する．物理的な規模が大きい凍土壁ほど，熱的な閉塞を達成するためにはより大きな有効間隔を克服する必要があるという直感的な理解と整合する．
+
+第二に，配管密度項の係数は $-4.1872$ であり，配管密度の増加に伴い $l$ が減少することを示している．これは，配管密度が高いほど冷却源が近接し，各凍結管の影響圏が効果的に重複するため，熱抽出効率が向上することを示唆している．この急速な閉塞は，地下水の移流熱が凍結を阻害する時間を短縮するため，システムはより高い流速に耐えることが可能となる．$l$ は限界流速 $V_{\mathrm{crit}}^{\mathrm{n}}$ と逆相関の関係にあるため，この堅牢性の向上はモデル上で $l$ の減少として表現される．
+
+第三に，特筆すべきは相互作用項 ($l_{\mathrm{total}} \times 2a/L$) の係数が $-0.2049$ と負の値を示したことである．これは，2つの幾何学的因子が独立して作用するのではなく，一方の効果が他方のレベルに依存することを意味する．具体的には，配管密度を高めることによる利点は，凍土壁の総延長が長くなるほど顕著になる．短い壁（配管本数が少ない場合）では地下水が端部を回り込みやすいため，密度増加の効果は限定的である．しかし，長い壁では流れが配管間隙を通過せざるを得ないため，高密度化による流路の狭窄効果がシステムの抵抗力を劇的に向上させる．この相乗効果は，大規模な凍結工法の設計において，単に配管密度を上げる以上の堅牢性向上が期待できることを示唆しており，大規模プロジェクトの最適化において重要な知見となる．
+
+\subsubsection{円形配置}
+TBI??悩み中．書いてもいいかなくらい．
+
 \FloatBarrier

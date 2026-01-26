@@ -169,11 +169,11 @@
 \end{longtable}
 
 有限要素法における数値積分では，被積分関数（形状関数の導関数やヤコビアンの積）の次数に応じて適切な積分点数を選択する必要がある．$N_\mathrm{sample}$ 点のGauss-Legendre積分は $2N_\mathrm{sample}-1$ 次以下の多項式を厳密に積分可能である．剛性行列の評価には通常，フル積分（Full Integration）が推奨されるが，計算効率の向上やロッキング現象の回避を目的として，意図的に積分点数を減らす低減積分（Reduced Integration）が用いられる場合もある．
-ここで，要素タイプごとの標準的な積分規則を\cref{Tab:Integration_Rules}に示す．
+ここで，要素タイプごとの標準的な積分規則を\cref{Table:Integration_Rules}に示す．
 \begin{table}[H]
   \centering
   \caption{各要素タイプにおける標準的な数値積分則}
-  \label{Tab:Integration_Rules}
+  \label{Table:Integration_Rules}
   \begin{tabular}{lcccc} \toprule
     \textbf{要素} & \textbf{座標系} & \textbf{積分点数}     & \textbf{積分次数} & \textbf{備考} \\ \midrule
     Tri3        & 面積座標         & 1点                & $O(h)$        & 重心積分        \\
