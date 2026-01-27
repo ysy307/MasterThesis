@@ -3,26 +3,26 @@
 
 \indent
 本節では熱力学的な平衡論に基づいて土壌中の液・気相間の相平衡をマトリックポテンシャルを用いて定式化することを目的とする．
-土壌表面などある基準水面を考えれば，その上部に存在する水は毛管力によって引き上げられ，基準水面よりも高い位置にある水は負圧状態になる．
-ここで，水のポテンシャルを基準水面からの水柱の高さで表したものがマトリックポテンシャル $h$ \unit{[\meter]} である．
-このとき，マトリックポテンシャル $h$ の場所にある液相の水の比自由エネルギー $\Delta f_\mathrm{w}$ \unit{[\joule.\kilogram^{-1}]} は，次のようになる．
+土壌表面などある基準面を考えれば，その上部に存在する水は毛管力によって引き上げられ，基準面よりも高い位置にある水は負圧状態になる．
+ここで，水のポテンシャルを基準面からの水柱の高さで表したものがマトリックポテンシャル $h$ \unit{\meter} である．
+このとき，あるマトリックポテンシャル $h$ をもつ液相の水の比自由エネルギー $\Delta f_\mathrm{w}$ \unit{\joule.\kilogram^{-1}} は，次のようになる．
 \begin{equation}
   \label{Eq:LiquidFreeEnergy}
   \Delta f_\mathrm{w} = h g
 \end{equation}
-ここで，$g$は重力加速度 \unit{[\meter.\second^{-2}]} である．
-一方，同じ高さにおける水蒸気の比自由エネルギー $\Delta f_\mathrm{v}$ \unit{[\joule.\kilogram^{-1}]} は，その場所の蒸気圧$P_\mathrm{v}$と基準水面$h=0$での飽和蒸気圧$P_\mathrm{v}^\mathrm{sat}$との比で決定される．
+ここで，$g$は重力加速度 \unit{\meter.\second^{-2}} である．
+一方，同じ高さにおける水蒸気の比自由エネルギー $\Delta f_\mathrm{v}$ \unit{\joule.\kilogram^{-1}} は，その場所の蒸気圧$P_\mathrm{v}$ \unit{\pascal}と基準面$h=0$での飽和蒸気圧$P_\mathrm{v}^\mathrm{sat}$ \unit{\pascal} との比で決定される．
 \begin{equation}
   \label{Eq:VaporFreeEnergy}
   \Delta f_\mathrm{v} = R_\mathrm{v} T^\ast \ln{\frac{P_\mathrm{v}}{P_\mathrm{v}^\mathrm{sat}}}
 \end{equation}
-ここで，$R_\mathrm{v}$は水蒸気の気体定数 [\qty{461.5}{\joule.\kilogram^{-1}.\kelvin^{-1}}] である．水蒸気の気体定数は，一般気体定数$R=\qty{8.314}{\joule.\mole^{-1}.\kelvin^{-1}}$を水のモル質量$M_\mathrm{w}=\qty{18.015}{\gram.\mole^{-1}}$で割ったものである．すなわち，$R_\mathrm{v} = R / M_\mathrm{w}$である．
-考えている土壌の系が熱力学的平衡状態にあるとき，液相と気相の単位質量あたりのHelmholtz自由エネルギーは等しい．すなわち，$\Delta f_\mathrm{w} = \Delta f_\mathrm{v}$が成り立つ．これを用いれば，\eqref{Eq:LiquidFreeEnergy}と\eqref{Eq:VaporFreeEnergy}より次式（Kelvin方程式）が得られる．
+ここで，$R_\mathrm{v}$は水蒸気の気体定数（\qty{461.5}{\joule.\kilogram^{-1}.\kelvin^{-1}}）である．水蒸気の気体定数は，一般気体定数$R=\qty{8.314}{\joule.\mole^{-1}.\kelvin^{-1}}$を水のモル質量$M_\mathrm{w}=\qty{18.015}{\gram.\mole^{-1}}$で割ったものである．すなわち，$R_\mathrm{v} = R / M_\mathrm{w}$である．
+考えている土壌の系が熱力学的平衡状態にあるとき，液相と気相の単位質量あたりのHelmholtz自由エネルギーは等しい．すなわち，$\Delta f_\mathrm{w} = \Delta f_\mathrm{v}$が成り立つ．これを用いれば，\eqref{Eq:LiquidFreeEnergy}と\eqref{Eq:VaporFreeEnergy}よりKelvin方程式が得られる．
 \begin{equation}
   \label{Eq:LiquidVaporEquilibrium}
   h g =\frac{R T^\ast}{M_\mathrm{w}} \ln{\frac{P_\mathrm{v}}{P_\mathrm{v}^\mathrm{sat}}}
 \end{equation}
-ここで，相対湿度$H_\mathrm{r}$は，空気中の水蒸気分圧と飽和水蒸気圧の比で表されるので，
+ここで，相対湿度$H_\mathrm{r}$ \unit{-}は，空気中の水蒸気分圧と飽和水蒸気圧の比で表すことができる．
 \begin{equation}
   \label{Eq:RelativeHumidity}
   H_\mathrm{r} = \frac{P_\mathrm{v}}{P_\mathrm{v}^\mathrm{sat}}
@@ -37,17 +37,16 @@
   \includegraphics[width=\linewidth,pagebox=cropbox,clip]{2-1/Hr_soil.pdf}
   \caption{相対湿度$H_\mathrm{r}$とマトリックポテンシャルの関係}\label{Fig:Hr_soil}
 \end{figure}
-ここで，水蒸気密度$\rho_\mathrm{v}$は，飽和水蒸気密度$\rho_\mathrm{v}^\mathrm{sat}$と相対湿度$H_\mathrm{r}$の積で表される．
+ここで，水蒸気密度$\rho_\mathrm{v}$は，飽和水蒸気密度$\rho_\mathrm{v}^\mathrm{sat}$ \unit{\kilogram.\meter^{-3}} と相対湿度$H_\mathrm{r}$の積で表される．
 \begin{align}
   \label{Eq:VaporDensity}
   \rho_\mathrm{v} & = \rho_\mathrm{v}^\mathrm{sat} H_\mathrm{r} = \rho_\mathrm{v}^\mathrm{sat} \exp{\pab{\frac{h M_\mathrm{w} g}{R T^\ast}}}
 \end{align}
-また，水蒸気を液水換算したときの体積水蒸気量 $\Qv$ \unit{[-]} は，水蒸気密度 $\rho_\mathrm{v}$ と気相率 $\Qa$ を用いて次のように定義される．
+また，水蒸気を液水換算したときの体積水蒸気量 $\Qv$ \unit{-} は，水蒸気密度 $\rho_\mathrm{v}$ と気相率 $\Qa$ を用いて次のように定義される．
 \begin{equation}
   \label{Eq:VolumetricVaporContent}
   \Qv = \frac{\rho_\mathrm{v} \Qa}{\rho_\mathrm{w}} = \rho_\mathrm{v}^\mathrm{sat} H_\mathrm{r} \frac{\Qa}{\rho_\mathrm{w}}
 \end{equation}
-
 $\rho_\mathrm{v}^\mathrm{sat}$は$T$の関数，$H_\mathrm{r}$は$h$と$T$の関数であり，水分保持関数によって$h$は$\Qw$について一価関数になることを考慮すれば，$\rho_\mathrm{v}$の空間方向の微分は，積の微分法則より次のようになる．
 \begin{align}
   \label{Eq:VaporDensityGradient}
