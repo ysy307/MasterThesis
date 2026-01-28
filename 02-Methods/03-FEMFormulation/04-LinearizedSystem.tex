@@ -53,7 +53,7 @@
 
 \subsubsection{ヤコビアンおよび残差ベクトルの詳細}
 各項の具体的な導出について述べる．
-変数 $X$ の時刻 $t_{n+1}$ における時間微分項は，時間ステップ情報を含んだBDF係数 $\beta_k$ \unit{[\second^{-1}]} を用いて以下のように近似される．
+変数 $X$ の時刻 $t_{n+1}$ における時間微分項は，時間ステップ情報を含んだBDF係数 $\beta_k$ \unit{\second^{-1}} を用いて以下のように近似される．
 \begin{equation}
   \eval{\pdv{X}{t}}{n+1} \approx \beta_0 X_{n+1} + X_\mathrm{hist}, \quad X_\mathrm{hist} = \sum_{k=1}^{k} \beta_k X_{n+1-k}
 \end{equation}

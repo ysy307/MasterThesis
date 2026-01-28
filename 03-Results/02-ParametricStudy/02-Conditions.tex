@@ -21,20 +21,20 @@
   \label{Table:sim_properties}
   \begin{tabular}{llcl@{\hspace{2em}}lcl}
     \toprule
-    \multicolumn{4}{c}{Thermal Properties}                    & \multicolumn{3}{c}{Hydraulic Properties}                                                                                                                              \\
+    \multicolumn{4}{c}{Thermal Properties}                  & \multicolumn{3}{c}{Hydraulic Properties}                                                                                                                                \\
     \cmidrule(r){1-4} \cmidrule(l){5-7}
-    Parameter                                                 & Component                                & Symbol                 & \multicolumn{1}{c}{Value} & Symbol              & Unit                & \multicolumn{1}{c}{Value} \\
+    Parameter                                               & Component                                & Symbol                 & \multicolumn{1}{c}{Value} & Symbol              & Unit                  & \multicolumn{1}{c}{Value} \\
     \midrule
-    Porosity                                                  & --                                       & $\phi$                 & \num{0.3}                 & $\theta_\mathrm{s}$ & [--]                & \num{0.3}                 \\
-    Density                                                   & Soil                                     & $\rho_\mathrm{s}$      & \num{2800}                & $\theta_\mathrm{r}$ & [--]                & \num{0.0}                 \\
-    \multicolumn{1}{r}{[\unit{\kg.\m^{-3}}]}                  & Water                                    & $\rho_\mathrm{w}$      & \num{1000}                & $\alpha_1$          & [\unit{\m^{-1}}]    & \num{0.2}                 \\
-                                                              & Ice                                      & $\rho_\mathrm{ice}$    & \num{917}                 & $n_1$               & [--]                & \num{1.8}                 \\
-    Specific heat                                             & Soil                                     & $c_\mathrm{s}$         & \num{921}                 & $K_\mathrm{s}$      & [\unit{\m.\s^{-1}}] & \num{1.97e-7}             \\
-    \multicolumn{1}{r}{[\unit{\joule.\kg^{-1}.\kelvin^{-1}}]} & Water                                    & $c_\mathrm{w}$         & \num{4180}                &                     &                     &                           \\
-                                                              & Ice                                      & $c_\mathrm{ice}$       & \num{2100}                &                     &                     &                           \\
-    Thermal conductivity                                      & Soil                                     & $\lambda_\mathrm{s}$   & \num{3.78}                &                     &                     &                           \\
-    \multicolumn{1}{r}{[\unit{\watt.\m^{-1}.\kelvin^{-1}}]}   & Water                                    & $\lambda_\mathrm{w}$   & \num{0.6}                 &                     &                     &                           \\
-                                                              & Ice                                      & $\lambda_\mathrm{ice}$ & \num{2.2}                 &                     &                     &                           \\
+    Porosity                                                & --                                       & $\phi$                 & \num{0.3}                 & $\theta_\mathrm{s}$ & \unit{-}              & \num{0.3}                 \\
+    Density                                                 & Soil                                     & $\rho_\mathrm{s}$      & \num{2800}                & $\theta_\mathrm{r}$ & \unit{-}              & \num{0.0}                 \\
+    \multicolumn{1}{r}{\unit{\kg.\m^{-3}}}                  & Water                                    & $\rho_\mathrm{w}$      & \num{1000}                & $\alpha_1$          & \unit{\meter^{-1}}    & \num{0.2}                 \\
+                                                            & Ice                                      & $\rho_\mathrm{ice}$    & \num{917}                 & $n_1$               & \unit{-}              & \num{1.8}                 \\
+    Specific heat                                           & Soil                                     & $c_\mathrm{s}$         & \num{921}                 & $K_\mathrm{s}$      & \unit{\meter.\s^{-1}} & \num{1.97e-7}             \\
+    \multicolumn{1}{r}{\unit{\joule.\kg^{-1}.\kelvin^{-1}}} & Water                                    & $c_\mathrm{w}$         & \num{4180}                &                     &                       &                           \\
+                                                            & Ice                                      & $c_\mathrm{ice}$       & \num{2100}                &                     &                       &                           \\
+    Thermal conductivity                                    & Soil                                     & $\lambda_\mathrm{s}$   & \num{3.78}                &                     &                       &                           \\
+    \multicolumn{1}{r}{\unit{\watt.\m^{-1}.\kelvin^{-1}}}   & Water                                    & $\lambda_\mathrm{w}$   & \num{0.6}                 &                     &                       &                           \\
+                                                            & Ice                                      & $\lambda_\mathrm{ice}$ & \num{2.2}                 &                     &                       &                           \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -120,7 +120,7 @@
   t_\mathrm{freeze}\pab{V\,} = \mathcal{F}\pab{V\,} = a + \dfrac{b}{V - V_\mathrm{crit}^\mathrm{n}}
   \label{Eq:hyperbolic_fitting}
 \end{equation}
-ここで，$v$ は初期流速 [\unit{\meter\per\day}]，$a, b, c$ はフィッティングパラメータである．\cref{Eq:hyperbolic_fitting} において，垂直漸近線は $V = V_\mathrm{crit}^\mathrm{n}$ に位置する．したがって，このパラメータは数値的に導出された限界流速 $V_\mathrm{crit}^\mathrm{n}$ と定義される．
+ここで，$V$ は初期流速 \unit{\meter.\day^{-1}}，$a, b, V_\mathrm{crit}^\mathrm{n}$ はフィッティングパラメータ \unit{\meter.\day^{-1}} である．\cref{Eq:hyperbolic_fitting} において，垂直漸近線は $V = V_\mathrm{crit}^\mathrm{n}$ に位置する．したがって，このパラメータは数値的に導出された限界流速 $V_\mathrm{crit}^\mathrm{n}$ と定義される．
 % 実際，基本的な2本配管のケースにおいて，このパラメータ $c$ の値が数値シミュレーションから直接得られる限界流速と良好に一致することを確認している．
 $V_\mathrm{crit}^\mathrm{n}$ が物理的に意義のある限界流速として解釈できるため，本研究ではこの値を，高志の式の枠組みにおける代表長さを評価するための基礎データとして用いる．なお，パラメータ $a$ および $b$ は，それぞれ曲線のオフセットおよび曲率を表す．
 
