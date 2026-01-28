@@ -120,17 +120,14 @@
 % マージン設定
 %============================================================================================================
 \usepackage[top=30truemm,bottom=30truemm,left=30truemm,right=20truemm]{geometry}
+% 全角文字幅を基準にしたマージン設定
+% 35字×40行
 \setlength{\baselineskip}{22.35pt}
 \ltjsetparameter{jacharrange={-2}}
 \setlength{\zw}{12.95pt}
 
 % 基本パッケージ
 \usepackage{cancel}
-%============================================================================================================
-% 引用文献設定
-%============================================================================================================
-\usepackage[block=par,backend=biber,style=../ref/biblatex/jpa, hyperref=true]{biblatex}
-\addbibresource{references.bib}
 %============================================================================================================
 % URL・ハイパーリンク
 %============================================================================================================
@@ -155,6 +152,79 @@
 	pdfkeywords={}
 }
 %============================================================================================================
+% Bibliography settings
+%============================================================================================================
+\usepackage[
+  block=par,
+  backend=biber,
+  style=../ref/biblatex/jpa, 
+  hyperref=true,        % ハイパーリンクを有効化
+  natbib=true,          % 互換性を高める
+  labeldateparts=true,  % 日付のリンク精度を上げる
+  uniquename=full,
+  uniquelist=true
+]{biblatex}
+\DeclareNameFormat{labelname}{%
+  \ifhyperref
+    {\bibhyperref{%
+       \usebibmacro{labelname:doname}%
+         {\namepartfamily}%
+         {\namepartfamilyi}%
+         {\namepartgiven}%
+         {\namepartgiveni}%
+         {\namepartprefix}%
+         {\namepartprefixi}%
+         {\namepartsuffix}%
+         {\namepartsuffixi}}}
+    {\usebibmacro{labelname:doname}%
+       {\namepartfamily}%
+       {\namepartfamilyi}%
+       {\namepartgiven}%
+       {\namepartgiveni}%
+       {\namepartprefix}%
+       {\namepartprefixi}%
+       {\namepartsuffix}%
+       {\namepartsuffixi}}%
+}
+\renewbibmacro*{cite:plabelyear+extradate}{%
+  \ifhyperref
+    {\bibhyperref{%
+       \usebibmacro{cite:plabelyear+extradate:inner}}}
+    {\usebibmacro{cite:plabelyear+extradate:inner}}%
+}
+
+% 元の処理を内部マクロとして定義（jpa.cbxの内容をラップ）
+\newbibmacro*{cite:plabelyear+extradate:inner}{%
+  \iffieldundef{year}{%
+    \iffieldundef{pubstate}{\printlabeldateextra}%
+    {\printfield{pubstate}}%
+  }{%
+    \ifthenelse{\boolean{japanese}}{%
+      \iffieldundef{origyear}{}{%
+        \printorigdate%
+        \addspace}%
+      \iffieldequalstr{relatedtype}{translationof}{%
+        \entrydata*{\thefield{related}}{\printdateextra}%
+        \addspace}{}%
+      \ifnameundef{translator}{}{%
+        \printnames{translator}%
+        \iffieldundef{translatortype}{\printtext{訳}\space}%
+        {\printfield{translatortype}\space}%
+      }%
+      \printlabeldateextra%
+    }{%
+      \iffieldundef{origyear}{}{\printorigdate\setunit*{\addslash}}%
+      \iffieldequalstr{relatedtype}{translationof}{%
+        \entrydata*{\thefield{related}}{\printlabeldateextra}%
+        \setunit*{\addslash}%
+      }{} %
+      \printlabeldateextra%
+    }%
+  }%
+}
+\addbibresource{references.bib}
+
+%============================================================================================================
 % 画像設定
 %============================================================================================================
 \usepackage{graphicx}
@@ -165,13 +235,13 @@
 
 \graphicspath{{/workspace/Images/Master/}}
 %============================================================================================================
-% TikZ設定
+% TikZ settings
 %============================================================================================================
 \usepackage{tikz}
 \usepackage{tikz-3dplot}
 \usetikzlibrary{intersections,calc,arrows.meta,patterns,patterns.meta, decorations.markings}
 %============================================================================================================
-% 表設定
+% Table settings
 %============================================================================================================
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -181,7 +251,7 @@
 
 
 %============================================================================================================
-% 数学関係設定
+% Math settings
 %============================================================================================================
 \usepackage{amsthm}
 \usepackage{mathtools}
@@ -194,123 +264,123 @@
 \numberwithin{equation}{section}
 \usepackage{../ref/mymathdef}
 
-% 化学式
+% Chemical formulas
 \usepackage[version=3]{mhchem}
 %============================================================================================================
-% キャプション設定
+% Caption settings
 %============================================================================================================
 \usepackage{cleveref}
 % 数式番号
-\crefformat{equation}{#2(#1)#3~式}
-\crefrangeformat{equation}{#3(#1)#4～#5(#2)#6~式}
+\crefformat{equation}{#2(#1) 式#3}
+\crefrangeformat{equation}{#3(#1)#4～#5(#2)#6 式}
 \crefmultiformat{equation}
-  {#2(#1)#3~式}
-  {，#2(#1)#3~式}
-  {，#2(#1)#3~式}
-  {，#2(#1)#3~式}
+  {#2(#1) 式#3}
+  {，#2(#1) 式#3}
+  {，#2(#1) 式#3}
+  {，#2(#1) 式#3}
 \crefrangemultiformat{equation}
-  {#3(#1)#4～#5(#2)#6~式}
-  {，#3(#1)#4～#5(#2)#6~式}
-  {，#3(#1)#4～#5(#2)#6~式}
-  {，#3(#1)#4～#5(#2)#6~式}
+  {#3(#1)#4～#5(#2)#6 式}
+  {，#3(#1)#4～#5(#2)#6 式}
+  {，#3(#1)#4～#5(#2)#6 式}
+  {，#3(#1)#4～#5(#2)#6 式}
 
 % 図番号
-\crefformat{figure}{Fig.~#2#1#3}
-\crefrangeformat{figure}{Figs.~#3#1#4--#5#2#6}
+\crefformat{figure}{#2Fig.~#1#3}
+\crefrangeformat{figure}{#3Figs.~#1#4--#5#2#6}
 \crefmultiformat{figure}
-  {Figs.~#2#1#3}
+  {#2Figs.~#1#3}
   {, #2#1#3}
   {, #2#1#3}
   {, #2#1#3}
 \crefrangemultiformat{figure}
-  {Figs.~#3#1#4--#5#2#6}
+  {#3Figs.~#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
 
 % subfigure番号
-\crefformat{subfigure}{Fig.~#2#1#3}
-\crefrangeformat{subfigure}{Figs.~#3#1#4--#5#2#6}
+\crefformat{subfigure}{#2Fig.~#1#3}
+\crefrangeformat{subfigure}{#3Figs.~#1#4--#5#2#6}
 \crefmultiformat{subfigure}
-  {Figs.~#2#1#3}
+  {#2Figs.~#1#3}
   {, #2#1#3}
   {, #2#1#3}
   {, #2#1#3}
 \crefrangemultiformat{subfigure}
-  {Figs.~#3#1#4--#5#2#6}
+  {#3Figs.~#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
 
 % 表番号
-\crefformat{table}{Table~#2#1#3}
-\crefrangeformat{table}{Tables~#3#1#4--#5#2#6}
+\crefformat{table}{#2Table~#1#3}
+\crefrangeformat{table}{#3Tables~#1#4--#5#2#6}
 \crefmultiformat{table}
-  {Tables~#2#1#3}
+  {#2Tables~#1#3}
   {, #2#1#3}
   {, #2#1#3}
   {, #2#1#3}
 \crefrangemultiformat{table}
-  {Tables~#3#1#4--#5#2#6}
+  {#3Tables~#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
   {, #3#1#4--#5#2#6}
 
 % part番号
-\crefformat{part}{#2#1#3~部}
-\crefrangeformat{part}{#3#1#4～#5#2#6~部}
+\crefformat{part}{#2第#1部#3}
+\crefrangeformat{part}{#3第#1部#4～#5第#2部#6}
 \crefmultiformat{part}
-  {#2#1#3~部}
-  {，#2#1#3~部}
-  {，#2#1#3~部}
-  {，#2#1#3~部}
+  {#2第#1部#3}
+  {，#2第#1部#3}
+  {，#2第#1部#3}
+  {，#2第#1部#3}
 \crefrangemultiformat{part}
-  {#3#1#4～#5#2#6~部}
-  {，#3#1#4～#5#2#6~部}
-  {，#3#1#4～#5#2#6~部}
-  {，#3#1#4～#5#2#6~部}
+  {#3第#1部#4～#5第#2部#6}
+  {，#3第#1部#4～#5第#2部#6}
+  {，#3第#1部#4～#5第#2部#6}
+  {，#3第#1部#4～#5第#2部#6}
 
 % section番号
-\crefformat{section}{#2#1#3~節}
-\crefrangeformat{section}{#3#1#4～#5#2#6~節}
+\crefformat{section}{#2#1 節#3}
+\crefrangeformat{section}{#3#1 節#4～#5#2 節#6}
 \crefmultiformat{section}
-  {#2#1#3~節}
-  {，#2#1#3~節}
-  {，#2#1#3~節}
-  {，#2#1#3~節}
+  {#2#1 節#3}
+  {，#2#1 節#3}
+  {，#2#1 節#3}
+  {，#2#1 節#3}
 \crefrangemultiformat{section}
-  {#3#1#4～#5#2#6~節}
-  {，#3#1#4～#5#2#6~節}
-  {，#3#1#4～#5#2#6~節}
-  {，#3#1#4～#5#2#6~節}
+  {#3#1 節#4～#5#2 節#6}
+  {，#3#1 節#4～#5#2 節#6}
+  {，#3#1 節#4～#5#2 節#6}
+  {，#3#1 節#4～#5#2 節#6}
 
 % subsection番号
-\crefformat{subsection}{#2#1#3~小節}
-\crefrangeformat{subsection}{#3#1#4～#5#2#6~小節}
+\crefformat{subsection}{#2#1 小節#3}
+\crefrangeformat{subsection}{#3#1 小節#4～#5#2 小節#6}
 \crefmultiformat{subsection}
-  {#2#1#3~小節}
-  {，#2#1#3~小節}
-  {，#2#1#3~小節}
-  {，#2#1#3~小節}
+  {#2#1 小節#3}
+  {，#2#1 小節#3}
+  {，#2#1 小節#3}
+  {，#2#1 小節#3}
 \crefrangemultiformat{subsection}
-  {#3#1#4～#5#2#6~小節}
-  {，#3#1#4～#5#2#6~小節}
-  {，#3#1#4～#5#2#6~小節}
-  {，#3#1#4～#5#2#6~小節}
+  {#3#1 小節#4～#5#2 小節#6}
+  {，#3#1 小節#4～#5#2 小節#6}
+  {，#3#1 小節#4～#5#2 小節#6}
+  {，#3#1 小節#4～#5#2 小節#6}
 
 % subsubsection番号
-\crefformat{subsubsection}{#2#1#3~小小節}
-\crefrangeformat{subsubsection}{#3#1#4～#5#2#6~小小節}
+\crefformat{subsubsection}{#2#1 小小節#3}
+\crefrangeformat{subsubsection}{#3#1 小小節#4～#5#2 小小節#6}
 \crefmultiformat{subsubsection}
-  {#2#1#3~小小節}
-  {，#2#1#3~小小節}
-  {，#2#1#3~小小節}
-  {，#2#1#3~小小節}
+  {#2#1 小小節#3}
+  {，#2#1 小小節#3}
+  {，#2#1 小小節#3}
+  {，#2#1 小小節#3}
 \crefrangemultiformat{subsubsection}
-  {#3#1#4～#5#2#6~小小節}
-  {，#3#1#4～#5#2#6~小小節}
-  {，#3#1#4～#5#2#6~小小節}
-  {，#3#1#4～#5#2#6~小小節}
+  {#3#1 小小節#4～#5#2 小小節#6}
+  {，#3#1 小小節#4～#5#2 小小節#6}
+  {，#3#1 小小節#4～#5#2 小小節#6}
+  {，#3#1 小小節#4～#5#2 小小節#6}
 
 \let\eqref\cref
 
@@ -322,9 +392,16 @@
 	labelsep=quad,
   font=normalsize
 }
-\captionsetup[figure]{name=Fig.}
+\captionsetup[figure]{name=Fig.,skip=2pt}
 \captionsetup[table]{name=Table}
 \captionsetup[lstlisting]{name=Code}
+
+% --- 図表の間隔設定 ---
+\setlength{\textfloatsep}{6pt plus 2pt minus 2pt} % ページ上下にある図と本文の間
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}    % [h]などで文中に置いた図の前後
+\setlength{\floatsep}{6pt plus 2pt minus 2pt}     % 図と図の間
+\setlength{\abovecaptionskip}{3pt}                % 図とキャプションの間
+\setlength{\belowcaptionskip}{2pt}                % キャプションの下（本文との間）
 
 \captionsetup[subfigure]{
   font=normalsize,
@@ -505,7 +582,6 @@
   \hrule width \columnwidth height 0.4pt
   \kern 2.6pt 
 }
-
 %============================================================================================================
 \begin{document}
 %============================================================================================================

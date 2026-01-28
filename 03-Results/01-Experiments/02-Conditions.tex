@@ -213,19 +213,18 @@
 この解析解と数値的に得られた初期圧力分布を\cref{Fig:initial_pressure_experiment}に示した．
 \begin{figure}[tbp]
   \centering
-  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-1/initial_experiment_comparison.pdf}
+  \includegraphics[width=.95\linewidth,pagebox=cropbox,clip]{3-1/initial_experiment_comparison.pdf}
   \caption{圧力水頭の空間分布．(a) 数値解，(b) 解析解，(c) 数値解と解析解の残差．}
   \label{Fig:initial_pressure_experiment}
 \end{figure}
-
 数値解と解析解を比較することにより，初期圧力分布に対する数値モデルの妥当性を検証した．
-その結果，凍結管周りの残差が少し大きいが，残差の最大ノルム および二乗平均平方根誤差はそれぞれ\num{2.012e-04}，\num{2.917e-05} となり，両者は良好に一致していることが確認され，初期圧力分布の設定が妥当であることが示された．
+その結果，完全流体におけるポテンシャル流れを用いているため，凍結管周りの粘性境界条件の影響で残差が少し大きいが，残差の最大ノルム および二乗平均平方根誤差はそれぞれ\num{2.012e-04}，\num{2.917e-05} となり，両者は良好に一致していることが確認され，初期圧力分布の設定が妥当であることが示された．
 
 \subsubsection{使用した物性値}
 \label{Sec:exp_material_properties}
 
-本検証解析においては，実験に用いた鳥取砂丘砂の物理的性質を忠実に再現するため，予備実験によって決定した物性値を\cref{Table:exp_properties}に示した．
-\begin{table}[t]
+本検証解析においては，実験に用いた鳥取砂丘砂の物理的性質を忠実に再現するため，予備実験によって決定した物性値を\cref{Table:exp_properties}に示した．また，これらの物性値に基づく水分保持関数を\cref{Fig:tottori_dune_sand_wrf}に示した．
+\begin{table}[btp]
   \centering
   \caption{予備実験により同定された熱物性値および水理定数}
   \label{Table:exp_properties}
@@ -233,9 +232,9 @@
     \toprule
     \multicolumn{4}{c}{Thermal Properties}                  & \multicolumn{3}{c}{Hydraulic Properties}                                                                                                                            \\
     \cmidrule(r){1-4} \cmidrule(l){5-7}
-    Parameter                                               & Component                                & Symbol                 & \multicolumn{1}{c}{Value} & Symbol              & Unit              & \multicolumn{1}{c}{Value} \\
+    Parameter                                               &                                          &                        & \multicolumn{1}{l}{Value} &                     &                   & \multicolumn{1}{l}{Value} \\
     \midrule
-    Porosity                                                & --                                       & $\phi$                 & \num{0.4}                 & $\theta_\mathrm{s}$ & \unit{-}          & \num{0.39971}             \\
+    Porosity                                                &                                          & $\phi$                 & \num{0.4}                 & $\theta_\mathrm{s}$ & \unit{-}          & \num{0.39971}             \\
     Density                                                 & Soil                                     & $\rho_\mathrm{s}$      & \num{2684}                & $\theta_\mathrm{r}$ & \unit{-}          & \num{0.00671}             \\
     \multicolumn{1}{r}{\unit{\kg.\m^{-3}}}                  & Water                                    & $\rho_\mathrm{w}$      & \num{1000}                & $\alpha_1$          & \unit{\m^{-1}}    & \num{4.034}               \\
                                                             & Ice                                      & $\rho_\mathrm{ice}$    & \num{917}                 & $\alpha_2$          & \unit{\m^{-1}}    & \num{0.04034}             \\
@@ -252,12 +251,11 @@
   \centering
   \includegraphics[width=.85\linewidth, pagebox=cropbox, clip]{3-1/wrf_durner_tds.pdf}
   \caption{同定されたパラメータに基づく鳥取砂丘砂の水分保持関数}
-  \label{Fig:swrc}
+  \label{Fig:tottori_dune_sand_wrf}
 \end{figure}
 
 \subsubsection{逆解析による境界条件の同定}
 \label{Sec:inv_analysis}
-
 実験では管表面温度等が計測されているが，接触熱抵抗や流入条件の不確実性を考慮し，逆解析により有効な境界温度を同定した．
 逆解析にはPEST \parencite{John-2004}を用い，下端からの流入水温度および凍結管表面温度を推定パラメータとした．
 比較対象となる温度観測点は，流速の不均一性の影響を低減するため領域中央の鉛直線上（高さ\qty{0.15}{\meter}から\qty{0.45}{\meter}の7点）に選定した．
