@@ -37,12 +37,12 @@
   \includegraphics[width=\linewidth,pagebox=cropbox,clip]{2-1/Hr_soil.pdf}
   \caption{相対湿度$H_\mathrm{r}$とマトリックポテンシャルの関係}\label{Fig:Hr_soil}
 \end{figure}
-ここで，水蒸気密度$\rho_\mathrm{v}$は，飽和水蒸気密度$\rho_\mathrm{v}^\mathrm{sat}$ \unit{\kilogram.\meter^{-3}} と相対湿度$H_\mathrm{r}$の積で表される．
+また，水蒸気密度$\rho_\mathrm{v}$は，飽和水蒸気密度$\rho_\mathrm{v}^\mathrm{sat}$ \unit{\kilogram.\meter^{-3}} と相対湿度$H_\mathrm{r}$の積で表される．
 \begin{align}
   \label{Eq:VaporDensity}
   \rho_\mathrm{v} & = \rho_\mathrm{v}^\mathrm{sat} H_\mathrm{r} = \rho_\mathrm{v}^\mathrm{sat} \exp{\pab{\frac{h M_\mathrm{w} g}{R T^\ast}}}
 \end{align}
-また，水蒸気を液水換算したときの体積水蒸気量 $\Qv$ \unit{-} は，水蒸気密度 $\rho_\mathrm{v}$ と気相率 $\Qa$ を用いて次のように定義される．
+さらに，水蒸気を液水換算したときの体積水蒸気量 $\Qv$ \unit{-} は，水蒸気密度 $\rho_\mathrm{v}$ と気相率 $\Qa$ を用いて次のように定義される．
 \begin{equation}
   \label{Eq:VolumetricVaporContent}
   \Qv = \frac{\rho_\mathrm{v} \Qa}{\rho_\mathrm{w}} = \rho_\mathrm{v}^\mathrm{sat} H_\mathrm{r} \frac{\Qa}{\rho_\mathrm{w}}
@@ -55,19 +55,22 @@ $\rho_\mathrm{v}^\mathrm{sat}$は$T$の関数，$H_\mathrm{r}$は$h$と$T$の関
 \end{align}
 \eqref{Eq:VaporDensityGradient}は $\nabla \rho_\mathrm{v}$ を $\nabla T$ と $\nabla \Qw$ で厳密に表現している．
 ここで，この式をより実用的な形に単純化するため，相対湿度 $H_\mathrm{r}$ が $h$ と $T$ に対してどのように応答するか，その特性を次に考察する．
+
 \eqref{Eq:RelativeHumidityFinal}より明らかなように，$H_\mathrm{r}$は $h$ の指数関数となっている．
 $h$ は不飽和帯において負の値をとるため，土壌が乾燥するにしたがって $h$ は負の方向により大きな値をとる．
-ここで例えば温度を$\qty{298.15}{\kelvin}=\qty{25.0}{\degreeCelsius}$と固定すれば，\eqref{Eq:RelativeHumidityFinal}の指数部の$h$以外$\pab{M_\mathrm{w} g / \pab{R T^\ast}}$を定数として計算でき，その定数部はおよそ $\qty{7.13e-5}{\meter^{-1}}$ となる．
-$h>\qty{-1e3}{\meter}$であれば，指数部の絶対値が比較的小さいため，$H_\mathrm{r}$は$1$に非常に近い値をとる．
-しかし，$h$ が $\qty{-1e3}{\meter}$ より小さくなる（負の方向に大きくなる）と，指数部の$h$の影響が大きくなり，$H_\mathrm{r}$は減少し始める．$h<-\qty{e6}{\meter}$ になると$h$が支配的になり，$H_\mathrm{r}$は$0$に漸近する．この傾向は \cref{Fig:Hr_soil} と一致する．
-一方，絶対温度 $T^\ast$は\eqref{Eq:RelativeHumidityFinal}の指数の分母にある．$h$ は負であるため，温度 $T^\ast$ が上昇すると，$H_\mathrm{r}$は大きくなる．
+ここで例えば温度を$\qty{298.15}{\kelvin}=\qty{25.0}{\degreeCelsius}$と固定すれば，\eqref{Eq:RelativeHumidityFinal}の指数部の$h$以外の部分$\pab{M_\mathrm{w} g / \pab{R T^\ast}}$を定数として計算でき，その定数部はおよそ $\qty{7.13e-5}{\meter^{-1}}$ となる．
+ここで，$h>\qty{-1.0e3}{\meter}$であれば，指数部の絶対値が比較的小さいため，$H_\mathrm{r}$は$1$に非常に近い値をとる．
+しかし，$h$ が $\qty{-1.0e3}{\meter}$ より小さくなる（負の方向に大きくなる）と，指数部の$h$の影響が大きくなり，$H_\mathrm{r}$は減少し始める．$h<-\qty{1.0e6}{\meter}$ になると$h$が支配的になり，$H_\mathrm{r}$は$0$に漸近する．この傾向は \cref{Fig:Hr_soil} と一致する．
+
+一方，絶対温度 $T^\ast$は\eqref{Eq:RelativeHumidityFinal}の指数の分母にある．$h$ は負であるため，$T^\ast$ が上昇すると$H_\mathrm{r}$は大きくなる．
 しかし，$T^\ast$の変動幅が $h$ の変動幅に比べて小さいため，\cref{Fig:Hr_soil_contour}に示す通り，$H_\mathrm{r}$の$T^\ast$に対する感度は $h$ に対する感度と比べて小さい．
 よって，$H_\mathrm{r}$ の値は，主にマトリックポテンシャル $h$および，それと水分保持関数を介して関連する液状水量 $\Qw$によって支配的に決定されると言える．
 $H_\mathrm{r}$ の特性についての考察から，$H_\mathrm{r}$ の温度 $T^\ast$ に対する依存性は，マトリックポテンシャル $h$ に対する依存性と比較して小さいことが示された．
+
 この知見に基づき，\eqref{Eq:VaporDensityGradient}を単純化するため，$H_\mathrm{r}$ の温度依存性は無視できると仮定する．
-土壌が極めて乾燥している状態（例えば $h < \qty{-2e3}{\meter}$）や塩分濃度が高い状態を除けば，$H_\mathrm{r} \approx 1$ の近似を用いることができる．
+土壌が極めて乾燥している状態（例えば $h < \qty{-2.0e3}{\meter}$）や塩分濃度が高い状態を除けば，$H_\mathrm{r} \approx 1$ の近似を用いることができる．
 前者の条件下では温度依存性を無視しうるため，\cref{Fig:Hr_soil_validation} に示すように，温度 $\qty{15}{\degreeCelsius}$ における $H_\mathrm{r}$ と $h$ の関係を代表例として用いることができる．
-このとき，基準マトリックポテンシャルを $\psi_\mathrm{m,ref} = \qty{-2e3}{\meter}$ のように適切に設定すれば，$h > \psi_\mathrm{m,ref}$ の範囲において $H_\mathrm{r} \approx 1$ と近似できることが確認される．
+このとき，基準マトリックポテンシャルを $\psi_\mathrm{m,ref} = \qty{-2.0e3}{\meter}$ のように適切に設定すれば，$h > \psi_\mathrm{m,ref}$ の範囲において $H_\mathrm{r} \approx 1$ と近似できることが確認される．
 この近似の成立には数パーセント程度の誤差を許容する必要があるが，例えば $H_\mathrm{r} = 0.99$ に相当する $h$ はおおよそ $\qty{-1383}{\meter}$ であり，実用上は十分な精度を保つ．
 
 \begin{figure}[tbp]

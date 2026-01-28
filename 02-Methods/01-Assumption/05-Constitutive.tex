@@ -5,12 +5,12 @@
 \subsubsection{熱物性値の定義}
 \label{Sec:ThermalProperties}
 
-土壌全体の体積熱容量 $C_\mathrm{p}$ \unit{[\joule.\meter^{-3}.\kelvin^{-1}]} は，各相体積熱容量の体積率による加重平均として次のように定義される\parencite{Jury-2004}．
+土壌全体の体積熱容量 $C_\mathrm{p}$ \unit{\joule.\meter^{-3}.\kelvin^{-1}} は，各相体積熱容量の体積率による加重平均として次のように定義される\parencite{Jury-2004}．
 \begin{equation}
   \label{Eq:Volumetric_Heat_Capacity_Total}
   C_\mathrm{p} \coloneq C_\mathrm{s}\pab{1-\phiv} + C_\mathrm{w}\Qw + C_\mathrm{ice}\Qice + C_\mathrm{v}\Qv + C_\mathrm{o}\Qo
 \end{equation}
-ここで，土粒子，間隙水，間隙氷，間隙空気，有機物の各相の体積熱容量 $C_\mathrm{s}$， $C_\mathrm{w}$， $C_\mathrm{ice}$， $C_\mathrm{v}$， $C_\mathrm{o}$ \unit{[\joule.\meter^{-3}.\kelvin^{-1}]} を，それぞれの比熱と密度の積として次のように定義する．
+ここで，土粒子，間隙水，間隙氷，間隙空気，有機物の各相の体積熱容量 $C_\mathrm{s}$， $C_\mathrm{w}$， $C_\mathrm{ice}$， $C_\mathrm{v}$， $C_\mathrm{o}$ \unit{\joule.\meter^{-3}.\kelvin^{-1}} を，それぞれの比熱 (\eqref{Eq:Density_TP})と密度 (\eqref{Eq:Specific_Heat_TP})の積として次のように定義する．
 \begin{subequations}
   \label{Eq:Volumetric_Heat_Capacity}
   \begin{align}
@@ -21,15 +21,15 @@
     C_\mathrm{o}   & \coloneq \rho_\mathrm{o} c_\mathrm{o}
   \end{align}
 \end{subequations}
-ここで，$c_\alpha$ は比熱 \unit{[\joule.\kilogram^{-1}.\kelvin^{-1}]}，$\rho_\alpha$ は密度 \unit{[\kilogram.\meter^{-3}]} を表す．
+特に下付き$o$については，有機物相を示す．
 
-さらに，土壌熱伝導率 $\lambda$ \unit{[\watt.\meter{-1}.\kelvin^{-1}]} は，特に土壌飽和条件下では各相の熱伝導率の幾何平均としてあらわすことができる\parencite{Cote-2005}．
+さらに，土壌熱伝導率 $\lambda$ \unit{\watt.\meter^{-1}.\kelvin^{-1}} は，特に土壌飽和条件下では各相の熱伝導率の幾何平均としてあらわすことができる\parencite{Cote-2005}．
 \begin{equation}
   \label{Eq:Thermal_Conductivity_Saturated}
   \lambda_0 \coloneq \lambda_\mathrm{s}^{1-\phiv} \lambda_\mathrm{w}^{\Qw} \lambda_\mathrm{ice}^{\Qice}
 \end{equation}
-ここで，$\lambda_\mathrm{s}$，$\lambda_\mathrm{w}$，$\lambda_\mathrm{ice}$ はそれぞれ土粒子，間隙水，間隙氷の熱伝導率\unit{[\watt.\meter^{-1}.\kelvin^{-1}]}を表す．
-一方，不飽和土壌における熱伝導率は，非線形性が強く，様々な経験式が提案されている．本研究では，\textcite{Campbell-1985}を凍土に拡張した\textcite{Hansson-2004}の式を採用する．
+ここで，$\lambda_\mathrm{s}$，$\lambda_\mathrm{w}$，$\lambda_\mathrm{ice}$ はそれぞれ土粒子，間隙水，間隙氷の熱伝導率\unit{\watt.\meter^{-1}.\kelvin^{-1}}を表す．
+一方，不飽和土壌における熱伝導率は，非線形性が強く，様々な経験式が提案されている．本研究では，\textcite{Campbell-1985}が提案した式を凍土に拡張した\textcite{Hansson-2004}の式を採用する．
 \begin{equation}
   \label{Eq:Thermal_Conductivity_Unsaturated}
   \lambda_0 = C_1 + C_2 \pab{\Qw + F \Qice} - \pab{C_1 - C_4}\exp\Bab{-\bab{C_3 \pab{\Qw + F \Qice}}^{C_5}}
@@ -40,16 +40,15 @@
   F = 1 + F_1 \Qice^{F_2}
 \end{equation}
 ここで，$F_1$，$F_2$ は経験的パラメータであり，それぞれ$F_1=13.05$，$F_2=1.06$とすることがある\parencite{Watanabe-2007}．
-熱伝導率の等方性を仮定しない場合，\eqref{Eq:Thermal_Conductivity_Saturated}または\eqref{Eq:Thermal_Conductivity_Unsaturated}を用いて見かけの熱伝導率テンソル$\lambda_{ij}$は次式で与えられる．
+さらに，熱伝導率の異方性を考慮すれば，\eqref{Eq:Thermal_Conductivity_Saturated}または\eqref{Eq:Thermal_Conductivity_Unsaturated}を用いて見かけの熱伝導率テンソル$\lambda_{ij}$ \unit{\watt.\meter^{-1}.\kelvin^{-1}} は次式で与えられる．
 \begin{equation}
   \label{eq:apparent_thermal_conductivity}
   \lambda_{ij}\pab{\Qw, \Qice} = \lambda_\mathrm{T} C_\mathrm{w} \norm{\vect{q}}_2 \delta_{ij} + \pab{\lambda_\mathrm{L}-\lambda_\mathrm{T}} C_\mathrm{w}\frac{q_j q_i}{\norm{\vect{q}}_2}+\lambda_0\pab{\Qw, \Qice}\delta_{ij}
 \end{equation}
-ここで，$\lambda_\mathrm{L}$，$\lambda_\mathrm{T}$ はそれぞれ縦方向（longitudinal）および横方向（transverse）の熱分散長 \unit{[\meter]} を表す．$\norm{\vect{q}}_2$ はダルシー流束密度の大きさ \unit{[\meter.\second^{-1}]}，$\delta_{ij}$ はクロネッカーのデルタである．記号 $\norm{\cdot}_2$ はユークリッドノルムを意味する．
-\begin{align*}
-  \norm{\vect{q}}_2 & = \sqrt{q_x^2+q_y^2}       & \text{（2次元の場合）} \\
-  \norm{\vect{q}}_2 & = \sqrt{q_x^2+q_y^2+q_z^2} & \text{（3次元の場合）}
-\end{align*}
+ここで，$\lambda_\mathrm{L}$，$\lambda_\mathrm{T}$ はそれぞれ縦方向（longitudinal）および横方向（transverse）の熱分散長 \unit{\meter} を表す．$\vect{q} = \pab{q_1, q_2, q_3}$は液状水フラックス\unit{\meter.\second^{-1}}，$\norm{\vect{q}}_2$ はダルシー流束密度の大きさ \unit{\meter.\second^{-1}}，$\delta_{ij}$ は Kroneckerのデルタ(\cref{Form:Kronecker-delta})である．記号 $\norm{\cdot}_2$ はユークリッドノルムを意味し，次元数を $dim$ とすると，
+\begin{equation*}
+  \norm{\vect{q}}_2 = \sqrt{\sum_{i=1}^{\mathrm{dim}} q_i^2}
+\end{equation*}
 すると，見かけの熱伝導率テンソル成分は次のようになる．
 \begin{equation}
   \begin{cases}
@@ -66,91 +65,122 @@
 \label{Sec:WaterProperties}
 
 水分保持関数 (Water Retention Function, WRF) は，土壌水分量と土壌水分ポテンシャルとの関係を記述する関数であり，土壌水分ポテンシャルから土壌水分量を計算するために用いられる．本項では，主要な水分特性モデルについて，その定義と特性を概説する．
-ここで， $\Sw$ は，体積含水率 $\Qw$，残留体積含水率 $\theta_\mathrm{r}$，飽和体積含水率 $\theta_\mathrm{s}$ を用いて次式で定義される正規化飽和度である．
+ここで， 正規化飽和度 $\Sw$ \unit{-} は，体積含水率 $\Qw$，残留体積含水率 $\theta_\mathrm{r}$ \unit{\meter^{3}.\meter^{-3}}，飽和体積含水率 $\theta_\mathrm{s}$ \unit{\meter^{3}.\meter^{-3}} を用いて次式で定義される．
 \begin{equation}
   \Sw = \dfrac{\Qw - \theta_\mathrm{r}}{\theta_\mathrm{s} - \theta_\mathrm{r}}
 \end{equation}
-また，不飽和土壌における透水係数 $K_\mathrm{w}$ \unit{[\meter.\second^{-1}]} は，飽和透水係数 $K_\mathrm{s}$ \unit{[\meter.\second^{-1}]} と相対透水係数 $k_\mathrm{r}$ \unit{[-]} の積として次式で与えられる．
+また，不飽和土壌における透水係数 $K_\mathrm{w}$ \unit{\meter.\second^{-1}} は，飽和透水係数 $K_\mathrm{s}$ \unit{\meter.\second^{-1}} と相対透水係数 $k_\mathrm{r}$ \unit{-} の積として次式で与えられる．
 \begin{equation}
   \label{Eq:Hydraulic_Conductivity}
   K_\mathrm{w} = K_\mathrm{s} k_\mathrm{r}
 \end{equation}
 この $k_\mathrm{r}$ を記述する関数が透水係数関数 (Hydraulic Conductivity Function, HCF) と呼ばれる．
 
-\begin{enumerate}[label=\arabic*：, leftmargin=*, labelwidth=1.5em, labelsep=0.5em]
-  \item Brooks-Corey (BC) モデル \\
+\begin{description}
+  % [label=\arabic*：, leftmargin=*, labelwidth=1.5em, labelsep=0.5em]
+  \item[Brooks-Corey (BC) モデル：] \mbox{} \\
         \textcite{Brooks-1964}によるWRFおよびHCFは，以下で与えられる．
-        \begin{equation}
-          \Sw =
-          \begin{cases}
-            \pab{\dfrac{\alpha}{h}}^n & h < \alpha    \\
-            1                         & h \geq \alpha
-          \end{cases}
-        \end{equation}
-        \begin{equation}
-          k_\mathrm{r} = \Sw^{l+2+2/n}
-        \end{equation}
-        ここで，$\alpha$ は空気侵入圧 \unit{[\meter^{-1}]}，$n$ は間隙径分布指数 \unit{[-]}，$l$ は間隙の連結性を示すパラメータ \unit{[-]} であり，極度の乾燥状態を除いて$2.0$と仮定される．
-  \item van Genuchten-Mualem (vG) モデル \\
+        \begin{subequations}
+          \begin{equation}
+            \label{Eq:Brooks-Corey-WRF}
+            \Sw =
+            \begin{cases}
+              \pab{\dfrac{\alpha}{h}}^n & h < \alpha    \\
+              1                         & h \geq \alpha
+            \end{cases}
+          \end{equation}
+          \begin{equation}
+            \label{Eq:Brooks-Corey-HCF}
+            k_{\mathrm{r}} = \Sw^{l+2+2/n}
+          \end{equation}
+          \label{Eq:Brooks-Corey}
+        \end{subequations}
+        ここで，$\alpha$ は空気侵入圧 \unit{\meter^{-1}}，$n$ は間隙径分布指数 \unit{-}，$l$ は間隙の連結性を示すパラメータ \unit{-} であり，極度の乾燥状態を除いて $2.0$ と仮定される．
+  \item[van Genuchten-Mualem (vG) モデル：] \mbox{} \\
         \textcite{van-Genuchten-1980}によるWRFおよびHCFは，以下で与えられる．
-        \begin{equation}
-          \Sw =
-          \begin{cases}
-            \pab{1+\abs{\alpha h}^{n}}^{-m} & h < 0    \\
-            1                               & h \geq 0 \\
-          \end{cases}
-        \end{equation}
-        \begin{equation}
-          k_\mathrm{r} = \Sw^{l}\bab{1-\pab{1-\Sw^{1/m}}^m}^2
-        \end{equation}
-        ここで，$m = 1 - 1/n$ ($n>1$) の関係が用いられる．
-  \item Kosugi (KO) モデル \\
+        \begin{subequations}
+          \begin{equation}
+            \label{Eq:van-Genuchten-Mualem-WRF}
+            \Sw =
+            \begin{cases}
+              \pab{1+\abs{\alpha h}^{n}}^{-m} & h < 0    \\
+              1                               & h \geq 0 \\
+            \end{cases}
+          \end{equation}
+          \begin{equation}
+            \label{Eq:van-Genuchten-Mualem-HCF}
+            k_\mathrm{r} = \Sw^{l}\bab{1-\pab{1-\Sw^{1/m}}^m}^2
+          \end{equation}
+        \end{subequations}
+        \label{Eq:van-Genuchten-Mualem}
+        ここで，$m = 1 - 1/n, \pab{n>1}$ の関係が用いられる．
+  \item[Kosugi (KO) モデル：] \mbox{} \\
         \textcite{Kosugi-1996}は，$\Sw$ が対数正規分布に従うと仮定し，以下のWRFおよびHCFを提案した．
-        \begin{equation}
-          \Sw =
-          \begin{cases}
-            \dfrac{1}{2}\erfc\Bab{\dfrac{\ln\pab{h/\alpha}}{\sqrt{2}n}} & h < 0    \\
-            1                                                           & h \geq 0
-          \end{cases}
-        \end{equation}
-        \begin{equation}
-          k_\mathrm{r} =
-          \begin{cases}
-            \Sw^{0.5}\Bab{\dfrac{1}{2}\erfc\bab{\dfrac{\ln\pab{h/\alpha}}{\sqrt{2}n}+\dfrac{n}{\sqrt{2}}}}^2 & h < 0    \\
-            1                                                                                                & h \geq 0
-          \end{cases}
-        \end{equation}
+        \begin{subequations}
+          \begin{equation}
+            \label{Eq:Kosugi-WRF}
+            \Sw =
+            \begin{cases}
+              \dfrac{1}{2}\erfc\Bab{\dfrac{\ln\pab{h/\alpha}}{\sqrt{2}n}} & h < 0    \\
+              1                                                           & h \geq 0
+            \end{cases}
+          \end{equation}
+          \begin{equation}
+            \label{Eq:Kosugi-HCF}
+            k_\mathrm{r} =
+            \begin{cases}
+              \Sw^{0.5}\Bab{\dfrac{1}{2}\erfc\bab{\dfrac{\ln\pab{h/\alpha}}{\sqrt{2}n}+\dfrac{n}{\sqrt{2}}}}^2 & h < 0    \\
+              1                                                                                                & h \geq 0
+            \end{cases}
+          \end{equation}
+          \label{Eq:Kosugi}
+        \end{subequations}
         ここで，$\erfc\pab{x}$ は相補誤差関数である．
-  \item Durner モデル \\
+  \item[Durner モデル：] \mbox{} \\
         ここまでに示したモデルでは捉えきれない団粒構造などを表現するため，\textcite{Durner-1994}は複数のWRFを線形結合する手法を提案した．
         \begin{equation}
-          \label{eq:Linear_Conmination}
-          S_\mathrm{w} = \sum_{i=1}^{k} w_i S_{\mathrm{w}_i}
+          \label{eq:Linear_Combination}
+          \Sw = \sum_{i=1}^{k} w_i S_{\mathrm{w}_i}
         \end{equation}
+        ここで，$S_{\mathrm{w}_i}$ は $i$番目のサブモデルの有効水分量である．
         Durnerモデルでは2つのvGモデルを結合し，WRFとHCFを以下のように定義する．
-        \begin{equation}
-          \Sw = w_1\pab{1+\abs{\alpha_1 h}^{n_1}}^{-m_1} + w_2\pab{1+\abs{\alpha_2 h}^{n_2}}^{-m_2}
-        \end{equation}
-        \begin{equation}
-          K_\mathrm{r} = \dfrac{\pab{w_1 S_\mathrm{w_1} + w_2 S_\mathrm{w_2}}^l\pab{w_1 \alpha_1\bab{1-\pab{1-S_\mathrm{w_1}^{1/m_1}}^{m_1}} + w_2 \alpha_2\bab{1-\pab{1-S_\mathrm{w_2}^{1/m_2}}^{m_2}}}^2}{\pab{w_1 \alpha_1 + w_2 \alpha_2}^2}
-        \end{equation}
-        ここで $w_i$ は各サブモデルの重み係数（$\sum w_i = 1$），$S_\mathrm{w_i}$ は $i$番目のサブモデルの有効水分量である．
-  \item Dual-vG-CH モデル \\
+        \begin{subequations}
+          \begin{equation}
+            \label{Eq:Durner-WRF}
+            \Sw = w_1\pab{1+\abs{\alpha_1 h}^{n_1}}^{-m_1} + w_2\pab{1+\abs{\alpha_2 h}^{n_2}}^{-m_2}
+          \end{equation}
+          \begin{equation}
+            \label{Eq:Durner-HCF}
+            \begin{split}
+              k_\mathrm{r} = & \dfrac{\pab{w_1 S_{\mathrm{w}_1} + w_2 S_{\mathrm{w}_2}}^l}{(w_1 \alpha_1 + w_2 \alpha_2)^2}                                             \\
+                             & \times \Bab{w_1 \alpha_1 \bab{1-\pab{1-S_{\mathrm{w}_1}^{1/m_1}}^{m_1}} + w_2 \alpha_2 \bab{1-\pab{1-S_{\mathrm{w}_2}^{1/m_2}}^{m_2}}}^2
+            \end{split}
+          \end{equation}
+        \end{subequations}
+        ここで $w_i$ は各サブモデルの重み係数$\pab{\sum w_i = 1}$であり，$\alpha_i$，$n_i$，$m_i$ はそれぞれ $i$番目のサブモデルの空気侵入圧，間隙径分布指数，および $m_i = 1 - 1/n_i$ の関係である．
+  \item[Dual-vG-CH モデル：] \mbox{} \\
         \textcite{Seki-2022}は，Durnerモデルのパラメータを削減するため，各vGサブモデルで共通のパラメータ $\alpha$ を用いるDual-vG-CHモデルを提案した．
-        \begin{equation}
-          \Sw = w\pab{1+\abs{\alpha h}^{n_1}}^{-m_1} + \pab{1-w}\pab{1+\abs{\alpha h}^{n_2}}^{-m_2}
-        \end{equation}
-        \begin{equation}
-          K_\mathrm{r} = \dfrac{\bab{w S_\mathrm{w_1} + \pab{1-w} S_\mathrm{w_2}}^l\Bab{w \alpha\bab{1-\pab{1-S_\mathrm{w_1}^{1/m_1}}^{m_1}} + \pab{1-w} \alpha\bab{1-\pab{1-S_\mathrm{w_2}^{1/m_2}}^{m_2}}}^2}{\pab{w \alpha + \pab{1-w} \alpha}^2}
-        \end{equation}
-\end{enumerate}
+        \begin{subequations}
+          \begin{equation}
+            \label{Eq:Dual-vG-CH-WRF}
+            \Sw = w\pab{1+\abs{\alpha h}^{n_1}}^{-m_1} + \pab{1-w}\pab{1+\abs{\alpha h}^{n_2}}^{-m_2}
+          \end{equation}
+          \begin{equation}
+            \label{Eq:Dual-vG-CH-HCF}
+            \begin{split}
+              k_\mathrm{r} = & \dfrac{\pab{w S_{\mathrm{w}_1} + \pab{1-w} S_{\mathrm{w}_2}}^l}{\pab{w \alpha + \pab{1-w} \alpha}^2}                                     \\
+                             & \times \Bab{w \alpha \bab{1-\pab{1-S_{\mathrm{w}_1}^{1/m_1}}^{m_1}} + \pab{1-w} \alpha \bab{1-\pab{1-S_{\mathrm{w}_2}^{1/m_2}}^{m_2}}}^2
+            \end{split}
+          \end{equation}
+        \end{subequations}
+\end{description}
 
-また，液状水が凍結する際に，氷が形成されることにより，間隙水量が減少する．この現象を考慮するため，間隙氷量 $\Qice$ を用いて，透水係数は次式で修正される\parencite{Taylor-1978}．
+また，液状水が凍結する際に，氷が形成されることにより，液状水が移動可能な間隙体積が減少する．この現象を考慮するため，間隙氷量 $\Qice$ を用いて，透水係数は次式で修正される\parencite{Taylor-1978}．
 \begin{equation}
   \label{Eq:Hydraulic_Conductivity_Ice}
   K_\mathrm{flh} = K_{\mathrm{s}} 10^{-\Omega \Qice}
 \end{equation}
-ここで，$K_\mathrm{flh}$は凍結水含有状態における透水係数 [\unit{\meter.\second^{-1}}]，$\Omega$ は経験的な定数 [--]であり，本研究では $\Omega = 10$ を採用した．
+ここで，$K_\mathrm{flh}$は凍結水含有状態における透水係数 \unit{\meter.\second^{-1}}，$\Omega$ は経験的な抵抗定数 \unit{-}であり，本研究では $\Omega = 10$ を採用した．
 
 % \subsubsection{力学的熱物性値の定義}
 
