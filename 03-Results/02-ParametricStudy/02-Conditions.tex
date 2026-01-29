@@ -7,7 +7,7 @@
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/mesh_base.pdf}
-  \caption{計算領域と凍結管配置（凍結管12本，間隔\qty{1.0}{\meter}）．円は鉛直凍結管，破線は解析対象断面，網掛け部は凍結イベントの探索範囲を示す．}
+  \caption{計算領域と凍結管配置（凍結管12本，間隔\qty{1.0}{\meter}）．円は鉛直凍結管，破線は解析対象断面，ハイライトされた領域は凍結イベントの探索範囲を示す．}
   \label{Fig:ComputationDomain}
 \end{figure}
 凍結管は表面温度一定（\qty{-30}{\degreeCelsius}）とし，解析領域の左端から\qty{10}{\meter}の地点に，領域中心軸に対して上下対称となるように配置した．
@@ -23,9 +23,9 @@
     \toprule
     \multicolumn{4}{c}{Thermal Properties}                  & \multicolumn{3}{c}{Hydraulic Properties}                                                                                                                                \\
     \cmidrule(r){1-4} \cmidrule(l){5-7}
-    Parameter                                               & Component                                & Symbol                 & \multicolumn{1}{c}{Value} & Symbol              & Unit                  & \multicolumn{1}{c}{Value} \\
+    Parameter                                               &                                          &                        & \multicolumn{1}{l}{Value} &                     &                       & \multicolumn{1}{l}{Value} \\
     \midrule
-    Porosity                                                & --                                       & $\phi$                 & \num{0.3}                 & $\theta_\mathrm{s}$ & \unit{-}              & \num{0.3}                 \\
+    Porosity                                                &                                          & $\phi$                 & \num{0.3}                 & $\theta_\mathrm{s}$ & \unit{-}              & \num{0.3}                 \\
     Density                                                 & Soil                                     & $\rho_\mathrm{s}$      & \num{2800}                & $\theta_\mathrm{r}$ & \unit{-}              & \num{0.0}                 \\
     \multicolumn{1}{r}{\unit{\kg.\m^{-3}}}                  & Water                                    & $\rho_\mathrm{w}$      & \num{1000}                & $\alpha_1$          & \unit{\meter^{-1}}    & \num{0.2}                 \\
                                                             & Ice                                      & $\rho_\mathrm{ice}$    & \num{917}                 & $n_1$               & \unit{-}              & \num{1.8}                 \\

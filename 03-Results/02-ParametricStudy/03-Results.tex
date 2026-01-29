@@ -19,114 +19,134 @@
 
 \subsubsection{双曲線フィッティングによる限界流速の同定}
 それぞれの凍結管間隔・本数に対し，初期流速と凍土が閉塞するまでの時間について\eqref{Eq:hyperbolic_fitting}を用いて双曲線フィッティングを行った結果を\cref{Fig:fit_results_all}に示す．横軸は初期流速，縦軸は凍結閉塞時間を表している．また，各計算ケースにおけるフィッティングパラメータおよび決定係数 ($R^2$) を\cref{Table:fitting_params}に示す．
-% --- 1ページ目 (2本・4本配管) ---
 \begin{figure}[p]
   \centering
-  % === 1段目 (0.6m) ===
-  \begin{subfigure}{0.48\linewidth}
+  % === 左列: 2本配管 (a, b, c) ===
+  \begin{minipage}[t]{0.48\linewidth}
     \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_0.6m_fit.pdf}
-    \caption{2本配管，\qty{0.6}{\meter}}
-    \label{Fig:2p_0.6m_fit}
-  \end{subfigure}
+    % (a) 0.6m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_0.6m_fit.pdf}
+      \caption{2本配管，\qty{0.6}{\meter}}
+      \label{Fig:2p_0.6m_fit}
+    \end{subfigure}
+    \vspace{1em}
+
+    % (b) 0.8m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_0.8m_fit.pdf}
+      \caption{2本配管，\qty{0.8}{\meter}}
+      \label{Fig:2p_0.8m_fit}
+    \end{subfigure}
+    \vspace{1em}
+
+    % (c) 1.0m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_1.0m_fit.pdf}
+      \caption{2本配管，\qty{1.0}{\meter}}
+      \label{Fig:2p_1.0m_fit}
+    \end{subfigure}
+  \end{minipage}
   \hfill
-  \begin{subfigure}{0.48\linewidth}
+  % === 右列: 4本配管 (d, e, f) ===
+  \begin{minipage}[t]{0.48\linewidth}
     \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_0.6m_fit.pdf}
-    \caption{4本配管，\qty{0.6}{\meter}}
-    \label{Fig:4p_0.6m_fit}
-  \end{subfigure}
+    % (d) 0.6m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_0.6m_fit.pdf}
+      \caption{4本配管，\qty{0.6}{\meter}}
+      \label{Fig:4p_0.6m_fit}
+    \end{subfigure}
+    \vspace{1em}
 
-  \vspace{1em}
+    % (e) 0.8m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_0.8m_fit.pdf}
+      \caption{4本配管，\qty{0.8}{\meter}}
+      \label{Fig:4p_0.8m_fit}
+    \end{subfigure}
+    \vspace{1em}
 
-  % === 2段目 (0.8m) ===
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_0.8m_fit.pdf}
-    \caption{2本配管，\qty{0.8}{\meter}}
-    \label{Fig:2p_0.8m_fit}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_0.8m_fit.pdf}
-    \caption{4本配管，\qty{0.8}{\meter}}
-    \label{Fig:4p_0.8m_fit}
-  \end{subfigure}
-
-  \vspace{1em}
-
-  % === 3段目 (1.0m) ===
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/2p_1.0m_fit.pdf}
-    \caption{2本配管，\qty{1.0}{\meter}}
-    \label{Fig:2p_1.0m_fit}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_1.0m_fit.pdf}
-    \caption{4本配管，\qty{1.0}{\meter}}
-    \label{Fig:4p_1.0m_fit}
-  \end{subfigure}
+    % (f) 1.0m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/4p_1.0m_fit.pdf}
+      \caption{4本配管，\qty{1.0}{\meter}}
+      \label{Fig:4p_1.0m_fit}
+    \end{subfigure}
+  \end{minipage}
 
   \caption{配管本数および配管間隔の違いによる凍結特性のフィッティング結果（2本・4本配管）．}
-  \label{Fig:fit_results_2_4}
+  \label{Fig:fit_results_all}
 \end{figure}
-% --- 2ページ目 (8本・12本配管) ---
 \begin{figure}[p]
   \ContinuedFloat
   \captionsetup{list=no}
   \centering
-  % === 1段目 (0.6m) ===
-  \begin{subfigure}{0.48\linewidth}
+  % === 左列: 8本配管 (g, h, i) ===
+  \begin{minipage}[t]{0.48\linewidth}
     \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_0.6m_fit.pdf}
-    \caption{8本配管，\qty{0.6}{\meter}}
-    \label{Fig:8p_0.6m_fit}
-  \end{subfigure}
+    % (g) 0.6m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_0.6m_fit.pdf}
+      \caption{8本配管，\qty{0.6}{\meter}}
+      \label{Fig:8p_0.6m_fit}
+    \end{subfigure}
+    \vspace{1em}
+
+    % (h) 0.8m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_0.8m_fit.pdf}
+      \caption{8本配管，\qty{0.8}{\meter}}
+      \label{Fig:8p_0.8m_fit}
+    \end{subfigure}
+    \vspace{1em}
+
+    % (i) 1.0m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_1.0m_fit.pdf}
+      \caption{8本配管，\qty{1.0}{\meter}}
+      \label{Fig:8p_1.0m_fit}
+    \end{subfigure}
+  \end{minipage}
   \hfill
-  \begin{subfigure}{0.48\linewidth}
+  % === 右列: 12本配管 (j, k, l) ===
+  \begin{minipage}[t]{0.48\linewidth}
     \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_0.6m_fit.pdf}
-    \caption{12本配管，\qty{0.6}{\meter}}
-    \label{Fig:12p_0.6m_fit}
-  \end{subfigure}
+    % (j) 0.6m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_0.6m_fit.pdf}
+      \caption{12本配管，\qty{0.6}{\meter}}
+      \label{Fig:12p_0.6m_fit}
+    \end{subfigure}
+    \vspace{1em}
 
-  \vspace{1em}
+    % (k) 0.8m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_0.8m_fit.pdf}
+      \caption{12本配管，\qty{0.8}{\meter}}
+      \label{Fig:12p_0.8m_fit}
+    \end{subfigure}
+    \vspace{1em}
 
-  % === 2段目 (0.8m) ===
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_0.8m_fit.pdf}
-    \caption{8本配管，\qty{0.8}{\meter}}
-    \label{Fig:8p_0.8m_fit}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_0.8m_fit.pdf}
-    \caption{12本配管，\qty{0.8}{\meter}}
-    \label{Fig:12p_0.8m_fit}
-  \end{subfigure}
-
-  \vspace{1em}
-
-  % === 3段目 (1.0m) ===
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/8p_1.0m_fit.pdf}
-    \caption{8本配管，\qty{1.0}{\meter}}
-    \label{Fig:8p_1.0m_fit}
-  \end{subfigure}
-  \hfill
-  \begin{subfigure}{0.48\linewidth}
-    \centering
-    \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_1.0m_fit.pdf}
-    \caption{12本配管，\qty{1.0}{\meter}}
-    \label{Fig:12p_1.0m_fit}
-  \end{subfigure}
+    % (l) 1.0m
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/12p_1.0m_fit.pdf}
+      \caption{12本配管，\qty{1.0}{\meter}}
+      \label{Fig:12p_1.0m_fit}
+    \end{subfigure}
+  \end{minipage}
 
   \caption{配管本数および配管間隔の違いによる凍結特性のフィッティング結果（8本・12本配管，続き）．}
 \end{figure}
