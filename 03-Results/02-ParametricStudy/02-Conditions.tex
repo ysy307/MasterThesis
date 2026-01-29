@@ -1,18 +1,18 @@
 \subsection{解析条件および計算ケース}
 \label{Sec:Param_Conditions}
 
-\subsubsection{計算領域および初期・境界条件}
-\label{Sec:Param_Conditions_Domain}
+\subsubsection{凍結管を直線配置した際の計算領域および初期・境界条件}
+\label{Sec:Param_Conditions_Linear}
 解析対象として，\cref{Fig:ComputationDomain}に示すように，凍結管が配置されている空間内のある一定の深さにおける\qtyproduct{30 x 30}{\meter}の水平断面領域を設定した．
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/mesh_base.pdf}
-  \caption{計算領域と凍結管配置（凍結管12本，間隔\qty{1.0}{\meter}）．円は鉛直凍結管，破線は解析対象断面，ハイライトされた領域は凍結イベントの探索範囲を示す．}
+  \caption{凍結管を直線配置した際の計算領域と凍結管配置（凍結管12本，間隔\qty{1.0}{\meter}）．円は鉛直凍結管，破線は解析対象断面，ハイライトされた領域は凍結イベントの探索範囲を示す．}
   \label{Fig:ComputationDomain}
 \end{figure}
 凍結管は表面温度一定（\qty{-30}{\degreeCelsius}）とし，解析領域の左端から\qty{10}{\meter}の地点に，領域中心軸に対して上下対称となるように配置した．
 計算ケースとして，凍結管の本数を2，4，8，12本の4種類とし，それぞれの配置において凍結管間隔を\qtylist{0.6;0.8;1.0}{\meter}の一定間隔とした組み合わせについて検討を行った．
-また，地下水流の影響を詳細に評価するため，初期地下水流速については，\qtyrange{0.0}{1.2}{\meter.\day^{-1}}の範囲で計19通りの流速条件を設定した．
+また，地下水流の影響を詳細に評価するため，初期地下水流速については，\qtylist{0.0;0.05;0.1;0.15;0.2;0.25;0.3;0.35;0.4;0.45;0.5;0.6;0.7;0.75;0.8;0.85;0.9;1.0;1.2}{\meter.\day^{-1}}の計19通りの流速条件を設定した．
 これにより，流速の増大に伴う凍結閉塞時間の変化および閉塞限界近傍の非線形な挙動を捉えることを可能とした．
 解析に用いた砂質地盤の熱・水理物性値を\cref{Table:sim_properties}に示す．
 \begin{table}[t]
@@ -39,25 +39,41 @@
   \end{tabular}
 \end{table}
 また，境界条件は左端が地下水流の流入境界で温度は初期温度に固定し，右端が流出境界となるように設定した．上下端は断熱・不透水境界とし，凍結管表面は\qty{-30}{\degreeCelsius}に固定し，不透水境界とした．
-初期条件としては，地盤温度を一様に\qty{18}{\degreeCelsius}，間隙水圧を設定した初期流速を満たすラプラス方程式に基づく分布とした．
+初期条件としては，地盤温度を一様に\qty{18}{\degreeCelsius}，設定した初期流速を境界条件として満たすラプラス方程式の解として，間隙水圧を設定した．
+
+\subsubsection{凍結管を円形配置した際の計算領域および初期・境界条件}
+\label{Sec:Param_Conditions_Circular}
+
+凍結管を円形に配置した際の計算領域および初期・境界条件については，\cref{Fig:Freeze_Pipes_Circle}に示す通りである．
+解析領域は\cref{Sec:Param_Conditions_Linear}と同様であり，凍結管は領域中心 $\pab{15.0,15.0}$を中心として円形に配置した．
+中心からの距離$L$ は\qtylist{2.0;4.5;10.0}{\meter}とし，凍結管同士の間隔がおおよそ一定に\qty{0.8}{\meter}となるように適当に本数を調整した配置とした．
+$L=\qty{2.0}{\meter}$は凍結管は13本，$L=\qty{4.5}{\meter}$は33本，$L=\qty{10.0}{\meter}$は73本の配置とした．
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/freeze_pipe_geometries.pdf}
+  \caption{凍結管を円形配置した際の計算領域と凍結管配置．}
+  \label{Fig:Freeze_Pipes_Circle}
+\end{figure}
+初期条件は\cref{Sec:Param_Conditions_Linear}と同様であり，境界条件については，解析領域の上下端を解析対象として設定した流速を境界として与え，流入側地盤温度を初期温度に固定した．
+円形配置において計算を行う地下水流速は，\qtylist{0.0;0.1;0.2;0.3;0.4;0.5;0.6;0.7;0.8}{\meter.\day^{-1}}の9条件とした．
 
 \subsubsection{凍結の完了について}
 \label{Sec:Param_Conditions_FreezeEnd}
 
 凍結閉塞時間の評価にあたっては，解析領域内で形成される凍結領域が連結し，遮水壁として機能する状態を凍結の完了と定義した．具体的には，\qty{0}{\degreeCelsius} 等温線に代表される凍結開始温度のみに基づく単純な温度判定ではなく，透水係数の低下に伴う水理学的な遮水機能に着目した基準を設けた．
 
-一般に，土壌の透水係数が \qty{1.0e-9}{\meter.\second^{-1}} 程度を下回ると水理学的に不透水層（難透水層）とみなされる\parencite{Freeze-1979}．\cref{Fig:T_Si_K_comparison} は，本研究で対象とした砂質土の不凍水特性および透水係数関数\eqref{Eq:Hydraulic_Conductivity_Ice}に基づき，温度低下に伴う凍結率および透水係数の推移を算出した結果である．計算の結果，不透水基準 \qty{1.0e-9}{\meter.\second^{-1}} を満たす理論的な凍結率は $0.765$ であり，これは温度約 \qty{-0.24}{\degreeCelsius} に相当することが示された．
+一般に，土壌の透水係数が \qty{1.0e-9}{\meter.\second^{-1}} 程度を下回ると水理学的に不透水層（難透水層）とみなされる\parencite{Freeze-1979}．\cref{Fig:T_Si_K_comparison} は，本研究で対象とした砂質土の不凍水特性および透水係数関数\eqref{Eq:Hydraulic_Conductivity_Ice}に基づき，温度低下に伴う凍結率および透水係数の推移を算出した結果である．計算の結果，不透水基準 \qty{1.0e-9}{\meter.\second^{-1}} を満たす理論的な凍結率は $0.765$ であり，これは温度約 \qty{-0.24}{\degreeCelsius} に相当することが計算できた．
 
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\linewidth,pagebox=cropbox,clip]{3-2/K-T-Si_validation.pdf}
-  \caption{砂質地盤における温度・凍結率・透水係数の関係．透水係数が \qty{1.0e-9}{\meter.\second^{-1}} を下回る理論的な凍結率は $0.765$であり，対応する温度は約 \qty{-0.24}{\degreeCelsius}である．}
+  \caption{砂質地盤における温度と凍結率および透水係数の関係．透水係数が \qty{1.0e-9}{\meter.\second^{-1}} を下回る理論的な凍結率は $0.765$であり，対応する温度は約 \qty{-0.24}{\degreeCelsius}である．}
   \label{Fig:T_Si_K_comparison}
 \end{figure}
 
-本研究では，数値解析上の設計基準として十分な安全率を確保するため，上述の理論値よりも保守的な閾値として凍結率 $\Sice=0.8$を採用した．凍結率が $0.8$，凍結率に対応する温度が約 \qty{-0.3}{\degreeCelsius}に達した際の透水係数は約 \qty{7.8e-10}{\meter.\second^{-1}} であり，不透水基準を十分に下回る遮水性能が担保されていることが確認された．
+本研究では，数値解析上の設計基準として十分な安全率を確保するため，上述の理論値よりも保守的な閾値として凍結率 $\Sice=0.8$を採用した．凍結率が $0.8$，温度が約 \qty{-0.3}{\degreeCelsius}に達した際の透水係数は約 \qty{7.8e-10}{\meter.\second^{-1}} であり，不透水基準を十分に下回る遮水性能が担保されていることが確認された．
 
-計算データからの閉塞時間の抽出には，以下の数値的手順を用いた．まず，地下水流の影響による閉塞点の流下（下流側へのシフト）を考慮し，凍結管配置の対称軸である $Y = \qty{15}{\meter}$ を基準として，凍結管ピッチ $L$ の $\pm \qty{10}{\percent}$ に位置する計 3 箇所の $Y$ 軸横断面を解析対象とした．
+計算データからの直線配置した際の閉塞時間の抽出には，以下の数値的手順を用いた．まず，地下水流の影響による閉塞点の流下（下流側へのシフト）を考慮し，凍結管配置の対称軸である $Y = \qty{15}{\meter}$ を基準として，凍結管ピッチ $L$ の $\pm \qty{10}{\percent}$ に位置する計 3 箇所の $Y$ 軸横断面を解析対象とした．
 さらに，計算メッシュの非対称性や要素拡大率の不均一性に起因する数値誤差の影響を低減するため，凍結管が 4 本以上配置されるケースにおいては，中央の凍結管間だけでなく，その上下に隣接する凍結管間についても同様の検証を行った．
 各断面の離散的な時間ステップデータに対し，\cref{Fig:BinarySearch} に示す二分探索法を適用することで，解析対象範囲の全域において凍結率が $0.8$ を上回る時刻を特定した．最終的に，すべての解析断面の中で最も遅い時刻を，全体の代表凍結完了時間 $t_\mathrm{freeze}$ と定義した．
 \begin{figure}
@@ -71,22 +87,22 @@
     % 左4つ
     \node (EventLabel) at (-1.2, 0) {\large{\textbf{Event}}};
     \node (EventLabel) at (-1.2, -0.9) {\large{\textbf{Frame}}};
-    \foreach \i/\val in {0/\(\times\), 1/\(\times\), 2/\(\times\), 3/\(\times\)} {
+    \foreach \i/\val in {0/$\times$, 1/$\times$, 2/$\times$, 3/$\times$} {
         \node[box] (boxL\i) at (\i*1.1, 0) {\Large\val};
       }
     \foreach \i in {0, 1, 2, 3} {
         \node (indexL\i) at (\i*1.1, -0.9) {\normalsize\i};
       }
 
-    \node (dotsL) at (4.4, 0) {\(\cdots\)};
-    \node[box] (midbox) at (5.5, 0) {\(\bigcirc\)};
+    \node (dotsL) at (4.4, 0) {$\cdots$};
+    \node[box] (midbox) at (5.5, 0) {$\bigcirc$};
     \node (indexLmid) at (5.5, -0.9) {4320};
 
     % 右の点々
-    \node (dotsR) at (6.6, 0) {\(\cdots\)};
+    \node (dotsR) at (6.6, 0) {$\cdots$};
 
     % 右4つ
-    \foreach \i/\val in {0/\(\bigcirc\), 1/\(\bigcirc\), 2/\(\bigcirc\), 3/\(\bigcirc\)} {
+    \foreach \i/\val in {0/$\bigcirc$, 1/$\bigcirc$, 2/$\bigcirc$, 3/$\bigcirc$} {
         \node[box] (boxR\i) at ({7.7 + \i*1.1}, 0) {\Large\val};
       }
     \foreach \i/\val in {0/8637, 1/8638, 2/8639, 3/8640} {
@@ -101,14 +117,18 @@
     % 補足説明（オプション）
     \node[align=left, anchor=west] at (-1.3, -2.8) {
       \textbf{Binary Search on Event Occurrence:} \\
-      Each frame represents whether an event has occurred (\(\bigcirc\)) or not (\(\times\)). \\
-      The goal is to find the first position where the event occurs. \\
-      Use binary search to minimize the number of checks.
+      \quad Each frame represents whether an event has occurred ($\bigcirc$) or not ($\times$). \\
+      \quad The goal is to find the first position where the event occurs. \\
+      \quad Use binary search to minimize the number of checks.
     };
   \end{tikzpicture}
-  \caption{二分探索法による凍結完了時間の抽出手順．各フレームはイベント発生（\(\bigcirc\)）または非発生（\(\times\)）を示す．}
+  \caption{二分探索法による凍結完了時間の抽出手順．各フレームはイベント発生（$\bigcirc$）または非発生（$\times$）を示す．}
   \label{Fig:BinarySearch}
 \end{figure}
+
+一方，凍結管が円形配置されている場合には，直線状配置において用いた一次元的な断面解析をそのまま適用することはできない．円形配置では，凍結の進行が二次元的に生じるため，領域全体にわたる連結性の評価が必要となるためである．
+そこで本研究では，計算された温度分布を所定の解像度を持つ二次元グリッドデータに再サンプリングし，各グリッド点において温度が所定の凍結判定温度（本研究では \qty{-0.3}{\degreeCelsius}）を上回るか否かを判定した．
+次に，温度が凍結判定温度を上回るグリッド点を通行可能領域とみなし，幅優先探索を用いて外部境界から凍結管配置の中心点 $\pab{15.0,15.0}$ 近傍へ到達可能な連結経路の有無を判定した．この経路が存在しない時刻を，機能的閉塞が成立した時刻として定義した．
 
 \subsubsection{限界流速の同定および挙動分類の手法}
 本研究では，シミュレーション結果から限界流速を定量的に抽出するために，数値実験的なアプローチとしてカーブフィッティングを採用した．フィッティング関数の選定は，以下の物理的および数学的な考察に基づいて決定された．
@@ -124,10 +144,10 @@
 % 実際，基本的な2本配管のケースにおいて，このパラメータ $c$ の値が数値シミュレーションから直接得られる限界流速と良好に一致することを確認している．
 $V_\mathrm{crit}^\mathrm{n}$ が物理的に意義のある限界流速として解釈できるため，本研究ではこの値を，高志の式の枠組みにおける代表長さを評価するための基礎データとして用いる．なお，パラメータ $a$ および $b$ は，それぞれ曲線のオフセットおよび曲率を表す．
 
-さらに，凍結挙動の特徴的なプラトー（Plateau）およびジャンプ（Jump）現象を定量的に解析するため，フィッティング関数の導関数 $\odv{t}/{V}$ に基づいて2つの領域を定義した．本研究では，経験的な閾値を 10 と設定し，以下のように分類を行った．
+さらに，凍結挙動の特徴的なプラトー（Plateau）およびジャンプ（Jump）現象を定量的に解析するため，フィッティング関数の導関数 $\odv{\mathcal{F}}/{V}$ に基づいて2つの領域を定義した．本研究では，経験的な閾値を 10 と設定し，以下のように分類を行った．
 \begin{description}
-  \item[プラトー領域] ($\odv{t}/{V} < 10$): 導関数の値が小さく，流速の変化に対する凍結時間の感度が低い領域．
-  \item[ジャンプ領域] ($\odv{t}/{V} \ge 10$): 導関数の値が大きく，わずかな流速の増加が凍結時間の劇的な延長を招く高感度な領域．
+  \item[プラトー領域] ($\odv{\mathcal{F}}/{V} < 10$)：導関数の値が小さく，流速の変化に対する凍結時間の感度が低い領域．
+  \item[ジャンプ領域] ($\odv{\mathcal{F}}/{V} \ge 10$)：導関数の値が大きく，わずかな流速の増加が凍結時間の劇的な延長を招く高感度な領域．
 \end{description}
 この手法は，複雑な数値シミュレーション結果から主要な設計パラメータをロバストに抽出し，簡易な解析理論との橋渡しを行うための有効な手段となる．
 
