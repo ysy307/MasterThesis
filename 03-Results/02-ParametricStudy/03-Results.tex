@@ -256,18 +256,17 @@
 \subsubsection{円形配置}
 
 本節では，\textcite{Takashi-1969}による限界流速の解析モデルに基づき，円形配置における凍土壁の閉塞限界について検討する．
-高志は，土壌の物性値，温度条件，および凍結管の配置条件を考慮した限界流速式を提案している．
-円形配置における限界流速 $V_\mathrm{crit}$ は次式で表される．
+\textcite{Takashi-1969}内では直線配置した際と同様に，円状に配置した際の限界流速式も次式で提案されている．
 \begin{equation}
   \label{Eq:Takashi_Critical_Flow}
   V_\mathrm{crit} = \frac{4\pi \lambda_\mathrm{f}}{r C_\mathrm{w}} \frac{T_\mathrm{f} - T_\mathrm{pipe}}{T_\infty - T_\mathrm{f}} \mathcal{F} \pab{\frac{2a}{L}, b_\mathrm{crit}}
 \end{equation}
-ここで，$r$ は凍結管の配置に関する代表長さであり，本研究では配置半径とした．直線配置した際の限界流速式（\eqref{Eq:Takashi_critical_velocity_Linear}）と比較すれば，ポテンシャル流れが異なるため，分母の長さ尺度が配置半径 $r$ に変化している点が異なる．
+ここで，$r$ は凍結管の配置に関する代表長さであり，本研究では配置半径とした．直線配置した際の限界流速式（\eqref{Eq:Takashi_critical_velocity_Linear}）と比較すれば，ポテンシャル流れが異なるため，分母の長差尺度代表長さが代表半径（配置半径） $r$ に変化し，定数がかかっている点が異なる．
 この理論式を用い，配置半径 $r = \qtylist{2.0;4.5;10.0}{\meter}$ の各条件における限界流速を算定した．
 その結果を\cref{Table:critical_velocity}に示す．
 配置半径の増大に伴い，限界流速は低下する傾向にある．
 
-\begin{table}[h]
+\begin{table}[btp]
   \centering
   \caption{高志の式による限界流速の算定結果}
   \label{Table:critical_velocity}
@@ -285,23 +284,22 @@
 % \paragraph{数値解析結果との比較}
 算定された限界流速と，数値解析による凍土壁の閉塞挙動との比較を以下に述べる．
 
-配置半径が$r=\qty{2.0}{\meter}$の場合，理論上の限界流速は約$\qty{0.73}{\meter.\day^{-1}}$であるが，数値解析ではこれを上回る初期流速$\qty{0.8}{\meter.\day^{-1}}$においても凍土壁の閉塞が確認された．
-通常，地下水流れによる熱移流の影響は地下水流れが速くなるほど大きくなる．しかしながら，半径が小さい場合，状両部で冷却された間隙水が移流によって下流側の凍結管が設置されている
+配置半径が $r=\qty{2.0}{\meter}$ の場合，理論上の限界流速は約 \qty{0.73}{\meter.\day^{-1}} である．
+しかし数値解析の結果，これを上回る初期流速 \qty{0.8}{\meter.\day^{-1}} においても凍土壁の閉塞が確認された．
+通常，地下水流による熱移流は凍結を阻害する要因となる．
+しかしながら，配置半径が小さい本ケースにおいては，上流部で冷却された間隙水が移流によって下流側の凍結管群へ到達し，初期温度よりも低い水が供給されることで，かえって凍土壁の成長が促進されたと考えられる．
+その結果，\cref{Fig:2m_02md,Fig:2m_06md} に示すような閉塞順序の逆転現象が観測された．
+流速 \qty{0.2}{\meter.\day^{-1}} では下流側が最後に閉塞したのに対し，流速 \qty{0.8}{\meter.\day^{-1}} では上流側が最後に閉塞している．
+このことから，小半径かつ高流速の条件下では，移流成分が下流側の温度低下を促進するように作用し，理論値を超える流速での閉塞を可能にしたと結論付けられる．
 
-\begin{enumerate}
-  \item \textbf{配置半径 $r = \qty{2.0}{\meter}$ の場合}:
-        理論上の限界流速は約 $\qty{0.73}{\meter.\day^{-1}}$ であるが，数値解析ではこれを上回る初期流速 $\qty{0.8}{\meter.\day^{-1}}$ においても凍土壁の閉塞が確認された．
-        小半径の場合，理論値よりも高い流速下で閉塞が可能であることが示唆される．
+この傾向は，配置半径が $r=\qty{4.5}{\meter}$ の場合（理論限界流速：約 \qty{0.32}{\meter.\day^{-1}}）においても同様である．
+\cref{Fig:4.5m_03md,Fig:4.5m_04md} に示すように，この限界流速近傍を境界として凍土壁の閉塞形態が変化し，下流側閉塞型から上流側閉塞型への明確な移行が確認された．
 
-  \item \textbf{配置半径 $r = \qty{4.5}{\meter}$ の場合}:
-        限界流速は約 $\qty{0.32}{\meter.\day^{-1}}$ と算定された．
-        解析結果において，この限界流速を境界として凍土壁の閉塞形態が変化し，下流側からの閉塞から上流側からの閉塞への移行が確認された．
-        これは $r = \qty{2.0}{\meter}$ の場合には見られなかった現象である．
-
-  \item \textbf{配置半径 $r = \qty{10.0}{\meter}$ の場合}:
-        限界流速は約 $\qty{0.15}{\meter.\day^{-1}}$ まで低下する．
-        半径が大きくなると凍土による地下水流の遮断効果が小さくなり，限界流速に近い $\qty{0.2}{\meter.\day^{-1}}$ 以上の初期流速では，凍土壁が閉塞しない事例も確認された．
-\end{enumerate}
+一方，配置半径が $r=\qty{10.0}{\meter}$ の場合，限界流速は約 \qty{0.15}{\meter.\day^{-1}} まで低下する．
+半径が大きくなると，上流部での凍結による流速遮断効果が下流まで及びにくく，また移流による低温水の輸送効果も希薄化する．
+そのため，限界流速に近い \qty{0.2}{\meter.\day^{-1}} を超える初期流速では，凍土壁は閉塞しないと判定された．
+閉塞に至った事例（初期流速 \qtylist{0.0;0.1;0.2}{\meter.\day^{-1}}）を \cref{Fig:10m_01md,Fig:10m_02md} に示す．
+これらを見ると，小半径のケースと比較して，各凍結管を中心とした同心円状に凍結前線が成長しており，熱拡散支配的な挙動を示していることがわかる．
 
 \begin{figure}[p] % 図が大きくなるため p (page) オプション推奨
   \centering
@@ -310,14 +308,14 @@
     \centering
     \includegraphics[width=\linewidth, pagebox=cropbox, clip]{3-2/Snap_2.0m_0200md_2025_closure.pdf}
     \caption{初期流速 $\qty{0.2}{\meter.\day^{-1}}$ ($r=\qty{2.0}{\meter}$)}
-    \label{fig:2m_02md}
+    \label{Fig:2m_02md}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\linewidth, pagebox=cropbox, clip]{3-2/Snap_2.0m_0600md_4024_closure.pdf}
     \caption{初期流速 $\qty{0.6}{\meter.\day^{-1}}$ ($r=\qty{2.0}{\meter}$)}
-    \label{fig:2m_06md}
+    \label{Fig:2m_06md}
   \end{subfigure}
 
   \vspace{1.5em} % 行間のスペース
@@ -327,14 +325,14 @@
     \centering
     \includegraphics[width=\linewidth, pagebox=cropbox, clip]{3-2/Snap_4.5m_0300md_4325_closure.pdf}
     \caption{初期流速 $\qty{0.3}{\meter.\day^{-1}}$ ($r=\qty{4.5}{\meter}$)}
-    \label{fig:4.5m_03md}
+    \label{Fig:4.5m_03md}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\linewidth, pagebox=cropbox, clip]{3-2/Snap_4.5m_0400md_7161_closure.pdf}
     \caption{初期流速 $\qty{0.4}{\meter.\day^{-1}}$ ($r=\qty{4.5}{\meter}$)}
-    \label{fig:4.5m_04md}
+    \label{Fig:4.5m_04md}
   \end{subfigure}
 
   \vspace{1.5em} % 行間のスペース
@@ -344,18 +342,18 @@
     \centering
     \includegraphics[width=\linewidth, pagebox=cropbox, clip]{3-2/Snap_10.0m_0100md_1563_closure.pdf}
     \caption{初期流速 $\qty{0.1}{\meter.\day^{-1}}$ ($r=\qty{10.0}{\meter}$)}
-    \label{fig:10.0m_01md}
+    \label{Fig:10.0m_01md}
   \end{subfigure}
   \hfill
   \begin{subfigure}[b]{0.48\textwidth}
     \centering
     \includegraphics[width=\linewidth, pagebox=cropbox, clip]{3-2/Snap_10.0m_0200md_4187_closure.pdf}
     \caption{初期流速 $\qty{0.2}{\meter.\day^{-1}}$ ($r=\qty{10.0}{\meter}$)}
-    \label{fig:10.0m_02md}
+    \label{Fig:10.0m_02md}
   \end{subfigure}
 
   \caption{各配置半径および初期流速における温度分布の比較}
-  \label{fig:simulation_results_comparison}
+  \label{Fig:simulation_results_comparison}
 \end{figure}
 
 \FloatBarrier
