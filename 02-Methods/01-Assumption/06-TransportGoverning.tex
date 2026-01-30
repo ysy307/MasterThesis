@@ -85,7 +85,7 @@ $\sigma_\mathrm{surf}$は温度の関数として次式で表される．
 この\eqref{Eq:VaporDensityGradient_approx}が， 水蒸気密度フラックスを計算するための $\nabla \rho_\mathrm{v}$ の近似形となる．
 
 % \subsubsection{土壌中の水蒸気拡散係数}
-ここで，飽和水蒸気密度$\rho_\mathrm{v}^\mathrm{sat}$ \unit{\kilogram.\meter^{-3}} は温度$T$の関数であるので，次のように表される．
+ここで，飽和水蒸気密度$\rho_\mathrm{v}^\mathrm{sat}$ \unit{\kilogram.\meter^{-3}} は温度$T$の関数であると近似でき，次のように表される．
 \begin{equation}
   \label{Eq:VaporSaturationDensity}
   \rho_\mathrm{v}^\mathrm{sat} = 10^{-3} \dfrac{\exp\pab{31.3716-\dfrac{6014.79}{T} - 0.00792495 T}}{T}
@@ -120,7 +120,7 @@ $\sigma_\mathrm{surf}$は温度の関数として次式で表される．
 \eqref{Eq:VaporFlux}から\eqref{Eq:Tortuosity}までの議論は，土壌間隙中の気相をガスが単純に拡散する（Fickの法則）というモデルに基づいている．
 しかし，単純な気相拡散モデルでは土壌中の熱的蒸気フラックス（温度勾配によるフラックス）を過小評価することが \textcite{Philip-1957} によって指摘されている．
 これは，間隙中の液体の島 (liquid-island) を介した水蒸気と液状水の相互作用（相変化を伴う高速移動）や，熱伝導率の違いによる局所的な温度勾配の増加に起因する．
-この効果を考慮するため，熱的蒸気フラックスを補正する促進係数 (enhancement factor) $\eta_e$ \unit{-} を導入する\parencite{Cass-1984, Campbell-1985}．
+この効果を考慮するため，熱的蒸気フラックスを補正する促進係数 (enhancement factor) $\eta_e$ \unit{-} を導入する \parencite{Cass-1984,Campbell-1985}．
 \begin{equation}
   \label{Eq:EnhancementFactor}
   \eta_e = 9.5 + 3 \frac{\Qw}{\Qs} - 8.5 \exp\Bab{-\bab{\pab{1+\frac{2.6}{\sqrt{f_c}}}\frac{\Qw}{\Qs}}^4}
@@ -224,7 +224,6 @@ Fickの法則 \eqref{Eq:VaporFlux} に，近似した水蒸気密度勾配 \eqre
 
 \subsubsection{質量保存則の基礎式}
 \label{Sec:MassConservationBasic}
-% 質量保存
 
 ある領域$V$に含まれる流体の質量$M\pab{t}$はある点$\vect{r}\pab{x_1,x_2,x_3}$の流体の密度$\rho\pab{\vect{r},t}$とその点の体積$\odif{V}$の積分で表される．
 \begin{equation}
